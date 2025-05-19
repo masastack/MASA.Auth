@@ -265,7 +265,7 @@ public class CommandHandler
 
         await _userClaimRepository.AddAsync(userClaim);
 
-        // 处理UserClaimExtend数据
+        // Handle UserClaimExtend data
         if (userClaimDto.DataSourceType != DataSourceTypes.None || !string.IsNullOrEmpty(userClaimDto.DataSourceValue))
         {
             var userClaimExtend = new UserClaimExtend(userClaim.Id, userClaimDto.DataSourceType, userClaimDto.DataSourceValue);
@@ -290,7 +290,7 @@ public class CommandHandler
         userClaim.Update(userClaimDto.Description);
         await _userClaimRepository.UpdateAsync(userClaim);
 
-        // 处理UserClaimExtend数据
+        // Handle UserClaimExtend data
         var userClaimExtend = await _userClaimExtendRepository.FindAsync(x => x.UserClaimId == userClaimDto.Id);
         if (userClaimExtend == null)
         {
@@ -302,7 +302,7 @@ public class CommandHandler
         }
         else
         {
-            if (userClaimDto.DataSourceType == DataSourceTypes.None && string.IsNullOrEmpty(userClaimDto.DataSourceValue))
+            if (userClaimDto.DataSourceType == DataSourceTypes.None)
             {
                 await _userClaimExtendRepository.RemoveAsync(userClaimExtend);
             }

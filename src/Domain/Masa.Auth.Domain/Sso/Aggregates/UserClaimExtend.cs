@@ -6,19 +6,19 @@ namespace Masa.Auth.Domain.Sso.Aggregates;
 public class UserClaimExtend : Entity<int>
 {
     /// <summary>
-    /// 用户声明ID
+    /// User claim ID
     /// </summary>
     public Guid UserClaimId { get; private set; }
 
     /// <summary>
-    /// 数据源类型
+    /// Data source type
     /// </summary>
     public DataSourceTypes DataSourceType { get; private set; }
 
     /// <summary>
-    /// 数据源值
-    /// 当DataSourceType为FixedJson时，存储JSON字符串，如：[{text:123,value:233}]
-    /// 当DataSourceType为Api时，存储API地址
+    /// Data source value
+    /// When DataSourceType is FixedJson, stores a JSON string, e.g.: [{text:123,value:233}]
+    /// When DataSourceType is Api, stores the API address
     /// </summary>
     public string DataSourceValue { get; private set; } = "";
 

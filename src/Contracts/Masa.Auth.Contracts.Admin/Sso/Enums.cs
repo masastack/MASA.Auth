@@ -36,22 +36,22 @@ public enum CspLevel
 }
 
 /// <summary>
-/// 数据源类型
+/// Data source type
 /// </summary>
 public enum DataSourceTypes
 {
     /// <summary>
-    /// 无数据源
+    /// No data source
     /// </summary>
     None = 0,
 
     /// <summary>
-    /// 固定JSON数据源
+    /// Fixed JSON data source
     /// </summary>
     FixedJson = 1,
 
     /// <summary>
-    /// API数据源
+    /// API data source
     /// </summary>
     Api = 2
 }

@@ -41,7 +41,6 @@ public class TeamCommandHandler
             environment = masaStackConfig.Environment;
         }
 
-        // 使用 GetAwaiter().GetResult() 替换 .Result，防止死锁
         _bucket = configurationApiClient.GetAsync<OssOptions>(environment, "Default", "public-$Config", "$public.OSS")
             .ConfigureAwait(false).GetAwaiter().GetResult().Bucket;
         _cdnEndpoint = configurationApiClient.GetDynamicAsync(environment, "Default", "public-$Config", "$public.Cdn")
