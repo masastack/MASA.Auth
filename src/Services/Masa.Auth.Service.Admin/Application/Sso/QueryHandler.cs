@@ -305,12 +305,17 @@ public class QueryHandler
         var userClaim = await _userClaimRepository.GetDetailAsync(query.UserClaimId);
         if (userClaim is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_CLAIM_NOT_EXIST);
 
+        var userClaimExtend = await _authDbContext.Set<UserClaimExtend>()
+            .AsNoTracking().FirstOrDefaultAsync(u => u.UserClaimId == query.UserClaimId);
+
         query.Result = new UserClaimDetailDto()
         {
             Id = userClaim.Id,
             Name = userClaim.Name,
             Description = userClaim.Description,
-            UserClaimType = StandardUserClaims.Claims.ContainsKey(userClaim.Name) ? UserClaimType.Standard : UserClaimType.Customize
+            UserClaimType = StandardUserClaims.Claims.ContainsKey(userClaim.Name) ? UserClaimType.Standard : UserClaimType.Customize,
+            DataSourceType = userClaimExtend?.DataSourceType ?? DataSourceTypes.None,
+            DataSourceValue = userClaimExtend?.DataSourceValue ?? ""
         };
     }
 
@@ -322,10 +327,22 @@ public class QueryHandler
                                 .ThenByDescending(userClaim => userClaim.CreationTime)
                                 .Select(userClaim => new UserClaimSelectDto(userClaim.Id, userClaim.Name, userClaim.Description))
                                 .ToListAsync();
+
+        var userClaimIds = userClaimSelect.Select(uc => uc.Id).ToList();
+        var userClaimExtends = await _authDbContext.Set<UserClaimExtend>().AsNoTracking()
+            .Where(uce => userClaimIds.Contains(uce.UserClaimId))
+            .ToListAsync();
+
         userClaimSelect.ForEach(userClaim =>
         {
-            if (StandardUserClaims.Claims.ContainsKey(userClaim.Name)) userClaim.UserClaimType = UserClaimType.Standard;
-            else userClaim.UserClaimType = UserClaimType.Customize;
+            if (StandardUserClaims.Claims.ContainsKey(userClaim.Name))
+                userClaim.UserClaimType = UserClaimType.Standard;
+            else
+                userClaim.UserClaimType = UserClaimType.Customize;
+            var userClaimExtend = userClaimExtends.FirstOrDefault(ue => ue.UserClaimId == userClaim.Id);
+
+            userClaim.DataSourceValue = userClaimExtend?.DataSourceValue ?? "";
+            userClaim.DataSourceType = userClaimExtend?.DataSourceType ?? DataSourceTypes.None;
         });
         query.Result = userClaimSelect;
     }
@@ -350,9 +367,11 @@ public class QueryHandler
                                            .ToListAsync();
         var clientIds = customLogins.Select(customLogin => customLogin.ClientId).ToList();
         var clients = await _oidcDbContext.Set<Client>().Where(client => clientIds.Contains(client.ClientId)).ToListAsync();
-        var customLoginDtos = customLogins.Select(customLogin =>
+
+        var customLoginDtos = new List<CustomLoginDto>();
+        foreach (var customLogin in customLogins)
         {
-            var (creator, modifier) = _operaterProvider.GetActionInfoAsync(customLogin.Creator, customLogin.Modifier).Result;
+            var (creator, modifier) = await _operaterProvider.GetActionInfoAsync(customLogin.Creator, customLogin.Modifier);
             var customLoginDto = new CustomLoginDto(customLogin.Id, customLogin.Name, customLogin.Title, new(), customLogin.Enabled, customLogin.CreationTime, customLogin.ModificationTime, creator, modifier);
             var client = clients.FirstOrDefault(client => client.ClientId == customLogin.ClientId);
             if (client is not null)
@@ -366,8 +385,8 @@ public class QueryHandler
                     Description = client.Description,
                 };
             }
-            return customLoginDto;
-        }).ToList();
+            customLoginDtos.Add(customLoginDto);
+        }
 
         query.Result = new(total, customLoginDtos);
     }

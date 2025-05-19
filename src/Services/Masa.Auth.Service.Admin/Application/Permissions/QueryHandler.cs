@@ -65,14 +65,17 @@ public class QueryHandler
                                    .Take(query.PageSize)
                                    .ToListAsync();
 
-        query.Result = new(total, roles.Select(role =>
+        var roleDtos = new List<RoleDto>();
+        foreach (var role in roles)
         {
             var dto = (RoleDto)role;
-            var (creator, modifier) = _operaterProvider.GetActionInfoAsync(role.Creator, role.Modifier).Result;
+            var (creator, modifier) = await _operaterProvider.GetActionInfoAsync(role.Creator, role.Modifier);
             dto.Creator = creator;
             dto.Modifier = modifier;
-            return dto;
-        }).ToList());
+            roleDtos.Add(dto);
+        }
+
+        query.Result = new(total, roleDtos);
     }
 
     [EventHandler]
@@ -627,9 +630,9 @@ public class QueryHandler
         var appId = userApiPermissionCodeQuery.AppId;
         var cacheKey = CacheKey.UserApiPermissionCodeKey(userId, appId);
 
-        userApiPermissionCodeQuery.Result = (await _cacheClient.GetOrSetAsync(cacheKey, () =>
+        userApiPermissionCodeQuery.Result = (await _cacheClient.GetOrSetAsync(cacheKey, async () =>
         {
-            var userPermissionIds = _userDomainService.GetPermissionIdsAsync(userId).Result;
+            var userPermissionIds = await _userDomainService.GetPermissionIdsAsync(userId);
             return new CacheEntry<List<string>>(_permissionRepository.GetPermissionCodes(p => p.AppId == appId
                                 && p.Type == PermissionTypes.Api && userPermissionIds.Contains(p.Id) && p.Enabled))
             {
@@ -657,7 +660,7 @@ public class QueryHandler
     }
 
     [EventHandler]
-    public async Task GetI18NDisplayNameAsync(GetI18NDisplayNameQuery query)
+    public void GetI18NDisplayNameAsync(GetI18NDisplayNameQuery query)
     {
         var publicSection = _configurationApi.GetPublic();
 

@@ -11,10 +11,20 @@ public class CommandHandler
     readonly IApiScopeRepository _apiScopeRepository;
     readonly IUserClaimRepository _userClaimRepository;
     readonly ICustomLoginRepository _customLoginRepository;
+    readonly IUserClaimExtendRepository _userClaimExtendRepository;
     readonly IEventBus _eventBus;
     readonly SyncCache _syncCache;
 
-    public CommandHandler(IClientRepository clientRepository, IIdentityResourceRepository identityResourceRepository, IApiResourceRepository apiResourceRepository, IApiScopeRepository apiScopeRepository, IUserClaimRepository userClaimRepository, ICustomLoginRepository customLoginRepository, IEventBus eventBus, SyncCache syncCache)
+    public CommandHandler(
+        IClientRepository clientRepository,
+        IIdentityResourceRepository identityResourceRepository,
+        IApiResourceRepository apiResourceRepository,
+        IApiScopeRepository apiScopeRepository,
+        IUserClaimRepository userClaimRepository,
+        ICustomLoginRepository customLoginRepository,
+        IUserClaimExtendRepository userClaimExtendRepository,
+        IEventBus eventBus,
+        SyncCache syncCache)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -22,6 +32,7 @@ public class CommandHandler
         _apiScopeRepository = apiScopeRepository;
         _userClaimRepository = userClaimRepository;
         _customLoginRepository = customLoginRepository;
+        _userClaimExtendRepository = userClaimExtendRepository;
         _eventBus = eventBus;
         _syncCache = syncCache;
     }
@@ -253,6 +264,13 @@ public class CommandHandler
         var userClaim = new UserClaim(userClaimDto.Name, userClaimDto.Description);
 
         await _userClaimRepository.AddAsync(userClaim);
+
+        // Handle UserClaimExtend data
+        if (userClaimDto.DataSourceType != DataSourceTypes.None || !string.IsNullOrEmpty(userClaimDto.DataSourceValue))
+        {
+            var userClaimExtend = new UserClaimExtend(userClaim.Id, userClaimDto.DataSourceType, userClaimDto.DataSourceValue);
+            await _userClaimExtendRepository.AddAsync(userClaimExtend);
+        }
     }
 
     [EventHandler]
@@ -271,6 +289,29 @@ public class CommandHandler
 
         userClaim.Update(userClaimDto.Description);
         await _userClaimRepository.UpdateAsync(userClaim);
+
+        // Handle UserClaimExtend data
+        var userClaimExtend = await _userClaimExtendRepository.FindAsync(x => x.UserClaimId == userClaimDto.Id);
+        if (userClaimExtend == null)
+        {
+            if (userClaimDto.DataSourceType != DataSourceTypes.None || !string.IsNullOrEmpty(userClaimDto.DataSourceValue))
+            {
+                userClaimExtend = new UserClaimExtend(userClaimDto.Id, userClaimDto.DataSourceType, userClaimDto.DataSourceValue);
+                await _userClaimExtendRepository.AddAsync(userClaimExtend);
+            }
+        }
+        else
+        {
+            if (userClaimDto.DataSourceType == DataSourceTypes.None)
+            {
+                await _userClaimExtendRepository.RemoveAsync(userClaimExtend);
+            }
+            else
+            {
+                userClaimExtend.UpdateDataSource(userClaimDto.DataSourceType, userClaimDto.DataSourceValue);
+                await _userClaimExtendRepository.UpdateAsync(userClaimExtend);
+            }
+        }
     }
 
     [EventHandler]
@@ -282,6 +323,13 @@ public class CommandHandler
 
         //Todo remove check
         await _userClaimRepository.RemoveAsync(userClaim);
+
+        // 删除关联的UserClaimExtend数据
+        var userClaimExtend = await _userClaimExtendRepository.FindAsync(x => x.UserClaimId == command.UserClaim.Id);
+        if (userClaimExtend != null)
+        {
+            await _userClaimExtendRepository.RemoveAsync(userClaimExtend);
+        }
     }
 
     #endregion

@@ -385,14 +385,16 @@ public class QueryHandler
                                  .Take(query.PageSize)
                                  .ToListAsync();
 
-        query.Result = new(total, tpus.Select(tpu =>
+        var resultList = new List<ThirdPartyUserDto>();
+        foreach (var tpu in tpus)
         {
             var dto = (ThirdPartyUserDto)tpu;
-            var (creator, modifier) = _operaterProvider.GetActionInfoAsync(tpu.Creator, tpu.Modifier).Result;
+            var (creator, modifier) = await _operaterProvider.GetActionInfoAsync(tpu.Creator, tpu.Modifier);
             dto.Creator = creator;
             dto.Modifier = modifier;
-            return dto;
-        }).ToList());
+            resultList.Add(dto);
+        }
+        query.Result = new(total, resultList);
     }
 
     [EventHandler]
@@ -768,14 +770,23 @@ public class QueryHandler
     {
         userClaimValuesQuery.Result = await _authDbContext.Set<UserClaimValue>()
             .Where(c => c.UserId == userClaimValuesQuery.UserId)
-            .ToDictionaryAsync(c => c.Name, c => c.Value);
+            .Select(c => new ClaimValue(c.Name, c.Value)).ToListAsync();
         var user = await _userRepository.FindAsync(u => u.Id == userClaimValuesQuery.UserId);
         if (user != null)
         {
             //compatible
-            userClaimValuesQuery.Result.AddOrUpdate(IdentityClaimConsts.PHONE_NUMBER, user.PhoneNumber);
-            userClaimValuesQuery.Result.AddOrUpdate(IdentityClaimConsts.ACCOUNT, user.Account);
-            userClaimValuesQuery.Result.AddOrUpdate(IdentityClaimConsts.USER_NAME, user.DisplayName);
+            if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.PHONE_NUMBER))
+            {
+                userClaimValuesQuery.Result.Add(new ClaimValue(IdentityClaimConsts.PHONE_NUMBER, user.PhoneNumber));
+            }
+            if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.ACCOUNT))
+            {
+                userClaimValuesQuery.Result.Add(new ClaimValue(IdentityClaimConsts.ACCOUNT, user.Account));
+            }
+            if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.USER_NAME))
+            {
+                userClaimValuesQuery.Result.Add(new ClaimValue(IdentityClaimConsts.USER_NAME, user.DisplayName));
+            }
         }
     }
 

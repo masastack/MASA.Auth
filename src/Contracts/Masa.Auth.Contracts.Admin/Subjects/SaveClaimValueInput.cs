@@ -9,5 +9,5 @@ public class SaveClaimValueInput
 
     public string ClaimName { get; set; } = default!;
 
-     public string ClaimValue { get; set; } = string.Empty;
+    public string ClaimValue { get; set; } = string.Empty;
 }

@@ -380,7 +380,7 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
-    public async Task<Dictionary<string, string>> GetClaimValuesAsync(IEventBus eventBus, Guid Id)
+    public async Task<List<ClaimValue>> GetClaimValuesAsync(IEventBus eventBus, Guid Id)
     {
         var query = new UserClaimValuesQuery(Id);
         await eventBus.PublishAsync(query);

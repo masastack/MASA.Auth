@@ -34,3 +34,24 @@ public enum CspLevel
     /// </summary>
     Two = 1
 }
+
+/// <summary>
+/// Data source type
+/// </summary>
+public enum DataSourceTypes
+{
+    /// <summary>
+    /// No data source
+    /// </summary>
+    None = 0,
+
+    /// <summary>
+    /// Fixed JSON data source
+    /// </summary>
+    FixedJson = 1,
+
+    /// <summary>
+    /// API data source
+    /// </summary>
+    Api = 2
+}

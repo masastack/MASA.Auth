@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Queries;
 
-public record UserClaimValuesQuery(Guid UserId) : Query<Dictionary<string, string>>
+public record UserClaimValuesQuery(Guid UserId) : Query<List<ClaimValue>>
 {
-    public override Dictionary<string, string> Result { get; set; } = new();
+    public override List<ClaimValue> Result { get; set; } = new();
 }

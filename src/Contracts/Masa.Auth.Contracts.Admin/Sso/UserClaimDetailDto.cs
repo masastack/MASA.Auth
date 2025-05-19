@@ -7,13 +7,30 @@ public class UserClaimDetailDto : UserClaimDto
 {
     public UserClaimDetailDto() { }
 
-    public UserClaimDetailDto(Guid id, string name, string description, UserClaimType userClaimType) : base(id, name, description, userClaimType)
+    /// <summary>
+    /// Data source type
+    /// </summary>
+    public DataSourceTypes DataSourceType { get; set; } = DataSourceTypes.None;
+
+    /// <summary>
+    /// Data source value
+    /// When DataSourceType is FixedJson, stores a JSON string, e.g.: [{key:123,value:233}]
+    /// When DataSourceType is Api, stores the API address
+    /// </summary>
+    public string DataSourceValue { get; set; } = "";
+
+    public UserClaimDetailDto(Guid id, string name, string description, UserClaimType userClaimType,
+        DataSourceTypes dataSourceType = DataSourceTypes.None, string dataSourceValue = "")
+        : base(id, name, description, userClaimType)
     {
+        DataSourceType = dataSourceType;
+        DataSourceValue = dataSourceValue;
     }
 
     public static implicit operator UpdateUserClaimDto(UserClaimDetailDto userClaim)
     {
-        return new UpdateUserClaimDto(userClaim.Id, userClaim.Name, userClaim.Description, userClaim.UserClaimType);
+        return new UpdateUserClaimDto(userClaim.Id, userClaim.Name, userClaim.Description, userClaim.UserClaimType,
+            userClaim.DataSourceType, userClaim.DataSourceValue);
     }
 }
 
