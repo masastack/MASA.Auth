@@ -1109,8 +1109,7 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "Name")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserClaimValue", "auth");
                 });
