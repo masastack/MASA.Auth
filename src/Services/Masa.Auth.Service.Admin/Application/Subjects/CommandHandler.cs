@@ -627,7 +627,7 @@ public class CommandHandler
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
         }
 
-        user.UserClaimValues(saveUserClaimValuesCommand.ClaimValues);
+        user.SetUserClaims(saveUserClaimValuesCommand.ClaimValues.Select(a => new KeyValuePair<string, string>(a.Key, a.Value)));
 
         await _userDomainService.UpdateAsync(user);
     }

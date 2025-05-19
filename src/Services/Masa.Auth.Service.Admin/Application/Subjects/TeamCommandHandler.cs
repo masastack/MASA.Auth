@@ -40,8 +40,12 @@ public class TeamCommandHandler
         {
             environment = masaStackConfig.Environment;
         }
-        _bucket = configurationApiClient.GetAsync<OssOptions>(environment, "Default", "public-$Config", "$public.OSS").Result.Bucket;
-        _cdnEndpoint = configurationApiClient.GetDynamicAsync(environment, "Default", "public-$Config", "$public.Cdn").Result.CdnEndpoint;
+
+        // 使用 GetAwaiter().GetResult() 替换 .Result，防止死锁
+        _bucket = configurationApiClient.GetAsync<OssOptions>(environment, "Default", "public-$Config", "$public.OSS")
+            .ConfigureAwait(false).GetAwaiter().GetResult().Bucket;
+        _cdnEndpoint = configurationApiClient.GetDynamicAsync(environment, "Default", "public-$Config", "$public.Cdn")
+            .ConfigureAwait(false).GetAwaiter().GetResult().CdnEndpoint;
         //TODO:mf stack isolation sdk is issue,update package use the following code
         //_bucket = masaConfiguration.ConfigurationApi.GetPublic().GetSection(OssOptions.Key).Get<OssOptions>().Bucket;
         //_cdnEndpoint = masaConfiguration.ConfigurationApi.GetPublic().GetValue<string>("$public.Cdn:CdnEndpoint");

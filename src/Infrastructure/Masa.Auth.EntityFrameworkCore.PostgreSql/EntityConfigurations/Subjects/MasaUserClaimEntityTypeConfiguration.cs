@@ -8,6 +8,5 @@ public class MasaUserClaimEntityTypeConfiguration : IEntityTypeConfiguration<Use
     public void Configure(EntityTypeBuilder<UserClaimValue> builder)
     {
         builder.HasKey(c => c.Id);
-        builder.HasIndex(c => new { c.UserId, c.Name }).IsUnique();
     }
 }
