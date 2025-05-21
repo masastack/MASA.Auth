@@ -14,7 +14,7 @@ public partial class UserBind
 
     [Inject]
     public IAuthClient AuthClient { get; set; } = default!;
-    
+
     [CascadingParameter(Name = "Culture")]
     private string? Culture { get; set; }
 
@@ -66,6 +66,14 @@ public partial class UserBind
     private async Task SendCaptcha(FormContext context)
     {
         if (CaptchaText != T("GetSmsCode")) return;
+
+        //Ensure EditContext is not null before accessing it
+        if (context.EditContext == null)
+        {
+            await PopupService.EnqueueSnackbarAsync(T("EditContext is null"), AlertTypes.Error);
+            return;
+        }
+
         var field = context.EditContext.Field(nameof(UserModel.PhoneNumber));
         context.EditContext.NotifyFieldChanged(field);
         var result = context.EditContext.GetValidationMessages(field);
