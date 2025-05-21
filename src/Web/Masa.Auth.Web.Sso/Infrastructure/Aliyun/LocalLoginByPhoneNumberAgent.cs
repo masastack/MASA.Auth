@@ -4,7 +4,6 @@
 using Aliyun.Acs.Core;
 using Aliyun.Acs.Core.Http;
 using Aliyun.Acs.Core.Profile;
-using static AlibabaCloud.SDK.Dypnsapi20170525.Models.GetAuthTokenResponseBody;
 using AliyunClient = AlibabaCloud.SDK.Dypnsapi20170525.Client;
 using AliyunConfig = AlibabaCloud.OpenApiClient.Models.Config;
 
@@ -64,7 +63,6 @@ public class LocalLoginByPhoneNumberAgent : IScopedDependency
                     default:
                         return (false, "未知异常");
                 }
-                ;
             }
         }
         catch
