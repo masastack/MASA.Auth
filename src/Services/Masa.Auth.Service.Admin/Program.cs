@@ -23,9 +23,9 @@ var masaStackConfig = builder.Services.GetMasaStackConfig();
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var identityServerUrl = masaStackConfig.GetSsoDomain();
 
-//#if DEBUG
-//identityServerUrl = "http://localhost:18200";
-//#endif
+#if DEBUG
+identityServerUrl = "https://localhost:18201";
+#endif
 
 builder.Services.AddAutoInject();
 builder.Services.AddDaprClient();
