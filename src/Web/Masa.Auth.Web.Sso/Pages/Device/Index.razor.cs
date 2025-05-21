@@ -85,7 +85,7 @@ public partial class Index
         }
         else
         {
-            await PopupService.EnqueueSnackbarAsync(ConsentOptions.MustChooseOneErrorMessage, BlazorComponent.AlertTypes.Error);
+            await PopupService.EnqueueSnackbarAsync(ConsentOptions.MustChooseOneErrorMessage, AlertTypes.Error);
         }
         return grantedConsent;
     }

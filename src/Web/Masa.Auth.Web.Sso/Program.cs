@@ -25,6 +25,36 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", policy =>
+    {
+        policy.SetIsOriginAllowed(origin =>
+        {
+            if (string.IsNullOrEmpty(origin)) return false;
+            try
+            {
+                var uri = new Uri(origin);
+                var host = uri.Host.ToLowerInvariant();
+                // Allow all lonsid.cn domains and their subdomains
+                if (host == "lonsid.cn" || host.EndsWith(".lonsid.cn"))
+                    return true;
+                // Allow all localhost domains
+                if (host == "localhost")
+                    return true;
+            }
+            catch
+            {
+                // Ignore origin with invalid format
+            }
+            return false;
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+    });
+});
+
 var authDomain = masaStackConfig.GetAuthServiceDomain();
 
 #if DEBUG
@@ -57,11 +87,28 @@ builder.Services.AddMultilevelCache(distributedCacheOptions =>
     distributedCacheOptions.UseStackExchangeRedisCache(redisOption);
 });
 builder.Services.AddScoped<CookieStorage>();
+
+var connectionString = masaStackConfig.GetConnectionString("sso");
+
+builder.Services.AddDbContext<SsoPersistedGrantDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
+
 var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddIdentityServer(options =>
     {
         options.UserInteraction.ErrorUrl = "/error/500";
         options.Events.RaiseSuccessEvents = true;
+    })
+    .AddOperationalStore<PersistedGrantDbContext>(options =>
+    {
+        var migrationsAssembly = typeof(SsoPersistedGrantDbContext).Assembly.GetName().Name;
+        options.ConfigureDbContext = builder =>
+            builder.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+
+        // this enables automatic token cleanup. this is optional.
+        options.EnableTokenCleanup = true;
     })
     .AddClientStore<MasaClientStore>()
     .AddResourceStore<MasaResourceStore>()
@@ -107,6 +154,9 @@ else
     }, true);
 }
 
+//migrate db
+await builder.MigrateDbContextAsync<SsoPersistedGrantDbContext>();
+
 builder.Services.AddDataProtection()
     .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption));
 
@@ -141,6 +191,9 @@ app.Use(async (context, next) =>
         context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
     }
 
+    //TODO
+    //1.移除 X-Frame-Options 响应头
+    //2.用 CSP 控制允许的父页面
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
     if (!context.Response.Headers.ContainsKey("X-Frame-Options"))
     {
@@ -172,13 +225,14 @@ app.Use(async (context, next) =>
     await next();
 });
 
-app.UseCookiePolicy();
+app.UseStaticFiles();
+app.UseRouting();
+
+app.UseCors("AllowSpecificOrigins");
+
 app.UseIdentityServer();
 // This cookie policy fixes login issues with Chrome 80+ using HHTP
 app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
-
-app.UseStaticFiles();
-app.UseRouting();
 
 app.UseAuthentication()
    .UseAuthorizationExternal();

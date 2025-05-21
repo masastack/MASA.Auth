@@ -5,8 +5,6 @@ namespace Masa.Auth.Web.Sso.Shared;
 
 public class SsoSectionComponentBase : ComponentBase
 {
-    I18n? _languageProvider;
-
     [Inject] public IPopupService PopupService { get; set; } = null!;
 
     [Inject] public IHttpContextAccessor HttpContextAccessor { get; set; } = null!;
