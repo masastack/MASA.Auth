@@ -2,8 +2,8 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using Aliyun.Acs.Core;
-using Aliyun.Acs.Core.Profile;
 using Aliyun.Acs.Core.Http;
+using Aliyun.Acs.Core.Profile;
 using AliyunClient = AlibabaCloud.SDK.Dypnsapi20170525.Client;
 using AliyunConfig = AlibabaCloud.OpenApiClient.Models.Config;
 
@@ -37,7 +37,7 @@ public class LocalLoginByPhoneNumberAgent : IScopedDependency
         return null;
     }
 
-    public async Task<(bool success,string errorMsg)> VerifyPhoneWithTokenAsync(string phoneNumber, string spToken)
+    public async Task<(bool success, string errorMsg)> VerifyPhoneWithTokenAsync(string phoneNumber, string spToken)
     {
         var client = CreateClient();
         var verifyPhoneWithTokenRequest = new VerifyPhoneWithTokenRequest
@@ -62,7 +62,7 @@ public class LocalLoginByPhoneNumberAgent : IScopedDependency
                         return (false, "无法判断号码，请通过短信方式登录");
                     default:
                         return (false, "未知异常");
-                };
+                }
             }
         }
         catch
@@ -88,7 +88,7 @@ public class LocalLoginByPhoneNumberAgent : IScopedDependency
             _logger.LogInformation(resultStr);
             return JsonSerializer.Deserialize<GetPhoneWithTokenResponse>(resultStr);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             _logger.LogError(ex, ex.Message);
         }
