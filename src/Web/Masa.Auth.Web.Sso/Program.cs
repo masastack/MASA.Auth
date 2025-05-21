@@ -192,8 +192,8 @@ app.Use(async (context, next) =>
     }
 
     //TODO
-    //1.移除 X-Frame-Options 响应头
-    //2.用 CSP 控制允许的父页面
+    //1.Remove X-Frame-Options header
+    //2.Control allowed parent pages via CSP frame-ancestors
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
     if (!context.Response.Headers.ContainsKey("X-Frame-Options"))
     {
