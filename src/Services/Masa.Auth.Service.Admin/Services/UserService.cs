@@ -422,4 +422,12 @@ public class UserService : ServiceBase
         var command = new DeleteAccountCommand(model.SmsCode);
         await eventBus.PublishAsync(command);
     }
+
+    [RoutePattern("generate-password", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<string> GenerateNewPasswordAsync([FromServices] IEventBus eventBus)
+    {
+        var command = new GenerateNewPasswordCommand();
+        await eventBus.PublishAsync(command);
+        return command.Result;
+    }
 }
