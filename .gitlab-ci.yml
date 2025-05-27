@@ -7,6 +7,7 @@ stages:
   #- deploy-staging
   - docker-prd
   - deploy-prd
+  
 
 variables:
   IMAGE_AUTH_SERVER_ADMIN_DEV: $CI_ALI_REGISTRY_DOMAIN/masastack/masa-auth-service-admin:dev-$CI_PIPELINE_ID
@@ -32,19 +33,19 @@ docker-dev:
   tags:
     - linux-shell
   before_script:
-    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN
+    - docker login -u $CI_ALI_REGISTRY_USER -p $CI_ALI_REGISTRY_PASSWD $CI_ALI_REGISTRY_DOMAIN 
   only:
-    - main
+    - main  
   script:
     - docker build -f $DOCKER_AUTH_ADMIN_SERVER_PATH -t $IMAGE_AUTH_SERVER_ADMIN_DEV .
-    - docker push $IMAGE_AUTH_SERVER_ADMIN_DEV
-    # - docker build -f $DOCKER_AUTH_ADMIN_WEB_PATH -t $IMAGE_AUTH_WEB_ADMIN_SERVER_DEV .
-    # - docker push $IMAGE_AUTH_WEB_ADMIN_SERVER_DEV
+    - docker push $IMAGE_AUTH_SERVER_ADMIN_DEV 
+    - docker build -f $DOCKER_AUTH_ADMIN_WEB_PATH -t $IMAGE_AUTH_WEB_ADMIN_SERVER_DEV .
+    - docker push $IMAGE_AUTH_WEB_ADMIN_SERVER_DEV
     - docker build -f $DOCKER_AUTH_ADMIN_WEB_SSO_PATH -t $IMAGE_AUTH_WEB_ADMIN_SSO_DEV .
     - docker push $IMAGE_AUTH_WEB_ADMIN_SSO_DEV
   after_script:
-    - docker rmi $IMAGE_AUTH_SERVER_ADMIN_DEV
-    # - docker rmi $IMAGE_AUTH_WEB_ADMIN_SERVER_DEV
+    - docker rmi $IMAGE_AUTH_SERVER_ADMIN_DEV   
+    - docker rmi $IMAGE_AUTH_WEB_ADMIN_SERVER_DEV
     - docker rmi $IMAGE_AUTH_WEB_ADMIN_SSO_DEV
 
 deploy-dev:
@@ -55,11 +56,11 @@ deploy-dev:
   script:
     - echo $KUBE_CONFIG_NEW_YDY | base64 -d > ./config
     - echo $CI_PIPELINE_ID
-    # - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_DEV
+    - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_DEV
     - kubectl --kubeconfig ./config set image deployment/auth-service auth-service=$IMAGE_AUTH_SERVER_ADMIN_DEV -n $NAMESPACE_DEV
     - kubectl --kubeconfig ./config set image deployment/auth-sso auth-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_DEV
   retry: 2
-
+    
 deploy-sec:
   stage: deploy-dev
   image: registry.cn-hangzhou.aliyuncs.com/masa/library:kubectl-shell-v1.21.1
@@ -68,11 +69,10 @@ deploy-sec:
   script:
     - echo $KUBE_CONFIG_NEW_YDY | base64 -d > ./config
     - echo $CI_PIPELINE_ID
-    # - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_SEC
+    - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_SEC
     - kubectl --kubeconfig ./config set image deployment/auth-service auth-service=$IMAGE_AUTH_SERVER_ADMIN_DEV -n $NAMESPACE_SEC
     - kubectl --kubeconfig ./config set image deployment/auth-sso auth-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_SEC
   retry: 2
-  when: manual
 
 deploy-test:
   stage: deploy-test
@@ -82,7 +82,7 @@ deploy-test:
   script:
     - echo $KUBE_CONFIG_NEW_YDY | base64 -d > ./config
     - echo $CI_PIPELINE_ID
-    # - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_TEST
+    - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_TEST
     - kubectl --kubeconfig ./config set image deployment/auth-service auth-service=$IMAGE_AUTH_SERVER_ADMIN_DEV -n $NAMESPACE_TEST
     - kubectl --kubeconfig ./config set image deployment/auth-sso auth-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_TEST
   retry: 2
@@ -96,7 +96,7 @@ deploy-new-prd:
   script:
     - echo $KUBE_CONFIG_LSD_PRD_YDY | base64 -d > ./config
     - echo $CI_COMMIT_ID
-    # - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_PRD
+    - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER_DEV -n $NAMESPACE_PRD
     - kubectl --kubeconfig ./config set image deployment/auth-service auth-service=$IMAGE_AUTH_SERVER_ADMIN_DEV -n $NAMESPACE_PRD
     - kubectl --kubeconfig ./config set image deployment/auth-sso auth-sso=$IMAGE_AUTH_WEB_ADMIN_SSO_DEV -n $NAMESPACE_PRD
   retry: 2
@@ -125,14 +125,14 @@ docker-prd:
     - tags
   script:
     - docker build -f $DOCKER_AUTH_ADMIN_SERVER_PATH -t $IMAGE_AUTH_SERVER_ADMIN .
-    - docker push $IMAGE_AUTH_SERVER_ADMIN
-    # - docker build -f $DOCKER_AUTH_ADMIN_WEB_PATH -t $IMAGE_AUTH_WEB_ADMIN_SERVER .
-    # - docker push $IMAGE_AUTH_WEB_ADMIN_SERVER
+    - docker push $IMAGE_AUTH_SERVER_ADMIN 
+    - docker build -f $DOCKER_AUTH_ADMIN_WEB_PATH -t $IMAGE_AUTH_WEB_ADMIN_SERVER .
+    - docker push $IMAGE_AUTH_WEB_ADMIN_SERVER
     - docker build -f $DOCKER_AUTH_ADMIN_WEB_SSO_PATH -t $IMAGE_AUTH_WEB_ADMIN_SSO .
     - docker push $IMAGE_AUTH_WEB_ADMIN_SSO
   after_script:
-    - docker rmi $IMAGE_AUTH_SERVER_ADMIN
-    # - docker rmi $IMAGE_AUTH_WEB_ADMIN_SERVER
+    - docker rmi $IMAGE_AUTH_SERVER_ADMIN   
+    - docker rmi $IMAGE_AUTH_WEB_ADMIN_SERVER
     - docker rmi $IMAGE_AUTH_WEB_ADMIN_SSO
 
 deploy-prd:
@@ -143,7 +143,7 @@ deploy-prd:
   script:
     - echo $KUBE_CONFIG_LSD_PRD_YDY | base64 -d > ./config
     - echo $CI_COMMIT_TAG
-    # - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER -n $NAMESPACE_PRD
+    - kubectl --kubeconfig ./config set image deployment/auth auth=$IMAGE_AUTH_WEB_ADMIN_SERVER -n $NAMESPACE_PRD
     - kubectl --kubeconfig ./config set image deployment/auth-service auth-service=$IMAGE_AUTH_SERVER_ADMIN -n $NAMESPACE_PRD
     - kubectl --kubeconfig ./config set image deployment/auth-sso auth-sso=$IMAGE_AUTH_WEB_ADMIN_SSO -n $NAMESPACE_PRD
   retry: 2
