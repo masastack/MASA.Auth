@@ -25,36 +25,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigins", policy =>
-    {
-        policy.SetIsOriginAllowed(origin =>
-        {
-            if (string.IsNullOrEmpty(origin)) return false;
-            try
-            {
-                var uri = new Uri(origin);
-                var host = uri.Host.ToLowerInvariant();
-                // Allow all lonsid.cn domains and their subdomains
-                if (host == "lonsid.cn" || host.EndsWith(".lonsid.cn"))
-                    return true;
-                // Allow all localhost domains
-                if (host == "localhost")
-                    return true;
-            }
-            catch
-            {
-                // Ignore origin with invalid format
-            }
-            return false;
-        })
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
-    });
-});
-
 var authDomain = masaStackConfig.GetAuthServiceDomain();
 
 #if DEBUG
@@ -227,8 +197,6 @@ app.Use(async (context, next) =>
 
 app.UseStaticFiles();
 app.UseRouting();
-
-app.UseCors("AllowSpecificOrigins");
 
 app.UseIdentityServer();
 // This cookie policy fixes login issues with Chrome 80+ using HHTP
