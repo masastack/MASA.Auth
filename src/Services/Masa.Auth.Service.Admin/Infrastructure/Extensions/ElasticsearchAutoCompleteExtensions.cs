@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Extensions;
@@ -11,13 +11,13 @@ public static class ElasticsearchAutoCompleteExtensions
     {
         services.AddAutoCompleteBySpecifyDocument<UserSelectDto>("es", autoCompleteOptions =>
         {
-            autoCompleteOptions.UseElasticSearch(options =>
+            autoCompleteOptions.UseElasticSearch((serviceProvider, options) =>
             {
-                var esIsolationConfigProvider = services.BuildServiceProvider().GetService<IHttpContextAccessor>()
+                var esIsolationConfigProvider = serviceProvider.GetService<IHttpContextAccessor>()
                     ?.HttpContext?.RequestServices.GetService<EsIsolationConfigProvider>();
                 if (esIsolationConfigProvider == null)
                 {
-                    esIsolationConfigProvider = services.BuildServiceProvider().GetRequiredService<EsIsolationConfigProvider>();
+                    esIsolationConfigProvider = serviceProvider.GetRequiredService<EsIsolationConfigProvider>();
                 }
                 var esOptions = esIsolationConfigProvider.GetEsOptions();
                 options.ElasticsearchOptions.UseNodes(esOptions.Nodes.ToArray())
@@ -32,7 +32,7 @@ public static class ElasticsearchAutoCompleteExtensions
                 if (!_indexes.Contains(esOptions.Index))
                 {
                     _indexes.Add(esOptions.Index);
-                    var autoCompleteFactory = services.BuildServiceProvider().GetRequiredService<IAutoCompleteFactory>();
+                    var autoCompleteFactory = serviceProvider.GetRequiredService<IAutoCompleteFactory>();
                     var autoCompleteClient = autoCompleteFactory.Create();
                     autoCompleteClient.BuildAsync().ConfigureAwait(false).GetAwaiter().GetResult();
                 }
