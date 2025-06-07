@@ -17,7 +17,6 @@ public class QueryHandler
     [EventHandler]
     public async Task GetOperationLogAsync(OperationLogsQuery query)
     {
-        // 确保时间为 UTC
         var startTime = query.StartTime.HasValue
             ? DateTime.SpecifyKind(query.StartTime.Value, DateTimeKind.Utc)
             : (DateTime?)null;
