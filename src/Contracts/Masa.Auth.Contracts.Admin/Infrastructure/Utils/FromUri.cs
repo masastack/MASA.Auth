@@ -60,6 +60,8 @@ public class FromUri<T>
                 else if (propertyType.GetGenericTypeDefinition() == typeof(Nullable<>)) return ConvertValue(value, propertyType.GetGenericArguments()[0]).Convert(propertyType);
                 else throw new Exception("This type is not recognized, please add this type detection logic");
             }
+
+
         }
         return ValueTask.FromResult<T?>(func(context.Request));
     }
