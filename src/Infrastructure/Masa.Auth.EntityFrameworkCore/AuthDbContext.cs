@@ -43,6 +43,25 @@ public class AuthDbContext : MasaDbContext<AuthDbContext>
             builder.ApplyConfigurationsFromAssembly(assembly);
         }
 
+        // Apply provider-specific configurations
+        if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
+        {
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime))
+                    {
+                        property.SetValueConverter(new DateTimeUtcConverter());
+                    }
+                    else if (property.ClrType == typeof(DateTime?))
+                    {
+                        property.SetValueConverter(new NullableDateTimeUtcConverter());
+                    }
+                }
+            }
+        }
+
         base.OnModelCreatingExecuting(builder);
     }
 

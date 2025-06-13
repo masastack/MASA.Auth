@@ -17,18 +17,11 @@ public class QueryHandler
     [EventHandler]
     public async Task GetOperationLogAsync(OperationLogsQuery query)
     {
-        var startTime = query.StartTime.HasValue
-            ? DateTime.SpecifyKind(query.StartTime.Value, DateTimeKind.Utc)
-            : (DateTime?)null;
-        var endTime = query.EndTime.HasValue
-            ? DateTime.SpecifyKind(query.EndTime.Value, DateTimeKind.Utc)
-            : (DateTime?)null;
-
         Expression<Func<OperationLog, bool>> condition = operationLog => true;
         condition = condition.And(query.Operator != default, operationLog => operationLog.Operator == query.Operator);
         condition = condition.And(query.OperationType != default, operationLog => operationLog.OperationType == query.OperationType);
-        condition = condition.And(startTime is not null, operationLog => operationLog.OperationTime >= startTime);
-        condition = condition.And(endTime is not null, operationLog => operationLog.OperationTime <= endTime);
+        condition = condition.And(query.StartTime is not null, operationLog => operationLog.OperationTime >= query.StartTime);
+        condition = condition.And(query.EndTime is not null, operationLog => operationLog.OperationTime <= query.EndTime);
         condition = condition.And(!string.IsNullOrEmpty(query.Search), operationLog =>
                         operationLog.OperationDescription.Contains(query.Search) ||
                         operationLog.OperatorName.Contains(query.Search));

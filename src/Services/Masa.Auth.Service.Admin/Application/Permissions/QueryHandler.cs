@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Service.Admin.Application.Permissions;
@@ -46,7 +46,7 @@ public class QueryHandler
         if (query.Enabled is not null)
             condition = condition.And(role => role.Enabled == query.Enabled);
         if (!string.IsNullOrEmpty(query.Search))
-            condition = condition.And(role => role.Name.Contains(query.Search));
+            condition = condition.And(role => EF.Functions.ILike(role.Name, $"%{query.Search}%"));
         if (!string.IsNullOrEmpty(query.ClientId))
             condition = condition.And(role => role.Clients.Any(c => c.ClientId == query.ClientId));
 
