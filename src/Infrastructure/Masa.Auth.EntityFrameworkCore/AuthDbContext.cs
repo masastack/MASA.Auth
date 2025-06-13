@@ -45,7 +45,7 @@ public class AuthDbContext : MasaDbContext<AuthDbContext>
             builder.ApplyConfigurationsFromAssembly(assembly);
         }
 
-        // 根据数据库提供者调用特定的配置
+        // Apply provider-specific configurations
         if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
         {
             foreach (var entityType in builder.Model.GetEntityTypes())
