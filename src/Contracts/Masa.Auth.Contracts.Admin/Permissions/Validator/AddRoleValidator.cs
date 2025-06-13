@@ -9,7 +9,7 @@ public class AddRoleValidator : AbstractValidator<AddRoleDto>
     {
         RuleFor(role => role.Name).Required().MinimumLength(2).MaximumLength(50);
         RuleFor(role => role.Code).Required().LetterNumberUnderline().MinimumLength(2).MaximumLength(150);
-        RuleFor(role => role.Description).MaximumLength(50);
+        RuleFor(role => role.Description);
         RuleFor(role => role.Limit).GreaterThanOrEqualTo(0);
     }
 }

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.EntityFrameworkCore.PostgreSql.Converters;
+
 namespace Masa.Auth.EntityFrameworkCore;
 
 public class AuthDbContext : MasaDbContext<AuthDbContext>
@@ -41,6 +43,25 @@ public class AuthDbContext : MasaDbContext<AuthDbContext>
         foreach (var assembly in Assemblies.Distinct())
         {
             builder.ApplyConfigurationsFromAssembly(assembly);
+        }
+
+        // 根据数据库提供者调用特定的配置
+        if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
+        {
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime))
+                    {
+                        property.SetValueConverter(new DateTimeUtcConverter());
+                    }
+                    else if (property.ClrType == typeof(DateTime?))
+                    {
+                        property.SetValueConverter(new NullableDateTimeUtcConverter());
+                    }
+                }
+            }
         }
 
         base.OnModelCreatingExecuting(builder);
