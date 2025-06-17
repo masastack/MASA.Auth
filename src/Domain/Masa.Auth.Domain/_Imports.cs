@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+global using Mapster;
 global using Masa.Auth.Contracts.Admin;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Dtos;
@@ -11,6 +12,8 @@ global using Masa.Auth.Contracts.Admin.Permissions;
 global using Masa.Auth.Contracts.Admin.Sso;
 global using Masa.Auth.Contracts.Admin.Subjects;
 global using Masa.Auth.Contracts.Admin.Webhooks;
+global using Masa.Auth.Domain.DynamicRoles.Aggregates;
+global using Masa.Auth.Domain.DynamicRoles.Repositories;
 global using Masa.Auth.Domain.GlobalNavs.Aggregates;
 global using Masa.Auth.Domain.Logs.Aggregates;
 global using Masa.Auth.Domain.Organizations.Aggregates;
@@ -28,11 +31,9 @@ global using Masa.BuildingBlocks.Dispatcher.Events;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.Utils.Security.Cryptography;
-global using Mapster;
 global using Microsoft.AspNetCore.Identity;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Linq.Expressions;
+global using System.Reflection;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
-global using Masa.Auth.Domain.DynamicRoles.Aggregates;
-global using System.Reflection;

@@ -7,51 +7,15 @@ public class DynamicRoleDataType : Enumeration
 {
     public static DynamicRoleDataType Default = new DynamicRoleDataType();
 
-    public static DynamicRoleDataType UserInfo = new UserInfoData();
+    public static DynamicRoleDataType UserInfo = new DynamicRoleDataType(1, nameof(UserInfo));
 
-    public static DynamicRoleDataType UserClaim = new UserClaimData();
+    public static DynamicRoleDataType UserClaim = new DynamicRoleDataType(2, nameof(UserClaim));
+
+    public static DynamicRoleDataType DynamicRole = new DynamicRoleDataType(3, nameof(DynamicRole));
 
     public DynamicRoleDataType() : base(0, "") { }
 
     public DynamicRoleDataType(int id, string name) : base(id, name)
     {
-    }
-
-    public virtual string? GetValueFromUser(User user, string fieldName)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static DynamicRoleDataType StartNew(string type) => type switch
-    {
-        nameof(UserInfo) => new UserInfoData(),
-        nameof(UserClaim) => new UserClaimData(),
-        _ => new DynamicRoleDataType()
-    };
-
-    private class UserInfoData : DynamicRoleDataType
-    {
-        public UserInfoData() : base(1, nameof(UserInfo)) { }
-
-        public override string? GetValueFromUser(User user, string fieldName)
-        {
-            var property = typeof(User).GetProperty(fieldName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-            if (property != null)
-            {
-                var value = property.GetValue(user);
-                return value?.ToString();
-            }
-            return null;
-        }
-    }
-
-    private class UserClaimData : DynamicRoleDataType
-    {
-        public UserClaimData() : base(2, nameof(UserClaim)) { }
-
-        public override string? GetValueFromUser(User user, string fieldName)
-        {
-            return user.UserClaims.FirstOrDefault(x => x.Name == fieldName)?.Value;
-        }
     }
 }

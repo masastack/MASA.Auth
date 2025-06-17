@@ -430,4 +430,12 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
         return command.Result;
     }
+
+    [RoutePattern("has-role", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<bool> HasRoleAsync(IEventBus eventBus, IUserContext _userContext, [FromBody] List<Guid> RoleIds)
+    {
+        var query = new UserHasAnyRoleQuery(_userContext.GetUserId<Guid>(), RoleIds);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
 }

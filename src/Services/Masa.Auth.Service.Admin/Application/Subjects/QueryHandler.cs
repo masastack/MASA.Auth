@@ -18,6 +18,7 @@ public class QueryHandler
     private readonly UserDomainService _userDomainService;
     private readonly OperaterProvider _operaterProvider;
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly IEventBus _eventBus;
 
     public QueryHandler(
         IUserRepository userRepository,
@@ -32,7 +33,8 @@ public class QueryHandler
         IMultiEnvironmentUserContext multiEnvironmentUserContext,
         UserDomainService userDomainService,
         OperaterProvider operaterProvider,
-        IWebHostEnvironment webHostEnvironment)
+        IWebHostEnvironment webHostEnvironment,
+        IEventBus eventBus)
     {
         _userRepository = userRepository;
         _teamRepository = teamRepository;
@@ -47,9 +49,32 @@ public class QueryHandler
         _operaterProvider = operaterProvider;
         _distributedCacheClient = distributedCacheClient;
         _webHostEnvironment = webHostEnvironment;
+        _eventBus = eventBus;
     }
 
     #region User
+
+    [EventHandler]
+    public async Task UserHasAnyRoleQuery(UserHasAnyRoleQuery query)
+    {
+        var user = await _userRepository.AsQueryable().Include(x => x.UserClaims).Include(u => u.Roles)
+            .FirstOrDefaultAsync(x => x.Id == query.UserId);
+
+        if (user is null)
+        {
+            return;
+        }
+
+        var hasRole = user.Roles.Any(r => query.RoleIds.Contains(r.RoleId));
+        if (!hasRole)
+        {
+            var validateCommand = new ValidateDynamicRoleCommand(query.UserId, query.RoleIds);
+            await _eventBus.PublishAsync(validateCommand);
+            hasRole = validateCommand.Result.Any(r => r.IsValid);
+        }
+        query.Result = hasRole;
+        return;
+    }
 
     [EventHandler]
     public async Task GetUsersAsync(UsersQuery query)

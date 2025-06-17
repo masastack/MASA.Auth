@@ -434,4 +434,9 @@ public class User : FullAggregateRoot<Guid, Guid>
         Email = email;
         return string.IsNullOrEmpty(PhoneNumber) ? Email : PhoneNumber;
     }
+
+    internal bool HasDynamicRole(Guid dynamicRoleId)
+    {
+        throw new NotImplementedException();
+    }
 }

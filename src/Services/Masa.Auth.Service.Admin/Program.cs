@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+using Masa.Auth.Service.Admin.Domain.DynamicRoles.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
@@ -24,7 +26,7 @@ var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationA
 var identityServerUrl = masaStackConfig.GetSsoDomain();
 
 #if DEBUG
-identityServerUrl = "https://localhost:18201";
+//identityServerUrl = "https://localhost:18201";
 #endif
 
 builder.Services.AddAutoInject();
@@ -87,6 +89,8 @@ builder.Services
         };
     });
 builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
+
+builder.Services.AddDynamicRoleServices();
 
 MapsterAdapterConfig.TypeAdapter();
 

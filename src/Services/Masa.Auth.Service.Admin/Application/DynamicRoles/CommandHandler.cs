@@ -8,14 +8,18 @@ public class CommandHandler
     private readonly IDynamicRoleRepository _repository;
     private readonly II18n<DefaultResource> _i18n;
     private readonly IUserRepository _userRepository;
-    private readonly IUserContext _userContext;
+    private readonly DynamicRoleService _dynamicRoleService;
 
-    public CommandHandler(IDynamicRoleRepository repository, II18n<DefaultResource> i18n, IUserRepository userRepository, IUserContext userContext)
+    public CommandHandler(
+        IDynamicRoleRepository repository,
+        II18n<DefaultResource> i18n,
+        IUserRepository userRepository,
+        DynamicRoleService dynamicRoleService)
     {
         _repository = repository;
         _i18n = i18n;
         _userRepository = userRepository;
-        _userContext = userContext;
+        _dynamicRoleService = dynamicRoleService;
     }
 
     [EventHandler]
@@ -54,14 +58,18 @@ public class CommandHandler
             return;
         }
 
-        var userId = _userContext.GetUserId<Guid>();
-        var user = await _userRepository.AsQueryable().Include(x=>x.UserClaims).FirstOrDefaultAsync(x=>x.Id == userId);
+        var user = await _userRepository.AsQueryable().Include(x => x.UserClaims).FirstOrDefaultAsync(x => x.Id == command.UserId);
         MasaArgumentException.ThrowIfNull(user, _i18n.T(nameof(User)));
 
         var entitys = await _repository.GetListAsync(x => command.RoleIds.Contains(x.Id));
 
-        var dtos = entitys.Select(x=> new DynamicRoleValidateDto(x.Id, x.EvaluateConditions(user)));
+        var dtos = new List<DynamicRoleValidateDto>();
+        foreach (var entity in entitys)
+        {
+            var isValid = await _dynamicRoleService.EvaluateConditionsAsync(user, entity);
+            dtos.Add(new DynamicRoleValidateDto(entity.Id, isValid));
+        }
 
-        command.Result = dtos.ToList();
+        command.Result = dtos;
     }
 }

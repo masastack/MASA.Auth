@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.DynamicRoles.Commands;
 
-public record ValidateDynamicRoleCommand(List<Guid> RoleIds) : Command
+public record ValidateDynamicRoleCommand(Guid UserId, List<Guid> RoleIds) : Command
 {
     public List<DynamicRoleValidateDto> Result { get; set; } = new();
 }
