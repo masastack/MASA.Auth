@@ -41,21 +41,7 @@ public class DynamicRuleCondition : ValueObject
         Order = newOrder;
     }
 
-    public bool EvaluateCondition(User user)
-    {
-        if (user == null) throw new ArgumentNullException(nameof(user));
-
-        var value = GetValueFromUser(user);
-
-        return EvaluateCondition(value);
-    }
-
-    private string? GetValueFromUser(User user)
-    {
-        return DataType.GetValueFromUser(user, FieldName);
-    }
-
-    private bool EvaluateCondition(string? data)
+    public bool EvaluateCondition(string? data)
     {
         return OperatorType.EvaluateCondition(data, Value);
     }

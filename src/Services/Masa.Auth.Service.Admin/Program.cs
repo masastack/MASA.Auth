@@ -24,7 +24,7 @@ var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationA
 var identityServerUrl = masaStackConfig.GetSsoDomain();
 
 #if DEBUG
-identityServerUrl = "https://localhost:18201";
+//identityServerUrl = "https://localhost:18201";
 #endif
 
 builder.Services.AddAutoInject();
@@ -87,6 +87,8 @@ builder.Services
         };
     });
 builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
+
+builder.Services.AddDynamicRoleServices();
 
 MapsterAdapterConfig.TypeAdapter();
 
