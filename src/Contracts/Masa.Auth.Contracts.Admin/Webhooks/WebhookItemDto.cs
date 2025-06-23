@@ -9,7 +9,7 @@ public class WebhookItemDto
 
     public string Name { get; set; } = "";
 
-    public string WebhookEvent { get; set; } = "";
+    public string Event { get; set; } = "";
 
     public string Url { get; set; } = "";
 
