@@ -8,7 +8,7 @@ public class WebhookEntityTypeConfiguration : IEntityTypeConfiguration<Webhook>
     public void Configure(EntityTypeBuilder<Webhook> builder)
     {
         builder.HasKey(p => p.Id);
-        builder.Property(p => p.WebhookEvent).HasConversion(
+        builder.Property(p => p.Event).HasConversion(
             v => v.ToString(),
             v => (WebhookEvent)Enum.Parse(typeof(WebhookEvent), v)
         );
