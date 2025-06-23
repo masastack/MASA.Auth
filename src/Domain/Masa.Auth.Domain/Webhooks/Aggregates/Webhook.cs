@@ -17,13 +17,13 @@ public class Webhook : FullAggregateRoot<Guid, Guid>
 
     public bool IsActive { get; private set; } = true;
 
-    public WebhookEvent WebhookEvent { get; private set; }
+    public WebhookEvent Event { get; private set; }
 
     private List<WebhookLog> _webhookLogs = new();
 
     public IReadOnlyCollection<WebhookLog> WebhookLogs => _webhookLogs;
 
-    public Webhook(string name, string url, string httpMethod, string secret, string description, bool isActive, WebhookEvent webhookEvent)
+    public Webhook(string name, string url, string httpMethod, string secret, string description, bool isActive, WebhookEvent @event)
     {
         Name = name;
         Url = url;
@@ -31,17 +31,17 @@ public class Webhook : FullAggregateRoot<Guid, Guid>
         Secret = secret;
         Description = description;
         IsActive = isActive;
-        WebhookEvent = webhookEvent;
+        Event = @event;
     }
 
-    public void Update(string name, string url, string? secret, string? description, bool isActive, WebhookEvent webhookEvent)
+    public void Update(string name, string url, string? secret, string? description, bool isActive, WebhookEvent @event)
     {
         Name = name;
         Url = url;
         Secret = secret ?? Secret;
         Description = description ?? Description;
         IsActive = isActive;
-        WebhookEvent = webhookEvent;
+        Event = @event;
     }
 
     public void AddLog(WebhookLog webhookLog)

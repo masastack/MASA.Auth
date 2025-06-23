@@ -21,7 +21,7 @@ public class WebhookDomainService : DomainService
 
     public async Task TriggerAsync(WebhookEvent webhookEvent, object data)
     {
-        var webhooks = await _webhookRepository.GetListAsync(w => w.WebhookEvent == webhookEvent && w.IsActive);
+        var webhooks = await _webhookRepository.GetListAsync(w => w.Event == webhookEvent && w.IsActive);
         using var client = new HttpClient();
 
         var payload = new
