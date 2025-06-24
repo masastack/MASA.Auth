@@ -4,7 +4,7 @@
 		<WarningsAsErrors>
 			$(WarningsAsErrors);CS8600;CS8601;CS8602;CS8603;CS8604;CS8609;CS8610;CS8614;CS8616;CS8618;CS8619;CS8622;CS8625
 		</WarningsAsErrors>
-		<MasaFrameworkPackageVersion>1.2.0-preview.7</MasaFrameworkPackageVersion>
+		<MasaFrameworkPackageVersion>1.2.0-preview.8</MasaFrameworkPackageVersion>
 		<MasaStackSdksPackageVersion>1.2.1-preview.43</MasaStackSdksPackageVersion>
 		<MicrosoftPackageVersion>6.0.7</MicrosoftPackageVersion>
 	</PropertyGroup>
