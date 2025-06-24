@@ -13,10 +13,13 @@ public static class MapsterAdapterConfig
         TypeAdapterConfig<string, ClientRedirectUri>.NewConfig().MapWith(src => new ClientRedirectUri(src));
         TypeAdapterConfig<string, ClientPostLogoutRedirectUri>.NewConfig().MapWith(src => new ClientPostLogoutRedirectUri(src));
         TypeAdapterConfig<string, ClientScope>.NewConfig().MapWith(src => new ClientScope(src));
+        TypeAdapterConfig<string, ClientCorsOrigin>.NewConfig().MapWith(src => new ClientCorsOrigin(src));
         TypeAdapterConfig<ClientGrantType, string>.NewConfig().MapWith(src => src.GrantType);
         TypeAdapterConfig<ClientRedirectUri, string>.NewConfig().MapWith(src => src.RedirectUri);
         TypeAdapterConfig<ClientPostLogoutRedirectUri, string>.NewConfig().MapWith(src => src.PostLogoutRedirectUri);
         TypeAdapterConfig<ClientScope, string>.NewConfig().MapWith(src => src.Scope);
+        TypeAdapterConfig<ClientCorsOrigin, string>.NewConfig().MapWith(src => src.Origin);
+
         TypeAdapterConfig<DateOnly?, DateTime?>.NewConfig().MapWith(src => src.HasValue ? src.Value.ToDateTime(TimeOnly.Parse("00:00")) : null);
         TypeAdapterConfig<DateTime?, DateOnly?>.NewConfig().MapWith(src => src.HasValue ? DateOnly.FromDateTime(src.Value) : null);
         TypeAdapterConfig<string, ClientGrantType>.NewConfig().MapWith(item => new ClientGrantType(item));
