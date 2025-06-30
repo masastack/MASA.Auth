@@ -1,6 +1,8 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Service.Admin.Infrastructure.Extensions;
+
 namespace Masa.Auth.Service.Admin.Application.Permissions;
 
 public class QueryHandler
@@ -206,7 +208,8 @@ public class QueryHandler
                                    .Select(x => x.User)
                                    .ToListAsync();
         var dtos = users.Adapt<List<UserSelectModel>>();
-        query.Result = new(total, dtos);
+        var maskedDtos = dtos.ApplyDataMasking();
+        query.Result = new(total, maskedDtos);
     }
 
 
