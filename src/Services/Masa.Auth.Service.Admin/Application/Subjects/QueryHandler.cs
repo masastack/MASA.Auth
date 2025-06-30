@@ -1,8 +1,6 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using Masa.Auth.Service.Admin.Infrastructure.Extensions;
-
 namespace Masa.Auth.Service.Admin.Application.Subjects;
 
 public class QueryHandler
@@ -251,7 +249,7 @@ public class QueryHandler
             staffDto.Account = staff.User.Account;
             return staffDto;
         }).ToList().ApplyDataMasking();
-        
+
         query.Result = new(total, staffDtos);
     }
 

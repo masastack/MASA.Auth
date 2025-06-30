@@ -84,6 +84,7 @@ global using Masa.Auth.Service.Admin.Infrastructure.Extensions;
 global using Masa.Auth.Service.Admin.Infrastructure.Middleware;
 global using Masa.Auth.Service.Admin.Infrastructure.Models;
 global using Masa.Auth.Service.Admin.Infrastructure.Sms;
+global using Masa.Auth.Service.Admin.Infrastructure.Utils;
 global using Masa.BuildingBlocks.Authentication.Identity;
 global using Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities;
 global using Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Enums;
