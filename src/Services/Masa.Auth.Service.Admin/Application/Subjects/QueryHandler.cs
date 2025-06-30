@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Service.Admin.Application.Subjects;
@@ -96,7 +96,9 @@ public class QueryHandler
             }
         });
 
-        query.Result = new(users.Total, users.Result.Select(u => (UserDto)u).ToList());
+        var userDtos = users.Result.Select(u => (UserDto)u).ToList();
+        var maskedUserDtos = userDtos.ApplyDataMasking();
+        query.Result = new(users.Total, maskedUserDtos);
     }
 
     [EventHandler]
@@ -241,12 +243,14 @@ public class QueryHandler
                                      .Take(query.PageSize)
                                      .ToListAsync();
 
-        query.Result = new(total, staffs.Select(staff =>
+        var staffDtos = staffs.Select(staff =>
         {
             var staffDto = (StaffDto)staff;
             staffDto.Account = staff.User.Account;
             return staffDto;
-        }).ToList());
+        }).ToList().ApplyDataMasking();
+
+        query.Result = new(total, staffDtos);
     }
 
     [EventHandler]
@@ -321,7 +325,7 @@ public class QueryHandler
                                          .Where(staff => staff.DepartmentStaffs.Any(department => department.DepartmentId == query.DepartmentId))
                                          .ToListAsync();
 
-        query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
+        query.Result = staffs.Select(staff => (StaffDto)staff).ToList().ApplyDataMasking();
     }
 
     [EventHandler]
@@ -335,7 +339,7 @@ public class QueryHandler
                                          .Where(staff => staff.TeamStaffs.Any(team => team.TeamId == query.TeamId))
                                          .ToListAsync();
 
-        query.Result = staffs.Select(staff => (StaffDto)staff).ToList();
+        query.Result = staffs.Select(staff => (StaffDto)staff).ToList().ApplyDataMasking();
     }
 
     [EventHandler]

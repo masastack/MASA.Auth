@@ -206,7 +206,8 @@ public class QueryHandler
                                    .Select(x => x.User)
                                    .ToListAsync();
         var dtos = users.Adapt<List<UserSelectModel>>();
-        query.Result = new(total, dtos);
+        var maskedDtos = dtos.ApplyDataMasking();
+        query.Result = new(total, maskedDtos);
     }
 
 
