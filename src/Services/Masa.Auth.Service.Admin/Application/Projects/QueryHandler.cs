@@ -141,15 +141,11 @@ public class QueryHandler
         var appNavVisibles = await _globalNavVisibleRepository.GetListAsync(x => appIds.Contains(x.AppId));
         var hideAppIds = appNavVisibles.GroupBy(x => x.AppId).Where(x =>
         {
-            if (!x.Any())
-            {
-                return false;
-            }
             if (x.Any(x => !x.Visible))
             {
                 return true;
             }
-            return !x.Any(x => x.ClientId.Equals(clientId) && x.Visible);
+            return !x.Any(x => string.Equals(x.ClientId, clientId, StringComparison.Ordinal) && x.Visible);
         }).Select(x => x.Key);
 
         menuPermissions.RemoveAll(x => hideAppIds.Contains(x.AppId));
