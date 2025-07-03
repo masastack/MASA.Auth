@@ -30,31 +30,17 @@ public class DynamicRoleService : DomainService
     {
         if (!dynamicRole.Conditions.Any()) return true; // No conditions means always true.
 
-        var result = false;
         foreach (var condition in dynamicRole.Conditions.OrderBy(c => c.Order))
         {
             var extractor = _extractorFactory.GetExtractor(condition.DataType);
             var value = await extractor.ExtractValueAsync(user, condition.FieldName);
 
-            var isConditionMet = condition.EvaluateCondition(value);
-            if (condition.LogicalOperator == LogicalOperator.And)
-            {
-                result = result && isConditionMet;
-            }
-            else if (condition.LogicalOperator == LogicalOperator.Or)
-            {
-                result = result || isConditionMet;
-            }
-            else
-            {
-                result = isConditionMet; // Default to first condition's result if no operator specified.
-            }
-
-            if (!result && condition.LogicalOperator == LogicalOperator.And)
-            {
-                break; // If using AND and one condition fails, overall result is false.
-            }
+            var result = condition.EvaluateCondition(value);
+            if (result && condition.LogicalOperator == LogicalOperator.Or)
+                return result;
+            else if (!result && condition.LogicalOperator == LogicalOperator.And)
+                return false;
         }
-        return result;
+        return true;
     }
 }
