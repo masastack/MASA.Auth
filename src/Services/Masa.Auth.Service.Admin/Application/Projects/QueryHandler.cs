@@ -66,10 +66,7 @@ public class QueryHandler
         var menuPermissions = (await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
                                 && permissionIds.Contains(p.Id) && p.Enabled)).ToList();
 
-        if (!query.ClientId.IsNullOrEmpty())
-        {
-            await RemoveInvisibleMenu(query.ClientId, menuPermissions);
-        }
+        await RemoveInvisibleMenu(query.ClientId, menuPermissions);
 
         query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
         {
@@ -144,19 +141,15 @@ public class QueryHandler
         var appNavVisibles = await _globalNavVisibleRepository.GetListAsync(x => appIds.Contains(x.AppId));
         var hideAppIds = appNavVisibles.GroupBy(x => x.AppId).Where(x =>
         {
-            if (x.Any(x => string.IsNullOrEmpty(x.ClientId) && x.Visible))
+            if (!x.Any())
             {
                 return false;
             }
-            else if (x.Any(x => string.IsNullOrEmpty(x.ClientId) && !x.Visible))
+            if (x.Any(x => !x.Visible))
             {
                 return true;
             }
-            else if (x.Count() > 0)
-            {
-                return !x.Any(x => x.ClientId == clientId);
-            }
-            return false;
+            return !x.Any(x => x.ClientId.Equals(clientId) && x.Visible);
         }).Select(x => x.Key);
 
         menuPermissions.RemoveAll(x => hideAppIds.Contains(x.AppId));
