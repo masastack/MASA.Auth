@@ -613,14 +613,27 @@ public class QueryHandler
                                         .OrderByDescending(t => t.ModificationTime)
                                         .ToListAsync();
 
-        foreach (var team in teams.ToList())
-        {
-            var userModel = _distributedCacheClient.Get<UserModel>(CacheKey.UserKey(team.Modifier));
-            var modifierName = userModel?.RealDisplayName ?? "";
-            var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
-                    .Select(s => s.StaffId);
+        var allAdminStaffIds = teams
+            .SelectMany(team => team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin)
+            .Select(s => s.StaffId))
+            .Distinct()
+            .ToList();
 
-            var adminAvatar = (await _staffRepository.GetListAsync(s => staffIds.Contains(s.Id))).Select(s => s.Avatar).ToList();
+        var adminStaffs = allAdminStaffIds.Any()
+            ? await _staffRepository.GetListAsync(s => allAdminStaffIds.Contains(s.Id))
+            : new List<Staff>();
+        var adminStaffAvatarDict = adminStaffs.ToDictionary(s => s.Id, s => s.Avatar);
+
+        var modifierIds = teams.Select(t => t.Modifier).Distinct().ToList();
+        var userModels = await _distributedCacheClient.GetListAsync<UserModel>(modifierIds.Select(CacheKey.UserKey).ToList());
+        var userModelDict = userModels.Where(u => u != null).ToDictionary(u => u!.Id, u => u);
+
+        foreach (var team in teams)
+        {
+            var modifierName = userModelDict.TryGetValue(team.Modifier, out var userModel) ? userModel!.RealDisplayName : "";
+            var staffIds = team.TeamStaffs.Where(s => s.TeamMemberType == TeamMemberTypes.Admin).Select(s => s.StaffId);
+            var adminAvatar = staffIds.Select(id => adminStaffAvatarDict.TryGetValue(id, out var avatar) ? avatar : "").ToList();
+
             var teamDto = new TeamDto(team.Id, team.Name, $"{team.Avatar.Url}?stamp={team.ModificationTime.Second}", team.Description, team.TeamStaffs.Count,
                 adminAvatar, modifierName, team.ModificationTime);
             if (staffId != Guid.Empty)
