@@ -619,7 +619,9 @@ public class QueryHandler
             .Distinct()
             .ToList();
 
-        var adminStaffs = await _staffRepository.GetListAsync(s => allAdminStaffIds.Contains(s.Id));
+        var adminStaffs = allAdminStaffIds.Any()
+            ? await _staffRepository.GetListAsync(s => allAdminStaffIds.Contains(s.Id))
+            : new List<Staff>();
         var adminStaffAvatarDict = adminStaffs.ToDictionary(s => s.Id, s => s.Avatar);
 
         var modifierIds = teams.Select(t => t.Modifier).Distinct().ToList();
