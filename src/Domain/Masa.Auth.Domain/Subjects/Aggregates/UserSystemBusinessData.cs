@@ -5,6 +5,8 @@ namespace Masa.Auth.Domain.Subjects.Aggregates;
 
 public class UserSystemBusinessData : FullAggregateRoot<Guid, Guid>
 {
+    public User User { get; set; } = null!;
+
     public Guid UserId { get; private set; }
 
     public string Data { get; private set; }
