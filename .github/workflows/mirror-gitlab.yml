@@ -9,8 +9,10 @@ jobs:
   to_gitlab:
     runs-on: ubuntu-latest
     steps:                                            
-      - uses: actions/checkout@v1
-      - uses: yesolutions/mirror-action@v0.5.1
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: yesolutions/mirror-action@master
         with:
           REMOTE: '${{ secrets.GITLAB_ADDER }}/cicd/masa.auth.git'
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
