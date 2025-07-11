@@ -2848,6 +2848,17 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Masa.Auth.Domain.Subjects.Aggregates.UserSystemBusinessData", b =>
+                {
+                    b.HasOne("Masa.Auth.Domain.Subjects.Aggregates.User", "User")
+                        .WithMany("SystemBusinessDatas")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Masa.Auth.Domain.Webhooks.Aggregates.WebhookLog", b =>
                 {
                     b.HasOne("Masa.Auth.Domain.Webhooks.Aggregates.Webhook", "Webhook")
@@ -3205,6 +3216,8 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
                     b.Navigation("Roles");
 
                     b.Navigation("Staff");
+
+                    b.Navigation("SystemBusinessDatas");
 
                     b.Navigation("ThirdPartyUsers");
 

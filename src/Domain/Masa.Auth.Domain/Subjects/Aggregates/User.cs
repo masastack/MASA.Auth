@@ -9,6 +9,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     private List<UserClaimValue> _userClaims = new();
     private List<UserPermission> _permissions = new();
     private List<ThirdPartyUser> _thirdPartyUsers = new();
+    private List<UserSystemBusinessData> _systemBusinessDatas = new();
     private Staff? _staff;
 
     private string _name = "";
@@ -152,6 +153,8 @@ public class User : FullAggregateRoot<Guid, Guid>
     public IReadOnlyCollection<ThirdPartyUser> ThirdPartyUsers => _thirdPartyUsers;
 
     public IReadOnlyCollection<UserClaimValue> UserClaims => _userClaims;
+
+    public IReadOnlyCollection<UserSystemBusinessData> SystemBusinessDatas => _systemBusinessDatas;
 
     public Staff? Staff => _staff;
 
