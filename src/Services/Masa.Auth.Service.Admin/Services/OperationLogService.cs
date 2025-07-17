@@ -7,7 +7,10 @@ public class OperationLogService : RestServiceBase
 {
     public OperationLogService() : base("api/operationLog")
     {
-
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
     }
 
     private async Task<PaginationDto<OperationLogDto>> GetListAsync(IEventBus eventBus, GetOperationLogsDto operationLog)
@@ -17,10 +20,25 @@ public class OperationLogService : RestServiceBase
         return query.Result;
     }
 
-    private async Task<OperationLogDetailDto> GetDetailAsync(IEventBus eventBus, [FromQuery] Guid id)
+    private async Task<OperationLogDto> GetDetailAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new OperationLogDetailQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
+    }
+
+    /// <summary>
+    /// 添加包含客户端信息的操作日志
+    /// </summary>
+    private async Task AddAsync(IEventBus eventBus, [FromBody] OperationLogDto dto)
+    {
+        var command = new AddOperationLogCommand(
+            dto.Operator,
+            dto.OperatorName,
+            dto.OperationType,
+            dto.OperationTime,
+            dto.OperationDescription,
+            dto.ClientId);
+        await eventBus.PublishAsync(command);
     }
 }

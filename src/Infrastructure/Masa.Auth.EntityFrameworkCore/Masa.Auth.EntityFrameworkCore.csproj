@@ -11,7 +11,6 @@
 		<PackageReference Include="Masa.Contrib.Ddd.Domain.Repository.EFCore" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.EFCore" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="$(MicrosoftPackageVersion)" />
 	</ItemGroup>
 
   <ItemGroup>

@@ -73,6 +73,7 @@
     "Operator": "Operator",
     "OperationType": "Operation type",
     "OperationDescription": "Operation description",
+    "ClientId": "Client ID",
     "Please select type": "Please select type",
     "Please enter operation description": "Please enter operation description",
     "AddUser": "Add user",

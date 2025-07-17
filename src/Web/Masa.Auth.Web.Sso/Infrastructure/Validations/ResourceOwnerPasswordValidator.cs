@@ -3,13 +3,11 @@
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 
-public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
+public class ResourceOwnerPasswordValidator : BaseGrantValidator, IResourceOwnerPasswordValidator
 {
-    readonly IAuthClient _authClient;
-
-    public ResourceOwnerPasswordValidator(IAuthClient authClient)
+    public ResourceOwnerPasswordValidator(IAuthClient authClient, ILogger<ResourceOwnerPasswordValidator> logger)
+        : base(authClient, logger)
     {
-        _authClient = authClient;
     }
 
     public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
@@ -22,9 +20,13 @@ public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                 Password = context.Password,
                 Environment = context.Request.Raw.Get(nameof(IEnvironmentModel.Environment)) ?? ""
             });
+
             context.Result = new GrantValidationResult(
                  subject: user!.Id.ToString(),
                  authenticationMethod: OidcConstants.AuthenticationMethods.Password);
+
+            // 记录Token获取的操作日志（包含客户端信息）
+            await RecordTokenOperationLogAsync(user, "用户Token获取：使用密码模式获取访问Token", context.Request.Client?.ClientId, nameof(ResourceOwnerPasswordValidator));
         }
         catch (Exception ex)
         {

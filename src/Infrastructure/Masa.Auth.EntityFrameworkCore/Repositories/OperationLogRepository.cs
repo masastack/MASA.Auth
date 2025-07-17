@@ -40,4 +40,24 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
             _logger.LogError(ex, "Add operation log error");
         }
     }
+
+    public async Task AddDefaultAsync(OperationTypes operationType, string operationDescription, string? clientId, Guid? @operator = null)
+    {
+        try
+        {
+            @operator ??= _userContext.GetUserId<Guid>();
+
+            if (@operator is not null && @operator != Guid.Empty)
+            {
+                var operatorName = (await _operaterProvider.GetUserAsync(@operator.Value))?.RealDisplayName ?? "";
+                await AddAsync(new OperationLog(
+                    @operator.Value, operatorName, operationType, default, operationDescription, clientId
+                ));
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Add operation log with client info error");
+        }
+    }
 }

@@ -534,6 +534,7 @@
     "Operator": "Оператор",
     "OperationType": "Тип операции",
     "OperationDescription": "Описание операции",
+    "ClientId": "ID клиента",
     "Please select type": "Пожалуйста, выберите тип",
     "Please enter operation description": "Пожалуйста, введите описание операции",
     "AddUser": "Добавить пользователя",

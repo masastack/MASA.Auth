@@ -3,17 +3,16 @@
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 
-public class LdapGrantValidator : IExtensionGrantValidator
+public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
 {
-    readonly IAuthClient _authClient;
     readonly IThirdPartyIdpService _thirdPartyIdpService;
     readonly ILdapFactory _ldapFactory;
 
     public string GrantType { get; } = BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.LDAP;
 
-    public LdapGrantValidator(IAuthClient authClient, IThirdPartyIdpService thirdPartyIdpService, ILdapFactory ldapFactory)
+    public LdapGrantValidator(IAuthClient authClient, IThirdPartyIdpService thirdPartyIdpService, ILdapFactory ldapFactory, ILogger<LdapGrantValidator> logger)
+        : base(authClient, logger)
     {
-        _authClient = authClient;
         _thirdPartyIdpService = thirdPartyIdpService;
         _ldapFactory = ldapFactory;
     }
@@ -85,6 +84,9 @@ public class LdapGrantValidator : IExtensionGrantValidator
             };
 
             context.Result = new GrantValidationResult(authUser.Id.ToString(), "ldap", claims);
+
+            // 记录Token获取的操作日志（包含客户端信息）
+            await RecordTokenOperationLogAsync(authUser, $"用户Token获取：使用LDAP账号{userName}获取访问Token", context.Request.Client?.ClientId, nameof(LdapGrantValidator));
         }
         catch (Exception ex)
         {

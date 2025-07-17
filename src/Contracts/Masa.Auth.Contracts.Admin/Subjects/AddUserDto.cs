@@ -43,6 +43,11 @@ public class AddUserDto
 
     public PasswordTypes PasswordType { get; set; }
 
+    /// <summary>
+    /// 客户端ID，用于记录用户从哪个客户端注册的
+    /// </summary>
+    public string? ClientId { get; set; }
+
     public AddUserDto()
     {
         Address = new();
@@ -52,7 +57,7 @@ public class AddUserDto
         PasswordType = PasswordTypes.MD5;
     }
 
-    public AddUserDto(Guid id,string? name, string? displayName, string? avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, string? account, string? password, GenderTypes gender, List<Guid>? roles, List<SubjectPermissionRelationDto>? permissions, PasswordTypes passwordType)
+    public AddUserDto(Guid id,string? name, string? displayName, string? avatar, string? idCard, string? companyName, bool enabled, string? phoneNumber, string? landline, string? email, AddressValueDto address, string? department, string? position, string? account, string? password, GenderTypes gender, List<Guid>? roles, List<SubjectPermissionRelationDto>? permissions, PasswordTypes passwordType, string? clientId = null)
     {
         Id = id;
         Name = name;
@@ -73,5 +78,6 @@ public class AddUserDto
         Roles = roles ?? new();
         Permissions = permissions ?? new();
         PasswordType = passwordType;
+        ClientId = clientId;
     }
 }

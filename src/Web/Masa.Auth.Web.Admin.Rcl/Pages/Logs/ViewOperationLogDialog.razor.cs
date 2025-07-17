@@ -16,7 +16,7 @@ public partial class ViewOperationLogDialog
     [Parameter]
     public Guid OperationLogId { get; set; }
 
-    private OperationLogDetailDto OperationLogDetail { get; set; } = new();
+    private OperationLogDto OperationLogDetail { get; set; } = new();
 
     private OperationLogService OperationLogService => AuthCaller.OperationLogService;
 

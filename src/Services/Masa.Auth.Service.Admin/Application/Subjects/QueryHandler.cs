@@ -812,29 +812,26 @@ public class QueryHandler
     {
         userClaimValuesQuery.Result = await _authDbContext.Set<UserClaimValue>()
             .Where(c => c.UserId == userClaimValuesQuery.UserId)
-            .OrderByDescending(c => c.ModificationTime)
-            .ThenByDescending(c => c.CreationTime)
             .Select(c => new ClaimValue(c.Name, c.Value)).ToListAsync();
-
         var user = await _userRepository.FindAsync(u => u.Id == userClaimValuesQuery.UserId);
         if (user != null)
         {
-            var compatibleClaims = new List<ClaimValue>();
-
+            //compatible
             if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.PHONE_NUMBER))
             {
-                compatibleClaims.Add(new ClaimValue(IdentityClaimConsts.PHONE_NUMBER, user.PhoneNumber));
+                userClaimValuesQuery.Result.Add(new ClaimValue(IdentityClaimConsts.PHONE_NUMBER, user.PhoneNumber));
             }
             if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.ACCOUNT))
             {
-                compatibleClaims.Add(new ClaimValue(IdentityClaimConsts.ACCOUNT, user.Account));
+                userClaimValuesQuery.Result.Add(new ClaimValue(IdentityClaimConsts.ACCOUNT, user.Account));
             }
             if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.USER_NAME))
             {
-                compatibleClaims.Add(new ClaimValue(IdentityClaimConsts.USER_NAME, user.DisplayName));
+                userClaimValuesQuery.Result.Add(new ClaimValue(IdentityClaimConsts.USER_NAME, user.DisplayName));
             }
-            userClaimValuesQuery.Result.InsertRange(0, compatibleClaims);
         }
+        // 对最终结果按名称升序排序
+        userClaimValuesQuery.Result = userClaimValuesQuery.Result.OrderBy(c => c.Key).ToList();
     }
 
     [EventHandler]

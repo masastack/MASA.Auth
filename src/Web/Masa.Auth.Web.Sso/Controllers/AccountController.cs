@@ -14,6 +14,7 @@ public class AccountController : Controller
     readonly IUserSession _userSession;
     readonly IBackChannelLogoutService _backChannelClient;
     readonly IDistributedCacheClient _distributedCacheClient;
+    readonly ILogger<AccountController> _logger;
 
     public AccountController(
         IIdentityServerInteractionService interaction,
@@ -22,7 +23,8 @@ public class AccountController : Controller
         I18n i18n,
         IUserSession userSession,
         IBackChannelLogoutService backChannelClient,
-        IDistributedCacheClient distributedCacheClient)
+        IDistributedCacheClient distributedCacheClient,
+        ILogger<AccountController> logger)
     {
         _interaction = interaction;
         _events = events;
@@ -31,6 +33,7 @@ public class AccountController : Controller
         _userSession = userSession;
         _backChannelClient = backChannelClient;
         _distributedCacheClient = distributedCacheClient;
+        _logger = logger;
     }
 
     [HttpPost]
@@ -41,7 +44,7 @@ public class AccountController : Controller
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         try
         {
-            UserModel? user = new();
+            UserModel? user = null;
 
             if (inputModel.PhoneLogin)
             {
@@ -52,12 +55,6 @@ public class AccountController : Controller
                     RegisterLogin = inputModel.RegisterLogin,
                     Environment = inputModel.Environment
                 });
-
-                if (user is null)
-                {
-                    //todo auto register user
-                    return Content("no corresponding user for this mobile phone number");
-                }
             }
             else
             {
@@ -82,7 +79,8 @@ public class AccountController : Controller
                         IsPersistent = true,
                         ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
                     };
-                };
+                }
+                ;
 
                 var isuser = new IdentityServerUser(user!.Id.ToString())
                 {
@@ -101,6 +99,12 @@ public class AccountController : Controller
                 await HttpContext.SignInAsync(isuser, props);
 
                 await _events.RaiseAsync(new UserLoginSuccessEvent(user.Name, user.Id.ToString(), user.DisplayName, clientId: context?.Client.ClientId));
+
+                // 记录登录操作日志（包含客户端信息）
+                var loginDescription = inputModel.PhoneLogin
+                    ? $"用户登录：使用手机号{inputModel.PhoneNumber}登录"
+                    : $"用户登录：使用账号{inputModel.Account}登录";
+                await RecordLoginOperationLogAsync(user, loginDescription, context?.Client.ClientId);
 
                 if (context != null && context.IsNativeClient())
                 {
@@ -123,6 +127,30 @@ public class AccountController : Controller
         await _events.RaiseAsync(new UserLoginFailureEvent(inputModel.PhoneLogin ? inputModel.PhoneNumber : inputModel.Account,
                 "invalid credentials", clientId: context?.Client.ClientId));
         return Content(_i18n.T("LoginValidateError") ?? "LoginValidateError");
+    }
+
+    /// <summary>
+    /// 记录登录操作日志（包含客户端信息）
+    /// </summary>
+    private async Task RecordLoginOperationLogAsync(UserModel user, string description, string? clientId)
+    {
+        try
+        {
+            var operationLogModel = new AddOperationLogModel(
+                user.Id,
+                user.DisplayName,
+                OperationTypes.Login,
+                DateTime.UtcNow,
+                description,
+                clientId);
+
+            await _authClient.OperationLogService.AddLogAsync(operationLogModel);
+        }
+        catch (Exception ex)
+        {
+            // 记录日志失败不应该影响登录流程，只记录错误
+            _logger.LogError(ex, "Failed to record login operation log for user {UserId}", user.Id);
+        }
     }
 
     [HttpGet]

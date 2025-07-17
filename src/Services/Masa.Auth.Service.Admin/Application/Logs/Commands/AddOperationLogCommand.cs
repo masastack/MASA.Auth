@@ -8,7 +8,8 @@ public record AddOperationLogCommand(
     string OperatorName,
     OperationTypes OperationType,
     DateTime OperationTime,
-    string OperationDescription
+    string OperationDescription,
+    string? ClientId
     ) : Command
 {
 }

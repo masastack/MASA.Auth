@@ -17,6 +17,11 @@ public class OperationLogDto
 
     public string OperationDescription { get; set; } = "";
 
+    /// <summary>
+    /// 客户端ID
+    /// </summary>
+    public string? ClientId { get; set; }
+
     public OperationLogDto() { }
 
     public OperationLogDto(
@@ -33,6 +38,24 @@ public class OperationLogDto
         OperationType = operationType;
         OperationTime = operationTime;
         OperationDescription = operationDescription;
+    }
+
+    public OperationLogDto(
+        Guid id,
+        Guid @operator,
+        string operatorName,
+        OperationTypes operationType,
+        DateTime operationTime,
+        string operationDescription,
+        string? clientId)
+    {
+        Id = id;
+        Operator = @operator;
+        OperatorName = operatorName;
+        OperationType = operationType;
+        OperationTime = operationTime;
+        OperationDescription = operationDescription;
+        ClientId = clientId;
     }
 }
 

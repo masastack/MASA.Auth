@@ -117,6 +117,10 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ClientId")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("OperationDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -135,6 +139,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.HasIndex("OperationDescription");
 
@@ -964,6 +970,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("CompanyName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1035,6 +1046,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Account");
+
+                    b.HasIndex("ClientId");
 
                     b.HasIndex("Email");
 

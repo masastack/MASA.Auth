@@ -3,16 +3,15 @@
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 
-public class LocalPhoneNumberGrantValidator : IExtensionGrantValidator
+public class LocalPhoneNumberGrantValidator : BaseGrantValidator, IExtensionGrantValidator
 {
-    IAuthClient _authClient;
     LocalLoginByPhoneNumberAgent _localLoginByPhoneNumber;
 
     public string GrantType { get; } = "local_phone";
 
-    public LocalPhoneNumberGrantValidator(IAuthClient authClient, LocalLoginByPhoneNumberAgent localLoginByPhoneNumber)
+    public LocalPhoneNumberGrantValidator(IAuthClient authClient, LocalLoginByPhoneNumberAgent localLoginByPhoneNumber, ILogger<LocalPhoneNumberGrantValidator> logger)
+        : base(authClient, logger)
     {
-        _authClient = authClient;
         _localLoginByPhoneNumber = localLoginByPhoneNumber;
     }
 
@@ -49,6 +48,9 @@ public class LocalPhoneNumberGrantValidator : IExtensionGrantValidator
                 else
                 {
                     context.Result = new GrantValidationResult(user.Id.ToString(), "local");
+
+                    // 记录Token获取的操作日志（包含客户端信息）
+                    await RecordTokenOperationLogAsync(user, $"用户Token获取：使用本地手机号{phoneNumber}获取访问Token", context.Request.Client?.ClientId, nameof(LocalPhoneNumberGrantValidator));
                 }
             }
             else

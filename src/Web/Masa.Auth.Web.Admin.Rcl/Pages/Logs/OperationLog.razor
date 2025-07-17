@@ -23,12 +23,22 @@
                         <div class="body regular3--text">@context.OperationTime.ToString("HH:mm:ss")</div>
                     </div>
                     <div>
-                        @foreach (var (key, value) in new List<(string, string)>
-                        {
-                        (T(nameof(OperationLogDto.Operator)),context.OperatorName),
-                        (T(nameof(OperationLogDto.OperationType)),@T(context.OperationType.ToString())),
-                        (T(nameof(OperationLogDto.OperationDescription)),@context.OperationDescription)
-                        })
+                        @{
+                            var logItems = new List<(string, string)>
+                            {
+                                (T(nameof(OperationLogDto.Operator)), context.OperatorName),
+                                (T(nameof(OperationLogDto.OperationType)), T(context.OperationType.ToString())),
+                                (T(nameof(OperationLogDto.OperationDescription)), context.OperationDescription)
+                            };
+                            
+                            // 添加客户端信息，如果存在的话
+                            if (!string.IsNullOrEmpty(context.ClientId))
+                            {
+                                logItems.Add((T("ClientId"), context.ClientId));
+                            }
+                        }
+                        
+                        @foreach (var (key, value) in logItems)
                         {
                             <div class="d-flex mb-6">
                                 <div class="mr-3" style="color: #7681AB;">
