@@ -536,6 +536,7 @@
     "Operator": "操作者",
     "OperationType": "操作タイプ",
     "OperationDescription": "操作説明",
+    "ClientId": "クライアントID",
     "Please select type": "操作タイプを選択してください",
     "Please enter operation description": "操作説明を入力してください",
     "AddUser": "ユーザーを新規追加",

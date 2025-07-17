@@ -33,6 +33,11 @@ public class UserDto
 
     public string? Landline { get; set; }
 
+    /// <summary>
+    /// Client ID, used to record which client the user registered from
+    /// </summary>
+    public string? ClientId { get; set; }
+
     public UserDto()
     {
         DisplayName = "";
@@ -41,7 +46,7 @@ public class UserDto
         Address = new();
     }
 
-    public UserDto(Guid id, string? name, string displayName, string avatar, string? idCard, string account, string? companyName, bool enabled, string? phoneNumber, string? email, AddressValueDto address, DateTime creationTime, GenderTypes gender, string? landline)
+    public UserDto(Guid id, string? name, string displayName, string avatar, string? idCard, string account, string? companyName, bool enabled, string? phoneNumber, string? email, AddressValueDto address, DateTime creationTime, GenderTypes gender, string? landline, string? clientId = null)
     {
         Id = id;
         Name = name;
@@ -57,6 +62,7 @@ public class UserDto
         CreationTime = creationTime;
         Gender = gender;
         Landline = landline;
+        ClientId = clientId;
     }
 }
 

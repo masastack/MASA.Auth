@@ -537,6 +537,7 @@
     "Operator": "操作人",
     "OperationType": "操作类型",
     "OperationDescription": "操作描述",
+    "ClientId": "客户端ID",
     "Please select type": "请选择操作类型",
     "Please enter operation description": "请输入操作描述",
     "AddUser": "新建用户",

@@ -6,5 +6,13 @@ namespace Masa.Auth.Domain.Logs.Repositories;
 
 public interface IOperationLogRepository : IRepository<OperationLog, Guid>
 {
+    /// <summary>
+    /// Add default operation log
+    /// </summary>
     Task AddDefaultAsync(OperationTypes operationType, string operationDescription, Guid? @operator = null);
+
+    /// <summary>
+    /// Add operation log
+    /// </summary>
+    Task AddDefaultAsync(OperationTypes operationType, string operationDescription, string? clientId, Guid? @operator = null);
 }

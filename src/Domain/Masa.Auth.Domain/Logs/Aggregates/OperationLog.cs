@@ -10,6 +10,7 @@ namespace Masa.Auth.Domain.Logs.Aggregates
         OperationTypes _operationType;
         DateTime _operationTime;
         string _operationDescription = "";
+        string? _clientId;
 
         public Guid Operator
         {
@@ -48,6 +49,19 @@ namespace Masa.Auth.Domain.Logs.Aggregates
             set => _operationDescription = value ?? "";
         }
 
+        /// <summary>
+        /// Client ID, used to record the client source of the operation
+        /// </summary>
+        [AllowNull]
+        public string? ClientId
+        {
+            get => _clientId;
+            set => _clientId = value;
+        }
+
+        /// <summary>
+        /// Constructor for creating operation log (without client information)
+        /// </summary>
         public OperationLog(Guid @operator, string operatorName, OperationTypes operationType, DateTime operationTime, string? operationDescription)
         {
             Operator = @operator;
@@ -56,6 +70,20 @@ namespace Masa.Auth.Domain.Logs.Aggregates
             if (operationTime == default) operationTime = DateTime.UtcNow;
             OperationTime = operationTime;
             OperationDescription = operationDescription;
+        }
+
+        /// <summary>
+        /// Constructor for creating operation log (with client information)
+        /// </summary>
+        public OperationLog(Guid @operator, string operatorName, OperationTypes operationType, DateTime operationTime, string? operationDescription, string? clientId)
+        {
+            Operator = @operator;
+            OperatorName = operatorName;
+            OperationType = operationType;
+            if (operationTime == default) operationTime = DateTime.UtcNow;
+            OperationTime = operationTime;
+            OperationDescription = operationDescription;
+            ClientId = clientId;
         }
     }
 }

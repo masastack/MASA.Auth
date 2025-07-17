@@ -835,6 +835,8 @@ public class QueryHandler
             }
             userClaimValuesQuery.Result.InsertRange(0, compatibleClaims);
         }
+        // Sort the claim values by their keys in ascending order.
+        userClaimValuesQuery.Result = userClaimValuesQuery.Result.OrderBy(c => c.Key).ToList();
     }
 
     [EventHandler]

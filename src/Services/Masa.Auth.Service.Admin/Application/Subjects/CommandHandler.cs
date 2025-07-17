@@ -83,6 +83,7 @@ public class CommandHandler
             Password = model.Password,
             Avatar = model.Avatar,
             Enabled = true,
+            ClientId = model.ClientId,
         });
         await _eventBus.PublishAsync(addUserCommand);
         command.Result = addUserCommand.Result.Adapt<UserModel>();
@@ -115,7 +116,7 @@ public class CommandHandler
     public async Task AddUserAsync(AddUserCommand command)
     {
         var userDto = command.User;
-        var user = new User(userDto.Id, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender);
+        var user = new User(userDto.Id, userDto.Name, userDto.DisplayName, userDto.Avatar, userDto.IdCard, userDto.Account, userDto.Password, userDto.CompanyName, userDto.Department, userDto.Position, userDto.PhoneNumber, userDto.Landline, userDto.Email, userDto.Address, userDto.Gender, clientId: userDto.ClientId);
         user.SetRoles(userDto.Roles);
         user.AddPermissions(userDto.Permissions);
         await _userDomainService.AddAsync(user);
@@ -332,7 +333,8 @@ public class CommandHandler
             {
                 PhoneNumber = model.PhoneNumber,
                 SmsCode = model.Code,
-                UserRegisterType = UserRegisterTypes.PhoneNumber
+                UserRegisterType = UserRegisterTypes.PhoneNumber,
+                ClientId = ""
             });
             await _eventBus.PublishAsync(registerUserCommand);
             command.Result = new UserDetailDto

@@ -3,15 +3,13 @@
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 
-public class PhoneCodeGrantValidator : IExtensionGrantValidator
+public class PhoneCodeGrantValidator : BaseGrantValidator, IExtensionGrantValidator
 {
-    IAuthClient _authClient;
-
     public string GrantType { get; } = BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.PHONE_CODE;
 
-    public PhoneCodeGrantValidator(IAuthClient authClient)
+    public PhoneCodeGrantValidator(IAuthClient authClient, ILogger<PhoneCodeGrantValidator> logger)
+        : base(authClient, logger)
     {
-        _authClient = authClient;
     }
 
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
@@ -31,6 +29,9 @@ public class PhoneCodeGrantValidator : IExtensionGrantValidator
             if (user != null)
             {
                 context.Result = new GrantValidationResult(user.Id.ToString(), "sms");
+
+                // Record token acquisition operation log (including client information)
+                await RecordTokenOperationLogAsync(user, $"用户Token获取：使用手机号{phoneNumber}验证码获取访问Token", context.Request.Client?.ClientId, nameof(PhoneCodeGrantValidator));
             }
             else
             {

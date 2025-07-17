@@ -25,6 +25,8 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(u => u.SystemBusinessDatas).WithOne(uc => uc.User).HasForeignKey(s => s.UserId);
         builder.HasIndex(u => new { u.CreationTime, u.ModificationTime });//.IsDescending(); supported 7.0
         builder.Property(u => u.PasswordType).HasConversion(v => v.Id, v => Enumeration.FromValue<PasswordType>(v)).HasDefaultValue(PasswordType.MD5);
+        builder.Property(u => u.ClientId).HasMaxLength(255).HasDefaultValue("");
+        builder.HasIndex(u => u.ClientId);
     }
 }
 

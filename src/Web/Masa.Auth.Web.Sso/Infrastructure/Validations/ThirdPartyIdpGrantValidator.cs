@@ -3,9 +3,8 @@
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 
-public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
+public class ThirdPartyIdpGrantValidator : BaseGrantValidator, IExtensionGrantValidator
 {
-    IAuthClient _authClient;
     IRemoteAuthenticationDefaultsProvider _remoteAuthenticationDefaultsProvider;
     ThirdPartyIdpCallerProvider _thirdPartyIdpCallerProvider;
     WeChatMiniProgramCaller _weChatMiniProgramCaller;
@@ -16,9 +15,10 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
         IAuthClient authClient,
         IRemoteAuthenticationDefaultsProvider remoteAuthenticationDefaultsProvider,
         ThirdPartyIdpCallerProvider thirdPartyIdpCallerProvider,
-        WeChatMiniProgramCaller weChatMiniProgramCaller)
+        WeChatMiniProgramCaller weChatMiniProgramCaller,
+        ILogger<ThirdPartyIdpGrantValidator> logger)
+        : base(authClient, logger)
     {
-        _authClient = authClient;
         _remoteAuthenticationDefaultsProvider = remoteAuthenticationDefaultsProvider;
         _thirdPartyIdpCallerProvider = thirdPartyIdpCallerProvider;
         _weChatMiniProgramCaller = weChatMiniProgramCaller;
@@ -72,6 +72,7 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
             {
                 ThridPartyIdentity = thridPartyIdentity
             });
+
             context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp");
             if (identity != null)
             {
@@ -80,6 +81,12 @@ public class ThirdPartyIdpGrantValidator : IExtensionGrantValidator
                     ["thirdPartyUserData"] = identity,
                     ["registerSuccess"] = user is not null
                 };
+            }
+
+            // If user exists, record token acquisition operation log
+            if (user != null)
+            {
+                await RecordTokenOperationLogAsync(user, $"用户Token获取：使用{scheme}第三方登录获取访问Token", context.Request.Client?.ClientId, nameof(ThirdPartyIdpGrantValidator));
             }
         }
         catch (Exception ex)

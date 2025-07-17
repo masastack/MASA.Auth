@@ -58,7 +58,7 @@ public class QueryHandler
         var operationLog = await _operationLogRepository.FindAsync(query.OperationLogId);
         if (operationLog is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.OPERATION_LOG_NOT_EXIST);
 
-        query.Result = operationLog.Adapt<OperationLogDetailDto>();
+        query.Result = operationLog.Adapt<OperationLogDto>();
     }
 }
 

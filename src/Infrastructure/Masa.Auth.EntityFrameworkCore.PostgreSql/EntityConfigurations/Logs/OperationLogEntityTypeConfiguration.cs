@@ -12,5 +12,13 @@ public class OperationLogEntityTypeConfiguration : IEntityTypeConfiguration<Oper
         builder.HasIndex(p => p.OperationTime);
         builder.HasIndex(p => p.OperationType);
         builder.HasIndex(p => p.OperationDescription);
+        
+        // 配置ClientId字段
+        builder.Property(p => p.ClientId)
+            .HasMaxLength(200)
+            .IsRequired(false);
+            
+        // 为ClientId添加索引以便查询
+        builder.HasIndex(p => p.ClientId);
     }
 }

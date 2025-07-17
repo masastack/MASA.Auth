@@ -17,9 +17,9 @@ public class OperationLogService : ServiceBase
         return await SendAsync<GetOperationLogsDto, PaginationDto<OperationLogDto>>(nameof(GetListAsync), request);
     }
 
-    public async Task<OperationLogDetailDto> GetDetailAsync(Guid id)
+    public async Task<OperationLogDto> GetDetailAsync(Guid id)
     {
-        return await SendAsync<object, OperationLogDetailDto>(nameof(GetDetailAsync), new { id });
+        return await SendAsync<object, OperationLogDto>(nameof(GetDetailAsync), new { id });
     }
 }
 

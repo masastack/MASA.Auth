@@ -72,7 +72,12 @@ public class LdapCommandHandler
         }
 
         await _unitOfWork.SaveChangesAsync();
-        var ldapUsers = await ldapProvider.GetAllUserAsync().ToListAsync();
+
+        var ldapUsers = new List<LdapUser>();
+        await foreach (var user in ldapProvider.GetAllUserAsync())
+        {
+            ldapUsers.Add(user);
+        }
 
         var args = new SyncLdapUserArgs()
         {

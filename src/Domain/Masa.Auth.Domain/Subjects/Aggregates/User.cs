@@ -27,6 +27,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     private string _email = "";
     private GenderTypes _gender;
     private AddressValue _address = new();
+    private string _clientId = "";
 
     [AllowNull]
     public string Name
@@ -111,6 +112,16 @@ public class User : FullAggregateRoot<Guid, Guid>
         }
     }
 
+    /// <summary>
+    /// Client ID, used to record which client the user registered from
+    /// </summary>
+    [AllowNull]
+    public string ClientId
+    {
+        get => _clientId;
+        private set => _clientId = value ?? "";
+    }
+
     #region Contact Property
 
     [AllowNull]
@@ -169,8 +180,9 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? companyName,
                 string? email,
                 string phoneNumber,
-                PasswordType? passwordType = null) :
-        this(name, displayName, avatar, default, account, password, companyName, default, default, phoneNumber, default, email, GenderTypes.Male, passwordType)
+                PasswordType? passwordType = null,
+                string? clientId = null) :
+        this(name, displayName, avatar, default, account, password, companyName, default, default, phoneNumber, default, email, GenderTypes.Male, passwordType, clientId)
     {
     }
 
@@ -183,8 +195,9 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? email,
                 string phoneNumber,
                 ThirdPartyUser thirdPartyUser,
-                PasswordType? passwordType = null) :
-        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, passwordType)
+                PasswordType? passwordType = null,
+                string? clientId = null) :
+        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, passwordType, clientId)
     {
         _thirdPartyUsers.Add(thirdPartyUser);
     }
@@ -199,8 +212,9 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string phoneNumber,
                 ThirdPartyUser thirdPartyUser,
                 Staff staff,
-                PasswordType? passwordType = null) :
-        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, thirdPartyUser, passwordType)
+                PasswordType? passwordType = null,
+                string? clientId = null) :
+        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, thirdPartyUser, passwordType, clientId)
     {
         _staff = staff;
     }
@@ -214,8 +228,9 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? email,
                 string phoneNumber,
                 Staff staff,
-                PasswordType? passwordType = null) :
-        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, passwordType)
+                PasswordType? passwordType = null,
+                string? clientId = null) :
+        this(name, displayName, avatar, account, password, companyName, email, phoneNumber, passwordType, clientId)
     {
         _staff = staff;
     }
@@ -235,7 +250,8 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? email,
                 AddressValue? address,
                 GenderTypes gender,
-                PasswordType? passwordType = null)
+                PasswordType? passwordType = null,
+                string? clientId = null)
     {
         Id = id;
         Name = name;
@@ -249,6 +265,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         Avatar = string.IsNullOrEmpty(avatar) ? DefaultUserAttributes.GetDefaultAvatar(Gender) : avatar;
         PasswordType = passwordType ?? PasswordType.MD5;
         Password = password;
+        ClientId = clientId;
         var value = VerifyPhonNumberEmail(phoneNumber, email);
         Account = string.IsNullOrEmpty(account) ? value : account;
         DisplayName = string.IsNullOrEmpty(displayName) ? value : displayName;
@@ -267,7 +284,8 @@ public class User : FullAggregateRoot<Guid, Guid>
                 string? landline,
                 string? email,
                 GenderTypes gender,
-                PasswordType? passwordType = null)
+                PasswordType? passwordType = null,
+                string? clientId = null)
         : this(default,
                name,
                displayName,
@@ -283,7 +301,8 @@ public class User : FullAggregateRoot<Guid, Guid>
                email,
                new(),
                gender,
-               passwordType)
+               passwordType,
+               clientId)
     {
     }
 
@@ -299,7 +318,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         }).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
-        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.Gender, roles, permissions, user.Landline);
+        return new(user.Id, user.Name, user.DisplayName, user.Avatar, user.IdCard, user.Account, user.CompanyName, user.Enabled, user.PhoneNumber, user.Email, user.CreationTime, user.Address, thirdPartyIdpAvatars, "", "", user.ModificationTime, user.Department, user.Position, user.Password, user.Gender, roles, permissions, user.Landline, user.ClientId);
     }
 
     public void Update(string account, string? name, string displayName, string avatar, string? idCard, string? companyName, string? phoneNumber, string? landline, string? email, AddressValue address, string? department, string? position, GenderTypes gender)
@@ -348,6 +367,15 @@ public class User : FullAggregateRoot<Guid, Guid>
     public void UpdatePhoneNumber(string phoneNumber)
     {
         PhoneNumber = phoneNumber;
+    }
+
+    /// <summary>
+    /// Update client ID
+    /// </summary>
+    /// <param name="clientId">Client ID</param>
+    public void UpdateClientId(string? clientId)
+    {
+        ClientId = clientId;
     }
 
     public void Disable()

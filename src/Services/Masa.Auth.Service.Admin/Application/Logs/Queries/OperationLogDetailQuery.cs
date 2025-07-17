@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Logs.Queries;
 
-public record OperationLogDetailQuery(Guid OperationLogId) : Query<OperationLogDetailDto>
+public record OperationLogDetailQuery(Guid OperationLogId) : Query<OperationLogDto>
 {
-    public override OperationLogDetailDto Result { get; set; } = new();
+    public override OperationLogDto Result { get; set; } = new();
 }

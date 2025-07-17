@@ -14,7 +14,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="6.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.15" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -9,13 +9,20 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
     readonly IHttpContextAccessor _contextAccessor;
+    readonly ILogger<AuthenticationExternalHandler> _logger;
 
-    public AuthenticationExternalHandler(IAuthClient authClient, IIdentityServerInteractionService interaction, IEventService events, IHttpContextAccessor contextAccessor)
+    public AuthenticationExternalHandler(
+        IAuthClient authClient,
+        IIdentityServerInteractionService interaction,
+        IEventService events,
+        IHttpContextAccessor contextAccessor,
+        ILogger<AuthenticationExternalHandler> logger)
     {
         _authClient = authClient;
         _interaction = interaction;
         _events = events;
         _contextAccessor = contextAccessor;
+        _logger = logger;
     }
 
     public async Task<bool> OnHandleAuthenticateAfterAsync(AuthenticateResult result)
@@ -55,6 +62,9 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
             await _events.RaiseAsync(new UserLoginSuccessEvent(userModel.Name, userModel.Id.ToString(), userModel.DisplayName, clientId: context?.Client.ClientId));
 
+            // Record third-party login operation log (including client information)
+            await RecordThirdPartyLoginOperationLogAsync(userModel, scheme, context?.Client.ClientId);
+
             return true;
         }
         else
@@ -64,23 +74,42 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
         }
     }
 
-    private void ProcessLoginCallback(AuthenticateResult externalResult, out List<Claim> localClaims, out AuthenticationProperties localSignInProps)
+    /// <summary>
+    /// Record third-party login operation log (including client information)
+    /// </summary>
+    private async Task RecordThirdPartyLoginOperationLogAsync(UserModel user, string scheme, string? clientId)
     {
-        localClaims = new List<Claim>();
-        localSignInProps = new AuthenticationProperties();
+        try
+        {
+            var operationLogModel = new AddOperationLogModel(
+                user.Id,
+                user.DisplayName,
+                OperationTypes.Login,
+                DateTime.UtcNow,
+                $"用户登录：使用{scheme}第三方登录",
+                clientId);
+
+            await _authClient.OperationLogService.AddLogAsync(operationLogModel);
+        }
+        catch (Exception ex)
+        {
+            // 记录日志失败不应该影响登录流程，只记录错误
+            _logger.LogError(ex, "Failed to record third-party login operation log for user {UserId} using {Scheme}", user.Id, scheme);
+        }
+    }
+
+    static void ProcessLoginCallback(AuthenticateResult externalResult, out List<Claim> localClaims, out AuthenticationProperties localSignInProps)
+    {
         // if the external system sent a session id claim, copy it over
         // so we can use it for single sign-out
-        var sid = externalResult.Principal?.Claims?.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
-        if (sid != null)
-        {
-            localClaims.Add(new Claim(JwtClaimTypes.SessionId, sid.Value));
-        }
+        localClaims = new List<Claim>();
+        localSignInProps = new AuthenticationProperties();
 
         // if the external provider issued an id_token, we'll keep it for signout
-        var idToken = externalResult.Properties?.GetTokenValue("id_token");
-        if (idToken != null)
+        var id_token = externalResult.Properties?.GetTokenValue("id_token");
+        if (id_token != null)
         {
-            localSignInProps.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = idToken } });
+            localSignInProps.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = id_token } });
         }
     }
 }
