@@ -100,7 +100,7 @@ public class AccountController : Controller
 
                 await _events.RaiseAsync(new UserLoginSuccessEvent(user.Name, user.Id.ToString(), user.DisplayName, clientId: context?.Client.ClientId));
 
-                // 记录登录操作日志（包含客户端信息）
+                // Record login operation log (including client information)
                 var loginDescription = inputModel.PhoneLogin
                     ? $"用户登录：使用手机号{inputModel.PhoneNumber}登录"
                     : $"用户登录：使用账号{inputModel.Account}登录";
@@ -130,7 +130,7 @@ public class AccountController : Controller
     }
 
     /// <summary>
-    /// 记录登录操作日志（包含客户端信息）
+    /// Record login operation log (including client information)
     /// </summary>
     private async Task RecordLoginOperationLogAsync(UserModel user, string description, string? clientId)
     {
@@ -148,7 +148,7 @@ public class AccountController : Controller
         }
         catch (Exception ex)
         {
-            // 记录日志失败不应该影响登录流程，只记录错误
+            // Logging failure should not affect login flow, only record errors
             _logger.LogError(ex, "Failed to record login operation log for user {UserId}", user.Id);
         }
     }

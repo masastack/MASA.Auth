@@ -44,7 +44,7 @@ public class AddUserDto
     public PasswordTypes PasswordType { get; set; }
 
     /// <summary>
-    /// 客户端ID，用于记录用户从哪个客户端注册的
+    /// Client ID, used to record which client the user registered from
     /// </summary>
     public string? ClientId { get; set; }
 

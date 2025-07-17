@@ -85,7 +85,7 @@ public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
 
             context.Result = new GrantValidationResult(authUser.Id.ToString(), "ldap", claims);
 
-            // 记录Token获取的操作日志（包含客户端信息）
+            // Record token acquisition operation log (including client information)
             await RecordTokenOperationLogAsync(authUser, $"用户Token获取：使用LDAP账号{userName}获取访问Token", context.Request.Client?.ClientId, nameof(LdapGrantValidator));
         }
         catch (Exception ex)

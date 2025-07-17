@@ -62,7 +62,7 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
             await _events.RaiseAsync(new UserLoginSuccessEvent(userModel.Name, userModel.Id.ToString(), userModel.DisplayName, clientId: context?.Client.ClientId));
 
-            // 记录第三方登录的操作日志（包含客户端信息）
+            // Record third-party login operation log (including client information)
             await RecordThirdPartyLoginOperationLogAsync(userModel, scheme, context?.Client.ClientId);
 
             return true;
@@ -75,7 +75,7 @@ public class AuthenticationExternalHandler : IAuthenticationExternalHandler
     }
 
     /// <summary>
-    /// 记录第三方登录操作日志（包含客户端信息）
+    /// Record third-party login operation log (including client information)
     /// </summary>
     private async Task RecordThirdPartyLoginOperationLogAsync(UserModel user, string scheme, string? clientId)
     {

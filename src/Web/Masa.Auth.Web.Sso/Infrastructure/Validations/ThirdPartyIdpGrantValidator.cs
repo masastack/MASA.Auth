@@ -83,7 +83,7 @@ public class ThirdPartyIdpGrantValidator : BaseGrantValidator, IExtensionGrantVa
                 };
             }
 
-            // 如果用户存在，记录Token获取的操作日志
+            // If user exists, record token acquisition operation log
             if (user != null)
             {
                 await RecordTokenOperationLogAsync(user, $"用户Token获取：使用{scheme}第三方登录获取访问Token", context.Request.Client?.ClientId, nameof(ThirdPartyIdpGrantValidator));

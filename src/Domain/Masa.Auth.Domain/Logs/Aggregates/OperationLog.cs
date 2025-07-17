@@ -50,7 +50,7 @@ namespace Masa.Auth.Domain.Logs.Aggregates
         }
 
         /// <summary>
-        /// 客户端ID，用于记录操作来源的客户端
+        /// Client ID, used to record the client source of the operation
         /// </summary>
         [AllowNull]
         public string? ClientId
@@ -60,7 +60,7 @@ namespace Masa.Auth.Domain.Logs.Aggregates
         }
 
         /// <summary>
-        /// 构造函数，用于创建操作日志（不包含客户端信息）
+        /// Constructor for creating operation log (without client information)
         /// </summary>
         public OperationLog(Guid @operator, string operatorName, OperationTypes operationType, DateTime operationTime, string? operationDescription)
         {
@@ -73,7 +73,7 @@ namespace Masa.Auth.Domain.Logs.Aggregates
         }
 
         /// <summary>
-        /// 构造函数，用于创建操作日志（包含客户端信息）
+        /// Constructor for creating operation log (with client information)
         /// </summary>
         public OperationLog(Guid @operator, string operatorName, OperationTypes operationType, DateTime operationTime, string? operationDescription, string? clientId)
         {

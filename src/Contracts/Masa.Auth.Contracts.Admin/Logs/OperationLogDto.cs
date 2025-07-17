@@ -18,7 +18,7 @@ public class OperationLogDto
     public string OperationDescription { get; set; } = "";
 
     /// <summary>
-    /// 客户端ID
+    /// Client ID
     /// </summary>
     public string? ClientId { get; set; }
 

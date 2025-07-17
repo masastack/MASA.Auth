@@ -4,7 +4,7 @@
 namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 
 /// <summary>
-/// Grant Validator基类，提供通用的操作日志记录功能
+/// Base class for Grant Validators, provides common operation log recording functionality
 /// </summary>
 public abstract class BaseGrantValidator
 {
@@ -18,12 +18,12 @@ public abstract class BaseGrantValidator
     }
 
     /// <summary>
-    /// 记录Token获取操作日志（包含客户端信息）
+    /// Record token acquisition operation log (including client information)
     /// </summary>
-    /// <param name="user">用户信息</param>
-    /// <param name="description">操作描述</param>
-    /// <param name="clientId">客户端ID</param>
-    /// <param name="loggerName">日志记录器名称（用于错误日志）</param>
+    /// <param name="user">User information</param>
+    /// <param name="description">Operation description</param>
+    /// <param name="clientId">Client ID</param>
+    /// <param name="loggerName">Logger name (for error logging)</param>
     protected async Task RecordTokenOperationLogAsync(UserModel user, string description, string? clientId, string loggerName = "")
     {
         try

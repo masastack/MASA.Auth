@@ -113,7 +113,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     }
 
     /// <summary>
-    /// 客户端ID，用于记录用户从哪个客户端注册的
+    /// Client ID, used to record which client the user registered from
     /// </summary>
     [AllowNull]
     public string ClientId
@@ -370,9 +370,9 @@ public class User : FullAggregateRoot<Guid, Guid>
     }
 
     /// <summary>
-    /// 更新客户端ID
+    /// Update client ID
     /// </summary>
-    /// <param name="clientId">客户端ID</param>
+    /// <param name="clientId">Client ID</param>
     public void UpdateClientId(string? clientId)
     {
         ClientId = clientId;

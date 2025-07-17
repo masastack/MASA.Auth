@@ -30,7 +30,7 @@ public class PhoneCodeGrantValidator : BaseGrantValidator, IExtensionGrantValida
             {
                 context.Result = new GrantValidationResult(user.Id.ToString(), "sms");
 
-                // 记录Token获取的操作日志（包含客户端信息）
+                // Record token acquisition operation log (including client information)
                 await RecordTokenOperationLogAsync(user, $"用户Token获取：使用手机号{phoneNumber}验证码获取访问Token", context.Request.Client?.ClientId, nameof(PhoneCodeGrantValidator));
             }
             else

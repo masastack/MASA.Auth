@@ -28,7 +28,7 @@ public class OperationLogService : RestServiceBase
     }
 
     /// <summary>
-    /// 添加包含客户端信息的操作日志
+    /// Add operation log with client information
     /// </summary>
     private async Task AddAsync(IEventBus eventBus, [FromBody] OperationLogDto dto)
     {
