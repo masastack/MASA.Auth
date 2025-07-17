@@ -17,31 +17,19 @@
 
 	<ItemGroup>
 		<PackageReference Include="AlibabaCloud.SDK.Dypnsapi20170525" Version="1.0.6" />
-		<PackageReference Include="aliyun-net-sdk-dypnsapi" Version="1.1.8" />
-		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="FluentValidation" Version="11.4.0" />
 		<PackageReference Include="Masa.Blazor" Version="1.9.3" />
 		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Development.DaprStarter.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Caller" Version="$(MasaStackSdksPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Config" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Mc" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.9" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(MicrosoftPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Configuration" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
