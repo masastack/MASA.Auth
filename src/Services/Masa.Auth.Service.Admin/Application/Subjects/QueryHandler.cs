@@ -830,7 +830,7 @@ public class QueryHandler
                 userClaimValuesQuery.Result.Add(new ClaimValue(IdentityClaimConsts.USER_NAME, user.DisplayName));
             }
         }
-        // 对最终结果按名称升序排序
+        // Sort the claim values by their keys in ascending order.
         userClaimValuesQuery.Result = userClaimValuesQuery.Result.OrderBy(c => c.Key).ToList();
     }
 
