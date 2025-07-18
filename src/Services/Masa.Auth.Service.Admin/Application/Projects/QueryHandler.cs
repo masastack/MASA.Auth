@@ -139,15 +139,29 @@ public class QueryHandler
     {
         var appIds = menuPermissions.Select(p => p.AppId).Distinct();
         var appNavVisibles = await _globalNavVisibleRepository.GetListAsync(x => appIds.Contains(x.AppId));
-        var hideAppIds = appNavVisibles.GroupBy(x => x.AppId).Where(x =>
-        {
-            if (x.Any(x => !x.Visible))
-            {
-                return true;
-            }
-            return !x.Any(x => string.Equals(x.ClientId, clientId, StringComparison.Ordinal) && x.Visible);
-        }).Select(x => x.Key);
+
+        var hideAppIds = appNavVisibles
+            .GroupBy(x => x.AppId)
+            .Where(appGroup => ShouldHideApp(appGroup, clientId))
+            .Select(group => group.Key);
 
         menuPermissions.RemoveAll(x => hideAppIds.Contains(x.AppId));
+
+        bool ShouldHideApp(IGrouping<string, GlobalNavVisible> appGroup, string clientId)
+        {
+            // Hide if any record is set to invisible
+            if (appGroup.Any(nav => !nav.Visible))
+                return true;
+
+            var visibleRecords = appGroup.Where(nav => nav.Visible);
+
+            // Show if there is a global visible record (ClientId is empty)
+            if (visibleRecords.Any(nav => string.IsNullOrEmpty(nav.ClientId)))
+                return false;
+
+            // Only client-specific records, check if any matches the current client
+            return !visibleRecords.Any(nav =>
+                string.Equals(nav.ClientId, clientId, StringComparison.Ordinal));
+        }
     }
 }
