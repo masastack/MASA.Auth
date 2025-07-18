@@ -812,23 +812,28 @@ public class QueryHandler
     {
         userClaimValuesQuery.Result = await _authDbContext.Set<UserClaimValue>()
             .Where(c => c.UserId == userClaimValuesQuery.UserId)
+            .OrderByDescending(c => c.ModificationTime)
+            .ThenByDescending(c => c.CreationTime)
             .Select(c => new ClaimValue(c.Name, c.Value)).ToListAsync();
+
         var user = await _userRepository.FindAsync(u => u.Id == userClaimValuesQuery.UserId);
         if (user != null)
         {
-            //compatible
+            var compatibleClaims = new List<ClaimValue>();
+
             if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.PHONE_NUMBER))
             {
-                userClaimValuesQuery.Result.Add(new ClaimValue(IdentityClaimConsts.PHONE_NUMBER, user.PhoneNumber));
+                compatibleClaims.Add(new ClaimValue(IdentityClaimConsts.PHONE_NUMBER, user.PhoneNumber));
             }
             if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.ACCOUNT))
             {
-                userClaimValuesQuery.Result.Add(new ClaimValue(IdentityClaimConsts.ACCOUNT, user.Account));
+                compatibleClaims.Add(new ClaimValue(IdentityClaimConsts.ACCOUNT, user.Account));
             }
             if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.USER_NAME))
             {
-                userClaimValuesQuery.Result.Add(new ClaimValue(IdentityClaimConsts.USER_NAME, user.DisplayName));
+                compatibleClaims.Add(new ClaimValue(IdentityClaimConsts.USER_NAME, user.DisplayName));
             }
+            userClaimValuesQuery.Result.InsertRange(0, compatibleClaims);
         }
         // Sort the claim values by their keys in ascending order.
         userClaimValuesQuery.Result = userClaimValuesQuery.Result.OrderBy(c => c.Key).ToList();
