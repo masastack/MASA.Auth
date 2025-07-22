@@ -66,13 +66,6 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         }
 
         [EventHandler]
-        public async Task ValidateByAccountOperationLogAsync(ValidateByAccountCommand command)
-        {
-            if (command.Result is not null)
-                await _operationLogRepository.AddDefaultAsync(OperationTypes.Login, $"用户登录：使用账号{command.Result.Account}登录", command.Result.Id);
-        }
-
-        [EventHandler]
         public async Task UpdateUserPhoneNumberOperationLogAsync(UpdateUserPhoneNumberCommand command)
         {
             if (command.Result is true)

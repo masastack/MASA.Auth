@@ -80,7 +80,7 @@ public class UserProfileService : IProfileService
         }
         else
         {
-            list.Add(item); 
+            list.Add(item);
         }
     }
 }

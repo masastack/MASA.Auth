@@ -716,4 +716,16 @@ public class CommandHandler
         command.Result = _passwordHelper.GenerateNewPassword();
         await Task.CompletedTask;
     }
+
+    [EventHandler(2)]
+    public async Task ChangeStaffCurrentTeamAsync(UpdateStaffCurrentTeamCommand updateStaffCurrentTeamCommand)
+    {
+        //insert claim value ,ensure update in token by IProfileService
+        var userClaimValue = new UserClaimValue(IdentityClaimConsts.CURRENT_TEAM, updateStaffCurrentTeamCommand.TeamId.ToString())
+        {
+            UserId = _userContext.GetUserId<Guid>()
+        };
+
+        await _authDbContext.Set<UserClaimValue>().AddAsync(userClaimValue);
+    }
 }

@@ -8,6 +8,8 @@ public class CustomTokenRequestValidator : ICustomTokenRequestValidator
     public Task ValidateAsync(CustomTokenRequestValidationContext context)
     {
         context.Result.ValidatedRequest.Client.AlwaysSendClientClaims = true;
+        context.Result.CustomResponse =
+            new Dictionary<string, object> { { "api_version", "v1.0" } };
         return Task.CompletedTask;
     }
 }
