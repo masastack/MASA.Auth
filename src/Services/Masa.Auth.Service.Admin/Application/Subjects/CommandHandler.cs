@@ -720,12 +720,33 @@ public class CommandHandler
     [EventHandler(2)]
     public async Task ChangeStaffCurrentTeamAsync(UpdateStaffCurrentTeamCommand updateStaffCurrentTeamCommand)
     {
-        //insert claim value ,ensure update in token by IProfileService
-        var userClaimValue = new UserClaimValue(IdentityClaimConsts.CURRENT_TEAM, updateStaffCurrentTeamCommand.TeamId.ToString())
+        var userId = _userContext.GetUserId<Guid>();
+        if (userId == Guid.Empty)
         {
-            UserId = _userContext.GetUserId<Guid>()
-        };
+            _logger.LogError("User ID is empty when trying to change staff current team.");
+            return;
+        }
 
-        await _authDbContext.Set<UserClaimValue>().AddAsync(userClaimValue);
+        //update claim value ,ensure update in token by IProfileService
+        // 检查用户是否已经有相同的团队 Claim
+        var existingClaimValue = await _authDbContext.Set<UserClaimValue>()
+            .FirstOrDefaultAsync(u => u.UserId == userId && u.Name == IdentityClaimConsts.CURRENT_TEAM);
+
+        if (existingClaimValue != null)
+        {
+            // 如果已存在，更新值
+            existingClaimValue.UpdateValue(updateStaffCurrentTeamCommand.TeamId.ToString());
+        }
+        else
+        {
+            // 如果不存在，创建新的 Claim
+            var userClaimValue = new UserClaimValue(IdentityClaimConsts.CURRENT_TEAM, updateStaffCurrentTeamCommand.TeamId.ToString())
+            {
+                UserId = userId
+            };
+            await _authDbContext.Set<UserClaimValue>().AddAsync(userClaimValue);
+        }
+
+        await _authDbContext.SaveChangesAsync();
     }
 }
