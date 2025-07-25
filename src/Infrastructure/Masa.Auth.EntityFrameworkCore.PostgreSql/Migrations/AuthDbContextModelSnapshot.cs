@@ -19,7 +19,7 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("auth")
-                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("ProductVersion", "6.0.36")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -1001,8 +1001,10 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
 
                     b.Property<string>("ClientId")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("character varying(255)")
+                        .HasDefaultValue("");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
@@ -2517,8 +2519,7 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
 
                             b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasMaxLength(512)
-                                .HasColumnType("character varying(512)");
+                                .HasColumnType("text");
 
                             b1.HasKey("Id");
 

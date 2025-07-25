@@ -15,7 +15,7 @@ public class DynamicRoleEntityTypeConfiguration : IEntityTypeConfiguration<Dynam
         {
             b.Property<Guid>("Id").ValueGeneratedOnAdd();
             b.Property(x => x.FieldName).HasMaxLength(128);
-            b.Property(x => x.Value).HasMaxLength(512);
+            b.Property(x => x.Value);
             b.Property(x => x.OperatorType).HasConversion(v => v.Id, v => Enumeration.FromValue<OperatorType>(v));
             b.Property(x => x.DataType).HasConversion(v => v.Id, v => Enumeration.FromValue<DynamicRoleDataType>(v));
             b.HasKey("Id");
