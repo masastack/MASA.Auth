@@ -11,9 +11,9 @@ public class RoleFieldValueExtractor : IFieldValueExtractor
     {
         if (Guid.TryParse(fieldName, out var roleId))
         {
-            var result = user.Roles.Any(x => x.RoleId == roleId);
+            var result = user.Roles?.Any(x => x.RoleId == roleId) ?? false;
             return Task.FromResult<string?>(result.ToString());
         }
-        throw new UserFriendlyException($"Invalid role ID: {fieldName}");
+        throw new UserFriendlyException("Invalid role ID format.");
     }
 }
