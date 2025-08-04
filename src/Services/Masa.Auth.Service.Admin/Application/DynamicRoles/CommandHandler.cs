@@ -58,7 +58,10 @@ public class CommandHandler
             return;
         }
 
-        var user = await _userRepository.AsQueryable().Include(x => x.UserClaims).FirstOrDefaultAsync(x => x.Id == command.UserId);
+        var user = await _userRepository.AsQueryable()
+            .Include(x => x.UserClaims)
+            .Include(x => x.Roles)
+            .FirstOrDefaultAsync(x => x.Id == command.UserId);
         MasaArgumentException.ThrowIfNull(user, _i18n.T(nameof(User)));
 
         var entitys = await _repository.GetListAsync(x => command.RoleIds.Contains(x.Id));

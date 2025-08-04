@@ -18,7 +18,7 @@ public static class DynamicRoleServiceExtensions
         // Register field value extractors
         services.AddScoped<IFieldValueExtractor, UserInfoFieldValueExtractor>();
         services.AddScoped<IFieldValueExtractor, UserClaimFieldValueExtractor>();
-
+        services.AddScoped<IFieldValueExtractor, RoleFieldValueExtractor>();
         // Register dynamic role field value extractor with special handling for circular dependencies
         services.AddScoped<IFieldValueExtractor>(provider =>
         {

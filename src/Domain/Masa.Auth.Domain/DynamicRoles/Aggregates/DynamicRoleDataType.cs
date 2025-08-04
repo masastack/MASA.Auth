@@ -13,6 +13,8 @@ public class DynamicRoleDataType : Enumeration
 
     public static DynamicRoleDataType DynamicRole = new DynamicRoleDataType(3, nameof(DynamicRole));
 
+    public static DynamicRoleDataType Role = new DynamicRoleDataType(4, nameof(Role));
+
     public DynamicRoleDataType() : base(0, "") { }
 
     public DynamicRoleDataType(int id, string name) : base(id, name)
