@@ -32,6 +32,7 @@ public static class UserFriendlyExceptionCodes
     public const string CLIENT_ID_ALREADY_EXIST = "ClientIdAlreadyExist";
     public const string INVALID_CAPTCHA = "InvalidCaptcha";
     public const string LDAP_ACCOUNT_NOTEXIST = "LdapAccountNotexist";
+    public const string LDAP_ACCOUNT_ABNORMAL = "LdapAccountAbnormal";
     public const string LDAP_ACCOUNT_VALIDATION_FAILED = "LdapAccountValidationFailed";
     public const string LDAP_NOT_CONFIGURED = "LdapNotConfigured";
     public const string ACCOUNT_DISABLED = "AccountDisabled";

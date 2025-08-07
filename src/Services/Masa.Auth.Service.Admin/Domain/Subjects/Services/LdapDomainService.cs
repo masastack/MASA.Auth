@@ -64,11 +64,22 @@ public class LdapDomainService : DomainService
 
                 if (tpu.User.Staff == null)
                 {
-                    tpu.User.Bind(new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true));
+                    var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company,
+                        GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid),
+                        null, StaffTypes.Internal, ldapUser.UserAccountControl == UserAccountControl.NormalAccount);
+                    tpu.User.Bind(staff);
                 }
                 else
                 {
                     tpu.User.Staff.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress);
+                    if (ldapUser.UserAccountControl == UserAccountControl.NormalAccount)
+                    {
+                        tpu.User.Staff.Enable();
+                    }
+                    else
+                    {
+                        tpu.User.Staff.Disable();
+                    }
                 }
             }
         });

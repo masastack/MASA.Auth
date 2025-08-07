@@ -15,6 +15,7 @@ public static class SchedulerJobServiceCollectionExtensions
         await serviceProvider.SafeExcuteAsync(AddSyncUserRedisJobAsync);
         await serviceProvider.SafeExcuteAsync(AddSyncOidcRedisJobAsync);
         await serviceProvider.SafeExcuteAsync(AddSyncPermissionRedisJobAsync);
+        await serviceProvider.SafeExcuteAsync(AddSyncLdapUserJobAsync);
     }
 
     static async Task CreateAndRunAsync(this IServiceProvider serviceProvider, UpsertSchedulerJobRequest upsertSchedulerJobRequest)
@@ -128,6 +129,32 @@ public static class SchedulerJobServiceCollectionExtensions
             {
                 HttpMethod = HttpMethods.POST,
                 RequestUrl = Path.Combine(authUrl, "api/permission/SyncRedis")
+            }
+        });
+    }
+
+    public static async Task AddSyncLdapUserJobAsync(this IServiceProvider serviceProvider)
+    {
+        var authUrl = serviceProvider.GetRequiredService<IMasaStackConfig>().GetAuthServiceDomain();
+        await serviceProvider.CreateAndRunAsync(new UpsertSchedulerJobRequest()
+        {
+            ProjectIdentity = MasaStackProject.Auth.Name,
+            JobIdentity = "masa-auth-sync-user-from-ladp-job",
+            Name = "SyncUserFromLdapJob",
+            IsAlertException = true,
+            JobType = JobTypes.Http,
+            CronExpression = "0 0 0 * * ? *",
+            Description = "SyncUserFromLdapJob",
+            ScheduleExpiredStrategy = ScheduleExpiredStrategyTypes.ExecuteImmediately,
+            ScheduleBlockStrategy = ScheduleBlockStrategyTypes.Cover,
+            RunTimeoutStrategy = RunTimeoutStrategyTypes.RunFailedStrategy,
+            RunTimeoutSecond = 12 * 60,
+            FailedRetryInterval = 10,
+            FailedRetryCount = 3,
+            HttpConfig = new SchedulerJobHttpConfig()
+            {
+                HttpMethod = HttpMethods.GET,
+                RequestUrl = Path.Combine(authUrl, "api/user/SyncFromLdap")
             }
         });
     }

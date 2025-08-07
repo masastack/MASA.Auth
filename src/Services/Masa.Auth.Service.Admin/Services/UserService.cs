@@ -299,6 +299,14 @@ public class UserService : ServiceBase
     }
 
     [AllowAnonymous]
+    [RoutePattern("SyncFromLdap", StartWithBaseUri = true, HttpMethod = "Get")]
+    public async Task SyncFromLdapAsync(IEventBus eventBus)
+    {
+        var command = new SyncFromLdapCommand();
+        await eventBus.PublishAsync(command);
+    }
+
+    [AllowAnonymous]
     [RoutePattern("register", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task<UserModel> RegisterAsync(IEventBus eventBus, [FromBody] RegisterByEmailModel registerModel)
     {
