@@ -139,7 +139,7 @@ public static class SchedulerJobServiceCollectionExtensions
         await serviceProvider.CreateAndRunAsync(new UpsertSchedulerJobRequest()
         {
             ProjectIdentity = MasaStackProject.Auth.Name,
-            JobIdentity = "masa-auth-sync-user-from-ladp-job",
+            JobIdentity = "masa-auth-sync-user-from-ldap-job",
             Name = "SyncUserFromLdapJob",
             IsAlertException = true,
             JobType = JobTypes.Http,

@@ -425,7 +425,6 @@ public class StaffCommandHandler
                 //        }
 
                 //        await _userDomainService.UpdateAsync(tpu.User);
-                //        syncStats = syncStats with { Disabled = syncStats.Disabled + 1, Updated = syncStats.Updated + 1 };
                 //        _logger.LogWarning($"Disabled user {tpu.User.Account} - no longer exists in LDAP");
                 //    }
                 //}
