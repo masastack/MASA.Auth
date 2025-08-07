@@ -348,13 +348,6 @@ public class StaffCommandHandler
 
             _logger.LogInformation($"Found {existingThirdPartyUsers.Count} existing LDAP users in Auth system");
 
-            var syncStats = new
-            {
-                Updated = 0,
-                Enabled = 0,
-                Disabled = 0
-            };
-
             // 5. 同步用户状态
             foreach (var tpu in existingThirdPartyUsers)
             {
@@ -380,7 +373,6 @@ public class StaffCommandHandler
                             {
                                 tpu.User.Staff.Enable();
                             }
-                            syncStats = syncStats with { Enabled = syncStats.Enabled + 1 };
                             _logger.LogInformation($"Enabled user {tpu.User.Account} based on LDAP status");
                         }
                         else
@@ -402,7 +394,6 @@ public class StaffCommandHandler
                                 tpu.User.RemoveRoles(roleIds);
                             }
 
-                            syncStats = syncStats with { Disabled = syncStats.Disabled + 1 };
                             _logger.LogInformation($"Disabled user {tpu.User.Account} and cleared roles/teams based on LDAP status");
                         }
                     }
@@ -411,7 +402,6 @@ public class StaffCommandHandler
                     if (hasBasicInfoChanged || isLdapUserEnabled != isAuthUserEnabled)
                     {
                         await _userDomainService.UpdateAsync(tpu.User);
-                        syncStats = syncStats with { Updated = syncStats.Updated + 1 };
                     }
                 }
                 //else
@@ -441,7 +431,7 @@ public class StaffCommandHandler
                 //}
             }
 
-            _logger.LogInformation($"LDAP staff synchronization completed. Stats: Updated={syncStats.Updated}, Enabled={syncStats.Enabled}, Disabled={syncStats.Disabled}");
+            _logger.LogInformation($"LDAP staff synchronization completed.");
         }
         catch (Exception ex)
         {

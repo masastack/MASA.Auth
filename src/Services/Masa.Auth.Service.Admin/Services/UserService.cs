@@ -298,7 +298,6 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
-    [AllowAnonymous]
     [RoutePattern("SyncFromLdap", StartWithBaseUri = true, HttpMethod = "Get")]
     public async Task SyncFromLdapAsync(IEventBus eventBus)
     {
