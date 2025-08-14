@@ -52,12 +52,12 @@ public class WeChatBuilder : ILocalAuthenticationDefaultBuilder, IAuthentication
         authenticationDefaults.BindOAuthOptions(options.CurrentValue);
         options.CurrentValue.ClaimActions.MapCustomJson(Claims.Privilege, user =>
         {
-             if (!user.TryGetProperty("privilege", out var value) || value.ValueKind != System.Text.Json.JsonValueKind.Array)
-             {
-                 return null;
-             }
+            if (!user.TryGetProperty("privilege", out var value) || value.ValueKind != System.Text.Json.JsonValueKind.Array)
+            {
+                return null;
+            }
 
-             return string.Join(',', value.EnumerateArray().Select(element => element.GetString()));
+            return string.Join(',', value.EnumerateArray().Select(element => element.GetString()));
         });
         options.CurrentValue.StateDataFormat = provider.GetRequiredService<PropertiesDataFormatCache>();
 

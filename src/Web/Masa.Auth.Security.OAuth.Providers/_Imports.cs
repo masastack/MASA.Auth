@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+global using AspNet.Security.OAuth.Alipay;
 global using AspNet.Security.OAuth.Apple;
 global using AspNet.Security.OAuth.GitHub;
 global using AspNet.Security.OAuth.Weixin;
