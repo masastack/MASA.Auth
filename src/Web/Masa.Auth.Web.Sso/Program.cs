@@ -25,6 +25,18 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
 
+#if DEBUG
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+#endif
+
 var authDomain = masaStackConfig.GetAuthServiceDomain();
 
 #if DEBUG
@@ -197,6 +209,10 @@ app.Use(async (context, next) =>
 
 app.UseStaticFiles();
 app.UseRouting();
+
+#if DEBUG
+app.UseCors("AllowAllOrigins");
+#endif
 
 app.UseIdentityServer();
 // This cookie policy fixes login issues with Chrome 80+ using HHTP

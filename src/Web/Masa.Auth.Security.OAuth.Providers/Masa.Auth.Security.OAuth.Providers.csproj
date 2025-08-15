@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -7,9 +7,10 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+	  <PackageReference Include="AspNet.Security.OAuth.Alipay" Version="6.0.15" />
 	  <PackageReference Include="AspNet.Security.OAuth.Apple" Version="6.0.15" />
-	  <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.10" />
-	  <PackageReference Include="AspNet.Security.OAuth.Weixin" Version="6.0.11" />
+	  <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.15" />
+	  <PackageReference Include="AspNet.Security.OAuth.Weixin" Version="6.0.15" />
 	  <PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="$(MasaFrameworkPackageVersion)" />
 	  <PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaStackSdksPackageVersion)" />
 	  <PackageReference Include="Masa.Contrib.Exceptions" Version="$(MasaFrameworkPackageVersion)" />

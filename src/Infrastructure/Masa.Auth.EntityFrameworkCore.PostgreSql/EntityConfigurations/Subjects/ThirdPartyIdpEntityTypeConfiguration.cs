@@ -8,7 +8,7 @@ public class ThirdPartyIdpEntityTypeConfiguration : IEntityTypeConfiguration<Thi
     public void Configure(EntityTypeBuilder<ThirdPartyIdp> builder)
     {
         builder.Property(p => p.ClientId).HasMaxLength(255);
-        builder.Property(p => p.ClientSecret).HasMaxLength(255);
+        builder.Property(p => p.ClientSecret).HasMaxLength(2000);
     }
 }
 

@@ -80,7 +80,6 @@ public class AccountController : Controller
                         ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
                     };
                 }
-                ;
 
                 var isuser = new IdentityServerUser(user!.Id.ToString())
                 {
