@@ -11,6 +11,11 @@ public class StaffCommandHandler
     readonly ILogger<CommandHandler> _logger;
     readonly IEventBus _eventBus;
     readonly PhoneHelper _phoneHelper;
+    readonly ILdapFactory _ldapFactory;
+    readonly ILdapIdpRepository _ldapIdpRepository;
+    readonly LdapDomainService _ldapDomainService;
+    readonly UserDomainService _userDomainService;
+    readonly AuthDbContext _authDbContext;
 
     public StaffCommandHandler(
         IStaffRepository staffRepository,
@@ -18,7 +23,12 @@ public class StaffCommandHandler
         IDistributedCacheClient distributedCacheClient,
         ILogger<CommandHandler> logger,
         IEventBus eventBus,
-        PhoneHelper phoneHelper)
+        PhoneHelper phoneHelper,
+        ILdapFactory ldapFactory,
+        ILdapIdpRepository ldapIdpRepository,
+        LdapDomainService ldapDomainService,
+        UserDomainService userDomainService,
+        AuthDbContext authDbContext)
     {
         _staffRepository = staffRepository;
         _staffDomainService = staffDomainService;
@@ -26,6 +36,11 @@ public class StaffCommandHandler
         _logger = logger;
         _eventBus = eventBus;
         _phoneHelper = phoneHelper;
+        _ldapFactory = ldapFactory;
+        _ldapIdpRepository = ldapIdpRepository;
+        _ldapDomainService = ldapDomainService;
+        _userDomainService = userDomainService;
+        _authDbContext = authDbContext;
     }
 
     [EventHandler(1)]
@@ -285,4 +300,195 @@ public class StaffCommandHandler
         await _distributedCacheClient.SetAsync(CacheKey.STAFF_DEFAULT_PASSWORD, command.DefaultPassword);
     }
 
+    [EventHandler(1)]
+    public async Task SyncStaffAsync(SyncFromLdapCommand command)
+    {
+        try
+        {
+            _logger.LogInformation("Starting LDAP staff synchronization...");
+
+            // 1. 获取LDAP配置和提供程序
+            var ldaps = await _ldapIdpRepository.GetListAsync();
+            if (!ldaps.Any())
+            {
+                _logger.LogWarning("No LDAP configuration found, skipping synchronization");
+                return;
+            }
+
+            var ldap = ldaps.First();
+            var ldapOptions = ldap.Adapt<LdapOptions>();
+            var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
+
+            // 验证LDAP连接
+            if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
+            {
+                _logger.LogError("Failed to authenticate with LDAP server");
+                throw new UserFriendlyException("LDAP connection failed");
+            }
+
+            // 2. 获取所有LDAP用户（包含状态信息）
+            var ldapUsers = new List<LdapUser>();
+            await foreach (var user in ldapProvider.GetAllUserAsync())
+            {
+                ldapUsers.Add(user);
+            }
+
+            _logger.LogInformation($"Found {ldapUsers.Count} users in LDAP");
+
+            // 3. 获取LDAP身份提供者
+            var identityProvider = await _ldapDomainService.GetIdentityProviderAsync();
+
+            // 4. 获取所有已存在的第三方用户（LDAP用户）
+            var existingThirdPartyUsers = await _authDbContext.Set<ThirdPartyUser>()
+                .Where(tpu => tpu.ThirdPartyIdpId == identityProvider.Id)
+                .Include(tpu => tpu.User)
+                .ThenInclude(user => user.Staff)
+                .Include(tpu => tpu.User.Roles)
+                .ToListAsync();
+
+            _logger.LogInformation($"Found {existingThirdPartyUsers.Count} existing LDAP users in Auth system");
+
+            // 5. 同步用户状态
+            foreach (var tpu in existingThirdPartyUsers)
+            {
+                var ldapUser = ldapUsers.FirstOrDefault(lu => lu.ObjectGuid == tpu.ThridPartyIdentity);
+
+                if (ldapUser != null)
+                {
+                    // LDAP中存在该用户，检查状态同步
+                    var isLdapUserEnabled = IsLdapUserEnabled(ldapUser);
+                    var isAuthUserEnabled = tpu.User.Enabled;
+
+                    // 更新基本信息
+                    var hasBasicInfoChanged = UpdateUserBasicInfo(tpu.User, ldapUser);
+
+                    // 检查启用状态是否需要同步
+                    if (isLdapUserEnabled != isAuthUserEnabled)
+                    {
+                        if (isLdapUserEnabled)
+                        {
+                            // LDAP用户已启用，Auth用户被禁用 -> 启用Auth用户
+                            tpu.User.Enable();
+                            if (tpu.User.Staff != null)
+                            {
+                                tpu.User.Staff.Enable();
+                            }
+                            _logger.LogInformation($"Enabled user {tpu.User.Account} based on LDAP status");
+                        }
+                        else
+                        {
+                            // LDAP用户已禁用，Auth用户被启用 -> 禁用Auth用户
+                            tpu.User.Disable();
+                            if (tpu.User.Staff != null)
+                            {
+                                tpu.User.Staff.Disable();
+                                // 清除员工所在团队
+                                tpu.User.Staff.SetTeamStaff(new List<Guid>());
+                                tpu.User.Staff.SetCurrentTeam(Guid.Empty);
+                            }
+
+                            // 清除用户拥有的角色
+                            if (tpu.User.Roles.Any())
+                            {
+                                var roleIds = tpu.User.Roles.Select(r => r.RoleId).ToList();
+                                tpu.User.RemoveRoles(roleIds);
+                            }
+
+                            _logger.LogInformation($"Disabled user {tpu.User.Account} and cleared roles/teams based on LDAP status");
+                        }
+                    }
+
+                    // 如果有任何变更，更新用户
+                    if (hasBasicInfoChanged || isLdapUserEnabled != isAuthUserEnabled)
+                    {
+                        await _userDomainService.UpdateAsync(tpu.User);
+                    }
+                }
+                //else
+                //{
+                //    // LDAP中不存在该用户，禁用Auth系统中的用户
+                //    if (tpu.User.Enabled)
+                //    {
+                //        tpu.User.Disable();
+                //        if (tpu.User.Staff != null)
+                //        {
+                //            tpu.User.Staff.Disable();
+                //            tpu.User.Staff.SetTeamStaff(new List<Guid>());
+                //            tpu.User.Staff.SetCurrentTeam(Guid.Empty);
+                //        }
+
+                //        // 清除角色
+                //        if (tpu.User.Roles.Any())
+                //        {
+                //            var roleIds = tpu.User.Roles.Select(r => r.RoleId).ToList();
+                //            tpu.User.RemoveRoles(roleIds);
+                //        }
+
+                //        await _userDomainService.UpdateAsync(tpu.User);
+                //        _logger.LogWarning($"Disabled user {tpu.User.Account} - no longer exists in LDAP");
+                //    }
+                //}
+            }
+
+            _logger.LogInformation($"LDAP staff synchronization completed.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred during LDAP staff synchronization");
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// 检查LDAP用户是否启用
+    /// </summary>
+    private bool IsLdapUserEnabled(LdapUser ldapUser)
+    {
+        return ldapUser.UserAccountControl == UserAccountControl.NormalAccount;
+    }
+
+    /// <summary>
+    /// 更新用户对应的员工基本信息
+    /// </summary>
+    private bool UpdateUserBasicInfo(User user, LdapUser ldapUser)
+    {
+        var hasChanged = false;
+
+        // 同步更新Staff信息
+        if (user.Staff != null)
+        {
+            var changes = new List<string>();
+
+            if (user.Staff.Name != ldapUser.Name)
+            {
+                changes.Add($"Name: '{user.Staff.Name}' -> '{ldapUser.Name}'");
+            }
+            if (user.Staff.DisplayName != ldapUser.DisplayName)
+            {
+                changes.Add($"DisplayName: '{user.Staff.DisplayName}' -> '{ldapUser.DisplayName}'");
+            }
+            if (user.Staff.Email != ldapUser.EmailAddress)
+            {
+                changes.Add($"Email: '{user.Staff.Email}' -> '{ldapUser.EmailAddress}'");
+            }
+            if (user.Staff.PhoneNumber != ldapUser.Phone)
+            {
+                changes.Add($"PhoneNumber: '{user.Staff.PhoneNumber}' -> '{ldapUser.Phone}'");
+            }
+
+            if (changes.Count > 0)
+            {
+                user.Staff.UpdateBasicInfo(
+                    ldapUser.Name,
+                    ldapUser.DisplayName,
+                    user.Staff.Gender,
+                    ldapUser.Phone,
+                    ldapUser.EmailAddress);
+                hasChanged = true;
+                _logger.LogInformation($"Updated Staff basic info for user {user.Account} from LDAP. Changes: {string.Join("; ", changes)}");
+            }
+        }
+
+        return hasChanged;
+    }
 }
