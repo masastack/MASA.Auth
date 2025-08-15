@@ -2426,8 +2426,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("ClientSecret")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("JsonKeyMap")
                         .IsRequired()

@@ -150,8 +150,7 @@ public class AlipayCaller : ThirdPartyIdpCallerBase
     /// <summary>
     /// Gets the RSA2(SHA256 with RSA) signature.
     /// </summary>
-    /// <param name="sortedPairs">Sorted key-value pairs</param>
-    private string GetRSA2Signature([NotNull] SortedDictionary<string, string?> sortedPairs, string clientSecret)
+    private string GetRSA2Signature([NotNull] SortedDictionary<string, string?> sortedPairs, string privateKey)
     {
         var builder = new StringBuilder(128);
 
@@ -170,10 +169,19 @@ public class AlipayCaller : ThirdPartyIdpCallerBase
 
         var plainText = builder.ToString();
         var plainBytes = Encoding.UTF8.GetBytes(plainText, 0, plainText.Length - 1); // Skip the last '&'
-        var privateKeyBytes = Convert.FromBase64String(clientSecret);
+        var privateKeyBytes = Convert.FromBase64String(privateKey);
 
         using var rsa = RSA.Create();
-        rsa.ImportPkcs8PrivateKey(privateKeyBytes, out _);
+
+        try
+        {
+            rsa.ImportPkcs8PrivateKey(privateKeyBytes, out _);
+        }
+        catch (CryptographicException ex)
+        {
+            _logger.LogError(ex, "Invalid private key format in clientSecret.");
+            throw new InvalidOperationException("The provided client secret is not a valid private key.");
+        }
 
         var encryptedBytes = rsa.SignData(plainBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
 
