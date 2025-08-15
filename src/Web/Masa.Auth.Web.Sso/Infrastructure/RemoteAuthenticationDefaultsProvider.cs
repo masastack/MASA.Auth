@@ -15,7 +15,8 @@ public class RemoteAuthenticationDefaultsProvider : IRemoteAuthenticationDefault
     public async Task<AuthenticationDefaults?> GetAsync(string scheme)
     {
         var thirdPartyIdps = await _thirdPartyIdpService.GetAllFromCacheAsync();
-        return Convert(thirdPartyIdps.FirstOrDefault(tpIdp => tpIdp.Name == scheme));
+        return Convert(thirdPartyIdps.FirstOrDefault(tpIdp =>
+            string.Equals(tpIdp.Name, scheme, StringComparison.OrdinalIgnoreCase)));
     }
 
     public async Task<List<AuthenticationDefaults>> GetAllAsync()
