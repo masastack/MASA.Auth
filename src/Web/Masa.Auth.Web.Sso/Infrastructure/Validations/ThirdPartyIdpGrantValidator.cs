@@ -50,6 +50,14 @@ public class ThirdPartyIdpGrantValidator : BaseGrantValidator, IExtensionGrantVa
                 var options = new OAuthOptions();
                 authenticationDefaults.BindOAuthOptions(options);
                 thridPartyIdentity = await _weChatMiniProgramCaller.GetOpenIdAsync(options, code);
+                // 为微信小程序场景构建最小可用的 Identity，保证下方 CustomResponse 正常返回
+                if (!string.IsNullOrWhiteSpace(thridPartyIdentity))
+                {
+                    identity = new Security.OAuth.Providers.Identity(thridPartyIdentity)
+                    {
+                        Issuer = authenticationDefaults.Scheme
+                    };
+                }
             }
             else
             {
@@ -74,14 +82,11 @@ public class ThirdPartyIdpGrantValidator : BaseGrantValidator, IExtensionGrantVa
             });
 
             context.Result = new GrantValidationResult(user?.Id.ToString() ?? "", "thirdPartyIdp");
-            if (identity != null)
+            context.Result.CustomResponse = new()
             {
-                context.Result.CustomResponse = new()
-                {
-                    ["thirdPartyUserData"] = identity,
-                    ["registerSuccess"] = user is not null
-                };
-            }
+                ["thirdPartyUserData"] = identity,
+                ["registerSuccess"] = user is not null
+            };
 
             // If user exists, record token acquisition operation log
             if (user != null)

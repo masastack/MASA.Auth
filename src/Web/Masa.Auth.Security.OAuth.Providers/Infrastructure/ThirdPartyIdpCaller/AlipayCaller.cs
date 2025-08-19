@@ -49,9 +49,6 @@ public class AlipayCaller : ThirdPartyIdpCallerBase
         };
         parameters.Add("sign", GetRSA2Signature(parameters, options.ClientSecret));
 
-        _logger.LogInformation("Alipay token request: {Method} {Address}, Parameters: {Parameters}",
-            "GET", options.TokenEndpoint, string.Join(", ", parameters.Select(kv => $"{kv.Key}={kv.Value}")));
-
         var address = QueryHelpers.AddQueryString(options.TokenEndpoint, parameters);
 
         using var response = await _httpClient.GetAsync(address);
@@ -104,9 +101,6 @@ public class AlipayCaller : ThirdPartyIdpCallerBase
             ["version"] = "1.0",
         };
         parameters.Add("sign", GetRSA2Signature(parameters, options.ClientSecret));
-
-        _logger.LogInformation("Alipay userinfo request: {Method} {Address}, Parameters: {Parameters}",
-            "GET", options.UserInformationEndpoint, string.Join(", ", parameters.Select(kv => $"{kv.Key}={kv.Value}")));
 
         var address = QueryHelpers.AddQueryString(options.UserInformationEndpoint, parameters);
 
