@@ -430,10 +430,10 @@ public class CommandHandler
                 throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_NOTEXIST, account);
             }
 
-            if (ldapUser.UserAccountControl != UserAccountControl.NormalAccount)
-            {
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_ABNORMAL, account);
-            }
+            //if (ldapUser.UserAccountControl != UserAccountControl.NormalAccount)
+            //{
+            //    throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_ABNORMAL, account);
+            //}
 
             var dc = new Regex("(?<=DC=).+(?=,)").Match(ldapOptions.BaseDn).Value;
             if (!await ldapProvider.AuthenticateAsync($"{dc}\\{account}", password))
