@@ -1,4 +1,4 @@
-// Copyright (c) MASA Stack All rights reserved.
+ï»¿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Service.Admin.Domain.DynamicRoles.Services;
@@ -27,21 +27,21 @@ public class DynamicRoleService : DomainService
     }
 
     /// <summary>
-    /// ÆÀ¹À¶¯Ì¬½ÇÉ«Ìõ¼ş£ºÏÈ¼ÆËãÊ×¸öÌõ¼ş×÷Îª³õÖµ£¬ºóĞøÌõ¼şÓÃÆä LogicalOperator ÓëÀÛ¼Æ½á¹ûºÏ²¢¡£
-    /// ÎŞÌõ¼şÊ±·µ»Ø true¡£
+    /// è¯„ä¼°åŠ¨æ€è§’è‰²æ¡ä»¶ï¼šå…ˆè®¡ç®—é¦–ä¸ªæ¡ä»¶ä½œä¸ºåˆå€¼ï¼Œåç»­æ¡ä»¶ç”¨å…¶ LogicalOperator ä¸ç´¯è®¡ç»“æœåˆå¹¶ã€‚
+    /// æ— æ¡ä»¶æ—¶è¿”å› trueã€‚
     /// </summary>
     public async Task<bool> EvaluateConditionsAsync(User user, DynamicRole dynamicRole)
     {
         var conditions = dynamicRole.Conditions.OrderBy(c => c.Order).ToList();
         if (conditions.Count == 0) return true;
 
-        // ¼ÆËãµÚÒ»¸öÌõ¼ş×÷Îª³õÊ¼½á¹û
+        // è®¡ç®—ç¬¬ä¸€ä¸ªæ¡ä»¶ä½œä¸ºåˆå§‹ç»“æœ
         var first = conditions[0];
         var firstExtractor = _extractorFactory.GetExtractor(first.DataType);
         var firstValue = await firstExtractor.ExtractValueAsync(user, first.FieldName);
         var result = first.EvaluateCondition(firstValue);
 
-        // ´ÓµÚ¶ş¸öÌõ¼ş¿ªÊ¼°´Æä LogicalOperator ÓëÀÛ¼Æ½á¹ûºÏ²¢
+        // ä»ç¬¬äºŒä¸ªæ¡ä»¶å¼€å§‹æŒ‰å…¶ LogicalOperator ä¸ç´¯è®¡ç»“æœåˆå¹¶
         for (var i = 1; i < conditions.Count; i++)
         {
             var condition = conditions[i];
