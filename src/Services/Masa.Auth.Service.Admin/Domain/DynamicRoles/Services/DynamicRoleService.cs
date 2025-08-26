@@ -26,21 +26,34 @@ public class DynamicRoleService : DomainService
         return await EvaluateConditionsAsync(user, dynamicRole);
     }
 
+    /// <summary>
+    /// 评估动态角色条件：先计算首个条件作为初值，后续条件用其 LogicalOperator 与累计结果合并。
+    /// 无条件时返回 true。
+    /// </summary>
     public async Task<bool> EvaluateConditionsAsync(User user, DynamicRole dynamicRole)
     {
-        if (!dynamicRole.Conditions.Any()) return true; // No conditions means always true.
+        var conditions = dynamicRole.Conditions.OrderBy(c => c.Order).ToList();
+        if (conditions.Count == 0) return true;
 
-        foreach (var condition in dynamicRole.Conditions.OrderBy(c => c.Order))
+        // 计算第一个条件作为初始结果
+        var first = conditions[0];
+        var firstExtractor = _extractorFactory.GetExtractor(first.DataType);
+        var firstValue = await firstExtractor.ExtractValueAsync(user, first.FieldName);
+        var result = first.EvaluateCondition(firstValue);
+
+        // 从第二个条件开始按其 LogicalOperator 与累计结果合并
+        for (var i = 1; i < conditions.Count; i++)
         {
+            var condition = conditions[i];
             var extractor = _extractorFactory.GetExtractor(condition.DataType);
             var value = await extractor.ExtractValueAsync(user, condition.FieldName);
+            var isMet = condition.EvaluateCondition(value);
 
-            var result = condition.EvaluateCondition(value);
-            if (result && condition.LogicalOperator == LogicalOperator.Or)
-                return result;
-            else if (!result && condition.LogicalOperator == LogicalOperator.And)
-                return false;
+            result = condition.LogicalOperator == LogicalOperator.And
+                ? result && isMet
+                : result || isMet;
         }
-        return true;
+
+        return result;
     }
 }
