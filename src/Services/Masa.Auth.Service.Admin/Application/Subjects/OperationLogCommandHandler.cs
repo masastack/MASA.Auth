@@ -19,7 +19,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         [EventHandler]
         public async Task RegisterUserOperationLogAsync(RegisterUserCommand command)
         {
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.RegisterUser, $"注册用户：{command.Result.Account}", command.Result.Id);
+            await _operationLogRepository.AddDefaultAsync(OperationTypes.RegisterUser, $"注册用户：{command.Result.Account}", command.RegisterModel.ClientId, command.Result.Id);
         }
 
         [EventHandler]

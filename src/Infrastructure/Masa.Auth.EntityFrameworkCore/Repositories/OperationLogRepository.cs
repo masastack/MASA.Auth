@@ -29,7 +29,7 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
 
             if (@operator is not null && @operator != Guid.Empty)
             {
-                var operatorName = (await _operaterProvider.GetUserAsync(@operator.Value))?.RealDisplayName ?? "";
+                var operatorName = (await _operaterProvider.GetUserAsync(@operator.Value))?.RealDisplayName ?? @operator.Value.ToString();
                 await AddAsync(new OperationLog(
                     @operator.Value, operatorName, operationType, default, operationDescription
                 ));
@@ -49,7 +49,7 @@ public class OperationLogRepository : Repository<AuthDbContext, OperationLog, Gu
 
             if (@operator is not null && @operator != Guid.Empty)
             {
-                var operatorName = (await _operaterProvider.GetUserAsync(@operator.Value))?.RealDisplayName ?? "";
+                var operatorName = (await _operaterProvider.GetUserAsync(@operator.Value))?.RealDisplayName ?? @operator.Value.ToString();
                 await AddAsync(new OperationLog(
                     @operator.Value, operatorName, operationType, default, operationDescription, clientId
                 ));
