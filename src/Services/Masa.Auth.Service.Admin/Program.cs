@@ -11,10 +11,7 @@ var defaultStackConfig = builder.Configuration.GetDefaultStackConfig();
 var webId = defaultStackConfig.GetWebId(project);
 var ssoDomain = defaultStackConfig.GetSsoDomain();
 
-await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, callerAction:callerAction =>
-{
-    callerAction.UseClientAuthentication(webId, ssoDomain);
-});
+await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service);
 
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();

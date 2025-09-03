@@ -11,11 +11,18 @@ public static class SchedulerJobServiceCollectionExtensions
     {
         using IServiceScope scope = services.BuildServiceProvider().CreateScope();
         var serviceProvider = scope.ServiceProvider;
-        await serviceProvider.SafeExcuteAsync(AddSyncUserAutoCompleteJobAsync);
-        await serviceProvider.SafeExcuteAsync(AddSyncUserRedisJobAsync);
-        await serviceProvider.SafeExcuteAsync(AddSyncOidcRedisJobAsync);
-        await serviceProvider.SafeExcuteAsync(AddSyncPermissionRedisJobAsync);
-        await serviceProvider.SafeExcuteAsync(AddSyncLdapUserJobAsync);
+        try
+        {
+            await serviceProvider.SafeExcuteAsync(AddSyncUserAutoCompleteJobAsync);
+            await serviceProvider.SafeExcuteAsync(AddSyncUserRedisJobAsync);
+            await serviceProvider.SafeExcuteAsync(AddSyncOidcRedisJobAsync);
+            await serviceProvider.SafeExcuteAsync(AddSyncPermissionRedisJobAsync);
+            await serviceProvider.SafeExcuteAsync(AddSyncLdapUserJobAsync);
+        }
+        catch
+        {
+            // ignored
+        }
     }
 
     static async Task CreateAndRunAsync(this IServiceProvider serviceProvider, UpsertSchedulerJobRequest upsertSchedulerJobRequest)
