@@ -7,8 +7,8 @@ public class AddCustomLoginValidator : AbstractValidator<AddCustomLoginDto>
 {
     public AddCustomLoginValidator()
     {
-        RuleFor(CustomLogin => CustomLogin.Name).Required().ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
-        RuleFor(CustomLogin => CustomLogin.Title).Required().ChineseLetterNumber().MinimumLength(2).MaximumLength(50);
+        RuleFor(CustomLogin => CustomLogin.Name).Required().MinimumLength(2).MaximumLength(50);
+        RuleFor(CustomLogin => CustomLogin.Title).Required().MinimumLength(2).MaximumLength(50);
         RuleFor(CustomLogin => CustomLogin.ClientId).Required();
     }
 }
