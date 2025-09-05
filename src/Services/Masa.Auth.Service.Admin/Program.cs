@@ -228,9 +228,20 @@ app.UseMasaExceptionHandler(opt =>
 {
     opt.ExceptionHandler = context =>
     {
+        // 获取日志记录器
+        var logger = context.HttpContext?.RequestServices.GetService<ILogger<Program>>();
+        var httpContext = context.HttpContext;
+
+        // 记录异常
+        logger?.LogError(context.Exception, "Unhandled exception occurred. Path: {Path}, Method: {Method}, User: {User}",
+            httpContext?.Request.Path,
+            httpContext?.Request.Method,
+            httpContext?.User?.Identity?.Name ?? "Anonymous");
+
         if (context.Exception is ValidationException validationException)
         {
-            context.ToResult(validationException.Errors.Select(err => err.ToString()).FirstOrDefault()!);
+            var errorMessage = validationException.Errors.Select(err => err.ToString()).FirstOrDefault() ?? "Validation failed";
+            context.ToResult(errorMessage);
         }
         else if (context.Exception is UserStatusException userStatusException)
         {
