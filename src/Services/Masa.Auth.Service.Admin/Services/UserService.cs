@@ -440,9 +440,10 @@ public class UserService : ServiceBase
     }
 
     [RoutePattern("has-role", StartWithBaseUri = true, HttpMethod = "Post")]
-    public async Task<bool> HasRoleAsync(IEventBus eventBus, IUserContext _userContext, [FromBody] List<Guid> RoleIds)
+    public async Task<bool> HasRoleAsync(IEventBus eventBus, IUserContext _userContext, [FromQuery] Guid? userId, [FromBody] List<Guid> RoleIds)
     {
-        var query = new UserHasAnyRoleQuery(_userContext.GetUserId<Guid>(), RoleIds);
+        userId ??= _userContext.GetUserId<Guid>();
+        var query = new UserHasAnyRoleQuery(userId.Value, RoleIds);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
