@@ -309,7 +309,6 @@ public class UserService : ServiceBase
     [RoutePattern("register", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task<UserModel> RegisterAsync(IEventBus eventBus, [FromBody] RegisterByEmailModel registerModel)
     {
-        throw new UserFriendlyException("注册已关闭");
         var command = new RegisterUserCommand(registerModel);
         await eventBus.PublishAsync(command);
 
