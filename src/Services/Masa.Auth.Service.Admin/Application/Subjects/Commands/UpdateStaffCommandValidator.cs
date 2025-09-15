@@ -14,6 +14,6 @@ public class UpdateStaffCommandValidator : MasaAbstractValidator<UpdateStaffComm
         WhenNotEmpty(command => command.Staff.IdCard, r => r.IdCard());
         WhenNotEmpty(command => command.Staff.Name, r => r.ChineseLetter().MaximumLength(20));
         WhenNotEmpty(command => command.Staff.CompanyName, r => r.ChineseLetter().MaximumLength(50));
-        WhenNotEmpty(command => command.Staff.Position, r => r.ChineseLetterNumber().MaximumLength(20));
+        WhenNotEmpty(command => command.Staff.Position, r => r.ChineseLetter().MaximumLength(20));
     }
 }

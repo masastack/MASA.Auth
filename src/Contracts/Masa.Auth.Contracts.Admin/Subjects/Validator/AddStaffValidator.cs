@@ -18,10 +18,10 @@ public class AddStaffValidator : MasaAbstractValidator<AddStaffDto>
         RuleFor(staff => staff.Password).Required().SetValidator(passwordValidator);
         RuleFor(staff => staff.Avatar).Required().Url();
         WhenNotEmpty(staff => staff.Email, r => r.Email());
-        WhenNotEmpty(staff => staff.Name, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
+        WhenNotEmpty(staff => staff.Name, r => r.ChineseLetter().MinimumLength(2).MaximumLength(50));
         WhenNotEmpty(staff => staff.IdCard, r => r.IdCard());
         WhenNotEmpty(staff => staff.Address.Address, r => r.MinimumLength(8).MaximumLength(100));
         WhenNotEmpty(staff => staff.CompanyName, r => r.ChineseLetter().MaximumLength(50));
-        WhenNotEmpty(staff => staff.Position, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
+        WhenNotEmpty(staff => staff.Position, r => r.ChineseLetter().MinimumLength(2).MaximumLength(50));
     }
 }

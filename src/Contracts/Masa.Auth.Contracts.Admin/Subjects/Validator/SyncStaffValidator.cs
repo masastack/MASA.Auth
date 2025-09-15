@@ -15,9 +15,9 @@ public class SyncStaffValidator : MasaAbstractValidator<SyncStaffDto>
             .WithName("NickName");
         RuleFor(staff => staff.PhoneNumber).Required().SetValidator(phoneValidator);
         RuleFor(staff => staff.JobNumber).Required().LetterNumber().MinimumLength(4).MaximumLength(12);
-        WhenNotEmpty(staff => staff.Name, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
+        WhenNotEmpty(staff => staff.Name, r => r.ChineseLetter().MinimumLength(2).MaximumLength(50));
         WhenNotEmpty(staff => staff.Email, r => r.Email());
         WhenNotEmpty(staff => staff.IdCard, r => r.IdCard());
-        WhenNotEmpty(staff => staff.Position, r => r.ChineseLetterNumber().MinimumLength(2).MaximumLength(50));
+        WhenNotEmpty(staff => staff.Position, r => r.ChineseLetter().MinimumLength(2).MaximumLength(50));
     }
 }
