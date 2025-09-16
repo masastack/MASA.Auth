@@ -128,6 +128,9 @@ public class QueryHandler
 
         query.Result = new(identityResources.Total, identityResources.Result.Select(idrs =>
             new IdentityResourceDto(idrs.Id, idrs.Name, idrs.DisplayName, idrs.Description, idrs.Enabled, idrs.Required, idrs.Emphasize, idrs.ShowInDiscoveryDocument, idrs.NonEditable)
+            {
+                Type = StandardIdentityResources.IdentityResources.Any(i => i.Name == idrs.Name) ? "Standard" : "Customize"
+            }
         ).ToList());
     }
 

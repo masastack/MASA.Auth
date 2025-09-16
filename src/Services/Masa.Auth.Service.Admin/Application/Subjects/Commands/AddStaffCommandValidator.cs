@@ -7,7 +7,11 @@ public class AddStaffCommandValidator : MasaAbstractValidator<AddStaffCommand>
 {
     public AddStaffCommandValidator(PasswordValidator passwordValidator, PhoneNumberValidator phoneValidator)
     {
-        RuleFor(command => command.Staff.JobNumber).Required().MaximumLength(20);
+        //TODO
+        //和AddStaffValidator中存在大量重复代码，后续优化
+        //RuleFor(command => command.Staff).SetValidator(addStaffValidator);
+
+        RuleFor(command => command.Staff.JobNumber).Required().MinimumLength(4).MaximumLength(12);
         RuleFor(command => command.Staff.PhoneNumber).Required().SetValidator(phoneValidator);
         RuleFor(command => command.Staff.DisplayName).MaximumLength(50);
         WhenNotEmpty(command => command.Staff.Password, r => r.SetValidator(passwordValidator));
@@ -15,6 +19,6 @@ public class AddStaffCommandValidator : MasaAbstractValidator<AddStaffCommand>
         WhenNotEmpty(command => command.Staff.Name, r => r.ChineseLetter().MaximumLength(20));
         WhenNotEmpty(command => command.Staff.IdCard, r => r.IdCard());
         WhenNotEmpty(command => command.Staff.CompanyName, r => r.ChineseLetter().MaximumLength(50));
-        WhenNotEmpty(command => command.Staff.Position, r => r.ChineseLetterNumber().MaximumLength(20));
+        WhenNotEmpty(command => command.Staff.Position, r => r.ChineseLetter().MaximumLength(20));
     }
 }

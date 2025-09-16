@@ -17,6 +17,8 @@ public class IdentityResourceDto
 
     public bool Required { get; set; }
 
+    public string Type { get; set; } = "";
+
     public bool Emphasize { get; set; }
 
     public bool ShowInDiscoveryDocument { get; set; }
