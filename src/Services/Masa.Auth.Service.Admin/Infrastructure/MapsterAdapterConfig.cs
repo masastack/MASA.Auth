@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Contracts.Admin.DynamicRoles;
+using Masa.Auth.Domain.DynamicRoles.Aggregates;
+
 namespace Masa.Auth.Service.Admin.Infrastructure;
 
 public static class MapsterAdapterConfig
@@ -57,11 +60,30 @@ public static class MapsterAdapterConfig
                     dto.Value,
                      Enumeration.FromValue<DynamicRoleDataType>((int)dto.DataType),
                     index)).ToList());
-        TypeAdapterConfig<DynamicRuleConditionUpsertDto, DynamicRuleCondition>.NewConfig().MapToConstructor(true).Map(dest => dest.OperatorType, src => Enumeration.FromValue<OperatorType>((int)src.OperatorType));
+        TypeAdapterConfig<DynamicRuleConditionDto, DynamicRuleCondition>.NewConfig().MapToConstructor(true).Map(dest => dest.OperatorType, src => Enumeration.FromValue<OperatorType>((int)src.OperatorType));
 
         TypeAdapterConfig<OperatorType, OperatorTypes>.NewConfig().MapWith(src => (OperatorTypes)src.Id);
         TypeAdapterConfig<OperatorTypes, OperatorType>.NewConfig().MapWith(src => Enumeration.FromValue<OperatorType>((int)src));
         TypeAdapterConfig<DynamicRoleDataType, DynamicRoleDataTypes>.NewConfig().MapWith(src => (DynamicRoleDataTypes)src.Id);
         TypeAdapterConfig<DynamicRoleDataTypes, DynamicRoleDataType>.NewConfig().MapWith(src => Enumeration.FromValue<DynamicRoleDataType>((int)src));
+
+        // StatementEffect 枚举映射配置
+        TypeAdapterConfig<Masa.Auth.Domain.DynamicRoles.Aggregates.StatementEffect, Masa.Auth.Contracts.Admin.DynamicRoles.StatementEffect>.NewConfig()
+            .MapWith(src => (Masa.Auth.Contracts.Admin.DynamicRoles.StatementEffect)src.Id);
+            
+        // StatementEffect 反向映射配置
+        TypeAdapterConfig<Masa.Auth.Contracts.Admin.DynamicRoles.StatementEffect, Masa.Auth.Domain.DynamicRoles.Aggregates.StatementEffect>.NewConfig()
+            .MapWith(src => Enumeration.FromValue<Masa.Auth.Domain.DynamicRoles.Aggregates.StatementEffect>((int)src));
+
+        // ControlPolicy 映射配置
+        TypeAdapterConfig<ControlPolicy, ControlPolicyDto>.NewConfig()
+            .Map(dest => dest.Actions, src => src.Actions.Select(action => new ActionIdentifierDto(action.ToString())).ToList())
+            .Map(dest => dest.Resources, src => src.Resources.Select(resource => new ResourceIdentifierDto(resource.ToString())).ToList());
+        
+        TypeAdapterConfig<ActionIdentifier, ActionIdentifierDto>.NewConfig()
+            .MapWith(src => new ActionIdentifierDto(src.ToString()));
+            
+        TypeAdapterConfig<ResourceIdentifier, ResourceIdentifierDto>.NewConfig()
+            .MapWith(src => new ResourceIdentifierDto(src.ToString()));
     }
 }

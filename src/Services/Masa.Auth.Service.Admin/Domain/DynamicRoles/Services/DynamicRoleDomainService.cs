@@ -3,14 +3,14 @@
 
 namespace Masa.Auth.Service.Admin.Domain.DynamicRoles.Services;
 
-public class DynamicRoleService : DomainService
+public class DynamicRoleDomainService : DomainService
 {
-    private readonly ILogger<DynamicRoleService> _logger;
+    private readonly ILogger<DynamicRoleDomainService> _logger;
     private readonly IDynamicRoleRepository _dynamicRoleRepository;
     private readonly FieldValueExtractorFactory _extractorFactory;
 
-    public DynamicRoleService(
-        ILogger<DynamicRoleService> logger,
+    public DynamicRoleDomainService(
+        ILogger<DynamicRoleDomainService> logger,
         IDynamicRoleRepository dynamicRoleRepository,
         FieldValueExtractorFactory extractorFactory)
     {

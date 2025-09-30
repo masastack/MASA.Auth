@@ -19,5 +19,10 @@ public class DynamicRoleUpsertDto
 
     public DateTime ModificationTime { get; set; }
 
-    public List<DynamicRuleConditionUpsertDto> Conditions { get; set; } = new();
+    public List<DynamicRuleConditionDto> Conditions { get; set; } = new();
+
+    /// <summary>
+    /// 控制策略列表，与Condition同时存在时，使用标准 IAM 策略格式
+    /// </summary>
+    public List<ControlPolicyDto> ControlPolicies { get; set; } = new();
 }

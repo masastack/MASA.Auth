@@ -8,18 +8,18 @@ public class CommandHandler
     private readonly IDynamicRoleRepository _repository;
     private readonly II18n<DefaultResource> _i18n;
     private readonly IUserRepository _userRepository;
-    private readonly DynamicRoleService _dynamicRoleService;
+    private readonly DynamicRoleDomainService _dynamicRoleDomainService;
 
     public CommandHandler(
         IDynamicRoleRepository repository,
         II18n<DefaultResource> i18n,
         IUserRepository userRepository,
-        DynamicRoleService dynamicRoleService)
+        DynamicRoleDomainService dynamicRoleDomainService)
     {
         _repository = repository;
         _i18n = i18n;
         _userRepository = userRepository;
-        _dynamicRoleService = dynamicRoleService;
+        _dynamicRoleDomainService = dynamicRoleDomainService;
     }
 
     [EventHandler]
@@ -69,7 +69,7 @@ public class CommandHandler
         var dtos = new List<DynamicRoleValidateDto>();
         foreach (var entity in entitys)
         {
-            var isValid = await _dynamicRoleService.EvaluateConditionsAsync(user, entity);
+            var isValid = await _dynamicRoleDomainService.EvaluateConditionsAsync(user, entity);
             dtos.Add(new DynamicRoleValidateDto(entity.Id, isValid));
         }
 
