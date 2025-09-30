@@ -26,7 +26,7 @@ public static class DynamicRoleServiceExtensions
             // Use lazy resolution to break circular dependency
             Func<User, DynamicRole, Task<bool>> evaluateFunc = async (user, role) =>
             {
-                var dynamicRoleService = provider.GetRequiredService<DynamicRoleService>();
+                var dynamicRoleService = provider.GetRequiredService<DynamicRoleDomainService>();
                 return await dynamicRoleService.EvaluateConditionsAsync(user, role);
             };
             return new DynamicRoleFieldValueExtractor(repository, evaluateFunc);

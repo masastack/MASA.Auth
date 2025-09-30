@@ -7,22 +7,19 @@ public class QueryHandler
 {
     private readonly IDynamicRoleRepository _repository;
     private readonly II18n<DefaultResource> _i18n;
-    private readonly OperaterProvider _operaterProvider;
     private readonly IUserRepository _userRepository;
-    private readonly DynamicRoleService _dynamicRoleService;
+    private readonly DynamicRoleDomainService _dynamicRoleDomainService;
 
     public QueryHandler(
         IDynamicRoleRepository repository,
         II18n<DefaultResource> i18n,
-        OperaterProvider operaterProvider,
         IUserRepository userRepository,
-        DynamicRoleService dynamicRoleService)
+        DynamicRoleDomainService dynamicRoleDomainService)
     {
         _repository = repository;
         _i18n = i18n;
-        _operaterProvider = operaterProvider;
         _userRepository = userRepository;
-        _dynamicRoleService = dynamicRoleService;
+        _dynamicRoleDomainService = dynamicRoleDomainService;
     }
 
     [EventHandler]
@@ -102,7 +99,7 @@ public class QueryHandler
         var dtos = new List<DynamicRoleDto>();
         foreach (var entity in entitys)
         {
-            var isValid = await _dynamicRoleService.EvaluateConditionsAsync(user, entity);
+            var isValid = await _dynamicRoleDomainService.EvaluateConditionsAsync(user, entity);
             if (isValid)
             {
                 dtos.Add(entity.Adapt<DynamicRoleDto>());
