@@ -9,13 +9,20 @@ public class QueryHandler
     private readonly II18n<DefaultResource> _i18n;
     private readonly OperaterProvider _operaterProvider;
     private readonly IUserRepository _userRepository;
+    private readonly DynamicRoleService _dynamicRoleService;
 
-    public QueryHandler(IDynamicRoleRepository repository, II18n<DefaultResource> i18n, OperaterProvider operaterProvider, IUserRepository userRepository)
+    public QueryHandler(
+        IDynamicRoleRepository repository,
+        II18n<DefaultResource> i18n,
+        OperaterProvider operaterProvider,
+        IUserRepository userRepository,
+        DynamicRoleService dynamicRoleService)
     {
         _repository = repository;
         _i18n = i18n;
         _operaterProvider = operaterProvider;
         _userRepository = userRepository;
+        _dynamicRoleService = dynamicRoleService;
     }
 
     [EventHandler]
@@ -74,5 +81,34 @@ public class QueryHandler
         condition = condition.And(!string.IsNullOrEmpty(options.Search), x => x.Name.Contains(options.Search));
         condition = condition.And(!string.IsNullOrEmpty(options.ClientId), x => x.ClientId == options.ClientId);
         return await Task.FromResult(condition); ;
+    }
+
+    [EventHandler]
+    public async Task UserRolesAsync(UserDynamicRoleQuery query)
+    {
+        if (query.RoleIds == null || !query.RoleIds.Any())
+        {
+            return;
+        }
+
+        var user = await _userRepository.AsQueryable()
+            .Include(x => x.UserClaims)
+            .Include(x => x.Roles)
+            .FirstOrDefaultAsync(x => x.Id == query.UserId);
+        MasaArgumentException.ThrowIfNull(user, _i18n.T(nameof(User)));
+
+        var entitys = await _repository.GetListAsync(x => query.RoleIds.Contains(x.Id));
+
+        var dtos = new List<DynamicRoleDto>();
+        foreach (var entity in entitys)
+        {
+            var isValid = await _dynamicRoleService.EvaluateConditionsAsync(user, entity);
+            if (isValid)
+            {
+                dtos.Add(entity.Adapt<DynamicRoleDto>());
+            }
+        }
+
+        query.Result = dtos;
     }
 }

@@ -27,6 +27,8 @@ public class DynamicRoleDto
 
     public List<DynamicRuleConditionDto> Conditions { get; set; } = new();
 
+    public List<ControlPolicyDto> ControlPolicies { get; set; } = new();
+
     public void SortConditions()
     {
         if (Conditions == null) return;

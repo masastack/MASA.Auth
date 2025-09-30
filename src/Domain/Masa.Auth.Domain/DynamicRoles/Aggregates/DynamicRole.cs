@@ -17,6 +17,11 @@ public class DynamicRole : FullAggregateRoot<Guid, Guid>
 
     public List<DynamicRuleCondition> Conditions { get; private set; } = new();
 
+    /// <summary>
+    /// 自定义控制策略，与Condition同级，暂时不使用标准 IAM 策略格式
+    /// </summary>
+    public List<ControlPolicy> ControlPolicies { get; set; } = new();
+
     private DynamicRole() { }
 
     public DynamicRole(string clientId, string name, string code, bool enabled, string description, List<DynamicRuleCondition> conditions)

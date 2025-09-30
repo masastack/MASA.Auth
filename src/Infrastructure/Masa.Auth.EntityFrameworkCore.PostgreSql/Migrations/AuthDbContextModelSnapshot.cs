@@ -2491,6 +2491,111 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
 
             modelBuilder.Entity("Masa.Auth.Domain.DynamicRoles.Aggregates.DynamicRole", b =>
                 {
+                    b.OwnsMany("Masa.Auth.Domain.DynamicRoles.Aggregates.ControlPolicy", "ControlPolicies", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("DynamicRoleId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Effect")
+                                .HasColumnType("integer");
+
+                            b1.Property<bool>("Enabled")
+                                .HasColumnType("boolean");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(128)
+                                .HasColumnType("character varying(128)");
+
+                            b1.Property<int>("Priority")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("DynamicRoleId");
+
+                            b1.ToTable("ControlPolicy", "auth");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DynamicRoleId");
+
+                            b1.OwnsMany("Masa.Auth.Domain.DynamicRoles.Aggregates.ActionIdentifier", "Actions", b2 =>
+                                {
+                                    b2.Property<Guid>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<Guid>("ControlPolicyId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<string>("Operation")
+                                        .IsRequired()
+                                        .HasMaxLength(128)
+                                        .HasColumnType("character varying(128)");
+
+                                    b2.Property<string>("Resource")
+                                        .IsRequired()
+                                        .HasMaxLength(128)
+                                        .HasColumnType("character varying(128)");
+
+                                    b2.Property<string>("Type")
+                                        .IsRequired()
+                                        .HasMaxLength(128)
+                                        .HasColumnType("character varying(128)");
+
+                                    b2.HasKey("Id");
+
+                                    b2.HasIndex("ControlPolicyId");
+
+                                    b2.ToTable("ActionIdentifier", "auth");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("ControlPolicyId");
+                                });
+
+                            b1.OwnsMany("Masa.Auth.Domain.DynamicRoles.Aggregates.ResourceIdentifier", "Resources", b2 =>
+                                {
+                                    b2.Property<Guid>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<Guid>("ControlPolicyId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<string>("Identifier")
+                                        .IsRequired()
+                                        .HasMaxLength(128)
+                                        .HasColumnType("character varying(128)");
+
+                                    b2.Property<string>("Region")
+                                        .IsRequired()
+                                        .HasMaxLength(128)
+                                        .HasColumnType("character varying(128)");
+
+                                    b2.Property<string>("Service")
+                                        .IsRequired()
+                                        .HasMaxLength(128)
+                                        .HasColumnType("character varying(128)");
+
+                                    b2.HasKey("Id");
+
+                                    b2.HasIndex("ControlPolicyId");
+
+                                    b2.ToTable("ResourceIdentifier", "auth");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("ControlPolicyId");
+                                });
+
+                            b1.Navigation("Actions");
+
+                            b1.Navigation("Resources");
+                        });
+
                     b.OwnsMany("Masa.Auth.Domain.DynamicRoles.Aggregates.DynamicRuleCondition", "Conditions", b1 =>
                         {
                             b1.Property<Guid>("Id")
@@ -2532,6 +2637,8 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
                         });
 
                     b.Navigation("Conditions");
+
+                    b.Navigation("ControlPolicies");
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.Organizations.Aggregates.DepartmentStaff", b =>

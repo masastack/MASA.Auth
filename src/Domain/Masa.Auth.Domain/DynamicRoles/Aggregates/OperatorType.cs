@@ -43,9 +43,9 @@ public class OperatorType : Enumeration
 
     public static OperatorType NotContains = new NotContainsOperator();
 
-    public OperatorType() : base(0, "") { }
+    private OperatorType() : base(0, "") { }
 
-    public OperatorType(int id, string name) : base(id, name)
+    private OperatorType(int id, string name) : base(id, name)
     {
     }
 
