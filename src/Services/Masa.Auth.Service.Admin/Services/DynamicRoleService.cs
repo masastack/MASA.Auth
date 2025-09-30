@@ -8,10 +8,10 @@ public class DynamicRoleService : ServiceBase
     public DynamicRoleService() : base("api/dynamic-role")
     {
         RouteOptions.DisableAutoMapRoute = false;
-        //RouteHandlerBuilder = builder =>
-        //{
-        //    builder.RequireAuthorization();
-        //};
+        RouteHandlerBuilder = builder =>
+        {
+            builder.RequireAuthorization();
+        };
     }
 
     [RoutePattern("", StartWithBaseUri = true, HttpMethod = "Get")]
