@@ -35,6 +35,11 @@ public class CommandHandler
         var entity = await _repository.FindAsync(x => x.Id == command.Id);
         MasaArgumentException.ThrowIfNull(entity, _i18n.T("DynamicRole"));
 
+        // 先清空集合，避免外键约束问题
+        entity.Conditions.Clear();
+        entity.ControlPolicies.Clear();
+        
+        // 使用映射更新
         command.UpsertDto.Adapt(entity);
 
         await _repository.UpdateAsync(entity);

@@ -5,17 +5,27 @@ namespace Masa.Auth.Contracts.Admin.DynamicRoles;
 
 public class ActionIdentifierDto
 {
+    [JsonPropertyName("Resource")]
     public string Resource { get; set; } = "*";
 
+    [JsonPropertyName("Type")]
     public string Type { get; set; } = "*";
 
+    [JsonPropertyName("Operation")]
     public string Operation { get; set; } = "*";
+
+    /// <summary>
+    /// 无参构造函数，用于JSON反序列化
+    /// </summary>
+    public ActionIdentifierDto()
+    {
+    }
 
     /// <summary>
     /// 从字符串解析ActionIdentifier，格式为 Resource:Type:Operation
     /// </summary>
     /// <param name="actionName">操作标识符字符串</param>
-    public ActionIdentifierDto(string? actionName = null)
+    public ActionIdentifierDto(string? actionName)
     {
         if (string.IsNullOrWhiteSpace(actionName))
         {
@@ -54,8 +64,25 @@ public class ActionIdentifierConverter : JsonConverter<List<ActionIdentifierDto>
         }
         else if (reader.TokenType == JsonTokenType.StartArray)
         {
-            var actionNames = JsonSerializer.Deserialize<List<string>>(ref reader, options);
-            return actionNames?.ConvertAll(actionName => new ActionIdentifierDto(actionName)) ?? new List<ActionIdentifierDto>();
+            var result = new List<ActionIdentifierDto>();
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndArray)
+                    break;
+
+                if (reader.TokenType == JsonTokenType.String)
+                {
+                    var actionName = reader.GetString();
+                    result.Add(new ActionIdentifierDto(actionName));
+                }
+                else if (reader.TokenType == JsonTokenType.StartObject)
+                {
+                    var actionObj = JsonSerializer.Deserialize<ActionIdentifierDto>(ref reader, options);
+                    if (actionObj != null)
+                        result.Add(actionObj);
+                }
+            }
+            return result;
         }
         throw new JsonException("Unexpected token type.");
     }

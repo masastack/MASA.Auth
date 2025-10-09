@@ -59,7 +59,17 @@ public static class MapsterAdapterConfig
                     Enumeration.FromValue<OperatorType>((int)dto.OperatorType),
                     dto.Value,
                      Enumeration.FromValue<DynamicRoleDataType>((int)dto.DataType),
-                    index)).ToList());
+                    index)).ToList())
+            .Map(dest => dest.ControlPolicies, src =>
+                src.ControlPolicies.Select(dto => new ControlPolicy
+                {
+                    Name = dto.Name,
+                    Effect = Enumeration.FromValue<Masa.Auth.Domain.DynamicRoles.Aggregates.StatementEffect>((int)dto.Effect),
+                    Priority = dto.Priority,
+                    Enabled = dto.Enabled,
+                    Actions = dto.Actions.Select(actionDto => new ActionIdentifier(actionDto.ToString())).ToList(),
+                    Resources = dto.Resources.Select(resourceDto => new ResourceIdentifier(resourceDto.ToString())).ToList()
+                }).ToList());
         TypeAdapterConfig<DynamicRuleConditionDto, DynamicRuleCondition>.NewConfig().MapToConstructor(true).Map(dest => dest.OperatorType, src => Enumeration.FromValue<OperatorType>((int)src.OperatorType));
 
         TypeAdapterConfig<OperatorType, OperatorTypes>.NewConfig().MapWith(src => (OperatorTypes)src.Id);
@@ -79,6 +89,12 @@ public static class MapsterAdapterConfig
         TypeAdapterConfig<ControlPolicy, ControlPolicyDto>.NewConfig()
             .Map(dest => dest.Actions, src => src.Actions.Select(action => new ActionIdentifierDto(action.ToString())).ToList())
             .Map(dest => dest.Resources, src => src.Resources.Select(resource => new ResourceIdentifierDto(resource.ToString())).ToList());
+            
+        // ControlPolicyDto 到 ControlPolicy 的反向映射配置
+        TypeAdapterConfig<ControlPolicyDto, ControlPolicy>.NewConfig()
+            .Map(dest => dest.Id, src => Guid.Empty) // 忽略 DTO 中的 Id，让 EF Core 自动生成
+            .Map(dest => dest.Actions, src => src.Actions.Select(actionDto => new ActionIdentifier(actionDto.ToString())).ToList())
+            .Map(dest => dest.Resources, src => src.Resources.Select(resourceDto => new ResourceIdentifier(resourceDto.ToString())).ToList());
         
         TypeAdapterConfig<ActionIdentifier, ActionIdentifierDto>.NewConfig()
             .MapWith(src => new ActionIdentifierDto(src.ToString()));
