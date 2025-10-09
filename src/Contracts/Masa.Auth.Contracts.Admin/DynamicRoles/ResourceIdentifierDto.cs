@@ -5,17 +5,27 @@ namespace Masa.Auth.Contracts.Admin.DynamicRoles;
 
 public class ResourceIdentifierDto
 {
+    [JsonPropertyName("Service")]
     public string Service { get; set; } = "*";
 
+    [JsonPropertyName("Region")]
     public string Region { get; set; } = "*";
 
+    [JsonPropertyName("Identifier")]
     public string Identifier { get; set; } = "*";
+
+    /// <summary>
+    /// 无参构造函数，用于JSON反序列化
+    /// </summary>
+    public ResourceIdentifierDto()
+    {
+    }
 
     /// <summary>
     /// 从字符串解析Resource，格式为 Service:Region:Identifier
     /// </summary>
     /// <param name="resource">资源标识符字符串</param>
-    public ResourceIdentifierDto(string? resource = null)
+    public ResourceIdentifierDto(string? resource)
     {
         if (string.IsNullOrWhiteSpace(resource))
         {
@@ -54,8 +64,25 @@ public class ResourceIdentifierConverter : JsonConverter<List<ResourceIdentifier
         }
         else if (reader.TokenType == JsonTokenType.StartArray)
         {
-            var resources = JsonSerializer.Deserialize<List<string>>(ref reader, options);
-            return resources?.ConvertAll(resource => new ResourceIdentifierDto(resource)) ?? new List<ResourceIdentifierDto>();
+            var result = new List<ResourceIdentifierDto>();
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndArray)
+                    break;
+
+                if (reader.TokenType == JsonTokenType.String)
+                {
+                    var resource = reader.GetString();
+                    result.Add(new ResourceIdentifierDto(resource));
+                }
+                else if (reader.TokenType == JsonTokenType.StartObject)
+                {
+                    var resourceObj = JsonSerializer.Deserialize<ResourceIdentifierDto>(ref reader, options);
+                    if (resourceObj != null)
+                        result.Add(resourceObj);
+                }
+            }
+            return result;
         }
         throw new JsonException("Unexpected token type.");
     }
