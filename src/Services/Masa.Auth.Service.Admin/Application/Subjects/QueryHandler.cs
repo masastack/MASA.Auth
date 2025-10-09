@@ -73,7 +73,37 @@ public class QueryHandler
             hasRole = validateCommand.Result.Any(r => r.IsValid);
         }
         query.Result = hasRole;
-        return;
+    }
+
+    [EventHandler]
+    public async Task UserHasRolesQuery(UserHasRolesQuery query)
+    {
+        var user = await _userRepository.AsQueryable().Include(x => x.UserClaims).Include(u => u.Roles)
+            .FirstOrDefaultAsync(x => x.Id == query.UserId);
+
+        if (user is null)
+        {
+            return;
+        }
+
+        // 获取用户直接拥有的角色ID
+        var userRoleIds = user.Roles
+            .Where(r => query.RoleIds.Contains(r.RoleId))
+            .Select(r => r.RoleId)
+            .ToList();
+
+        // 验证动态角色
+        var validateCommand = new ValidateDynamicRoleCommand(query.UserId, query.RoleIds);
+        await _eventBus.PublishAsync(validateCommand);
+
+        // 获取动态角色ID
+        var dynamicRoleIds = validateCommand.Result
+            .Where(r => r.IsValid)
+            .Select(r => r.RoleId)
+            .ToList();
+
+        // 合并去重后返回
+        query.Result = userRoleIds.Union(dynamicRoleIds).ToList();
     }
 
     [EventHandler]

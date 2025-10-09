@@ -446,4 +446,13 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(query);
         return query.Result;
     }
+
+    [RoutePattern("roles", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<List<Guid>> RolesAsync(IEventBus eventBus, IUserContext _userContext, [FromQuery] Guid? userId, [FromBody] List<Guid> RoleIds)
+    {
+        userId ??= _userContext.GetUserId<Guid>();
+        var query = new UserHasRolesQuery(userId.Value, RoleIds);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
 }
