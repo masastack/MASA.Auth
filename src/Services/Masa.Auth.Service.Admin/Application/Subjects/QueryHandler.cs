@@ -157,7 +157,8 @@ public class QueryHandler
     [EventHandler]
     public async Task GetUsersByAccountAsync(UsersByAccountQuery query)
     {
-        var users = await _userRepository.GetListAsync(u => query.Accounts.Contains(u.Account));
+        var users = await _userRepository.GetListAsync(u => query.Accounts.Contains(u.Account)
+                    || query.Accounts.Contains(u.PhoneNumber));
         query.Result = users.Adapt<List<UserSimpleModel>>();
     }
 
