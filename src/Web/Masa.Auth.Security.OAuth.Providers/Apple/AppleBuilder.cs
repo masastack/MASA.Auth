@@ -5,14 +5,12 @@ namespace Masa.Auth.Security.OAuth.Providers.Apple;
 
 public class AppleBuilder : ILocalAuthenticationDefaultBuilder, IAuthenticationInject
 {
-    const string SCHEME = "Apple";
+    public string Scheme => AppleAuthenticationDefaults.AuthenticationScheme;
 
-    public string Scheme { get; } = SCHEME;
-
-    public AuthenticationDefaults AuthenticationDefaults { get; } = new AuthenticationDefaults
+    public AuthenticationDefaults AuthenticationDefaults => new AuthenticationDefaults
     {
         HandlerType = typeof(AppleAuthenticationHandler),
-        Scheme = SCHEME,
+        Scheme = Scheme,
         DisplayName = AppleAuthenticationDefaults.DisplayName,
         Icon = "https://cdn.masastack.com/stack/auth/ico/apple.png",
         CallbackPath = AppleAuthenticationDefaults.CallbackPath,
@@ -31,8 +29,8 @@ public class AppleBuilder : ILocalAuthenticationDefaultBuilder, IAuthenticationI
     }
 
     public void InjectForHotUpdate(IServiceCollection serviceCollection)
-    {        
-       serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<AppleAuthenticationOptions>, ApplePostConfigureOptions>());
-       serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<AppleAuthenticationOptions>, OAuthPostConfigureOptions<AppleAuthenticationOptions, AppleAuthenticationHandler>>());
+    {
+        serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<AppleAuthenticationOptions>, ApplePostConfigureOptions>());
+        serviceCollection.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<AppleAuthenticationOptions>, OAuthPostConfigureOptions<AppleAuthenticationOptions, AppleAuthenticationHandler>>());
     }
 }

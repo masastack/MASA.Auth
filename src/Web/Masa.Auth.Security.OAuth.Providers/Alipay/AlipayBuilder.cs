@@ -8,12 +8,12 @@ namespace Masa.Auth.Security.OAuth.Providers.Alipay;
 /// </summary>
 public class AlipayBuilder : ILocalAuthenticationDefaultBuilder, IAuthenticationInject
 {
-    public string Scheme { get; } = "Alipay";
+    public string Scheme => AlipayAuthenticationDefaults.AuthenticationScheme;
 
-    public AuthenticationDefaults AuthenticationDefaults { get; } = new AuthenticationDefaults
+    public AuthenticationDefaults AuthenticationDefaults => new AuthenticationDefaults
     {
         HandlerType = typeof(AlipayAuthenticationHandler),
-        Scheme = "Alipay",
+        Scheme = Scheme,
         DisplayName = AlipayAuthenticationDefaults.DisplayName,
         Icon = "https://cdn.masastack.com/stack/auth/ico/alipay.svg",
         CallbackPath = AlipayAuthenticationDefaults.CallbackPath,

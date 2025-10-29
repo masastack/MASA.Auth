@@ -7,10 +7,10 @@ public class GitHubBuilder : ILocalAuthenticationDefaultBuilder, IAuthentication
 {
     public string Scheme { get; } = GitHubAuthenticationDefaults.AuthenticationScheme;
 
-    public AuthenticationDefaults AuthenticationDefaults { get; } = new AuthenticationDefaults
+    public AuthenticationDefaults AuthenticationDefaults => new AuthenticationDefaults
     {
         HandlerType = typeof(GitHubAuthenticationHandler),
-        Scheme = GitHubAuthenticationDefaults.AuthenticationScheme,
+        Scheme = Scheme,
         DisplayName = GitHubAuthenticationDefaults.DisplayName,
         Icon = "https://cdn.masastack.com/stack/auth/ico/github.svg",
         CallbackPath = GitHubAuthenticationDefaults.CallbackPath,
