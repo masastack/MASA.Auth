@@ -5,6 +5,7 @@ using static AspNet.Security.OAuth.Weixin.WeixinAuthenticationConstants;
 
 namespace Masa.Auth.Security.OAuth.Providers.WeChat;
 
+[Obsolete("use WeixinBuilder replace")]
 public class WeChatBuilder : ILocalAuthenticationDefaultBuilder, IAuthenticationInject, IAuthenticationInstanceBuilder
 {
     public string Scheme { get; } = "WeChat";
@@ -19,6 +20,7 @@ public class WeChatBuilder : ILocalAuthenticationDefaultBuilder, IAuthentication
         Issuer = WeixinAuthenticationDefaults.Issuer,
         AuthorizationEndpoint = WeixinAuthenticationDefaults.AuthorizationEndpoint,
         TokenEndpoint = WeixinAuthenticationDefaults.TokenEndpoint,
+        ThirdPartyIdpType = ThirdPartyIdpTypes.WeChat,
         UserInformationEndpoint = WeixinAuthenticationDefaults.UserInformationEndpoint,
         JsonKeyMap = new Dictionary<string, string>
         {
