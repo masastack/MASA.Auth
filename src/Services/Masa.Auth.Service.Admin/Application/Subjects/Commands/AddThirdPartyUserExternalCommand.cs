@@ -3,7 +3,9 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public record AddThirdPartyUserExternalCommand(AddThirdPartyUserModel ThirdPartyUser, bool WhenExisReturn = false, bool WhenExisUpdateClaimData = false) : Command
+public record AddThirdPartyUserExternalCommand(AddThirdPartyUserModel ThirdPartyUser,
+    bool WhenExisReturn = false,
+    bool WhenExisUpdateClaimData = false, string ClientId = "") : Command
 {
     public UserModel Result { get; set; } = new();
 }

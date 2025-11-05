@@ -19,6 +19,8 @@ public class AddThirdPartyUserDto
 
     public bool IsLdap { get; set; }
 
+    public string? ClientId { get; set; }
+
     public AddThirdPartyUserDto()
     {
 

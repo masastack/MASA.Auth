@@ -27,7 +27,8 @@ public class ThirdPartyUserDomainService : DomainService
         var userDto = dto.User;
         _logger.LogWarning("AddThirdPartyUserAsync user {0}", JsonSerializer.Serialize(userDto));
         var user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar, userDto.Account, userDto.Password, "", userDto.Email, userDto.PhoneNumber ?? "",
-             new ThirdPartyUser(dto.ThirdPartyIdpId, dto.ThridPartyIdentity, dto.ExtendedData, dto.ClaimData), Enumeration.FromValue<PasswordType>((int)userDto.PasswordType));
+             new ThirdPartyUser(dto.ThirdPartyIdpId, dto.ThridPartyIdentity, dto.ExtendedData, dto.ClaimData),
+             Enumeration.FromValue<PasswordType>((int)userDto.PasswordType), dto.ClientId);
 
         if (dto.IsLdap)
         {
