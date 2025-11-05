@@ -50,7 +50,7 @@ public class ThirdPartyCommandHandler
                 Avatar = model.Avatar,
                 Password = model.Password
             }
-        }, true);
+        }, true, ClientId: model.ClientId ?? "");
         await _eventBus.PublishAsync(addThirdPartyUserExternalCommand);
         command.Result = addThirdPartyUserExternalCommand.Result;
     }
@@ -97,6 +97,7 @@ public class ThirdPartyCommandHandler
     public async Task AddThirdPartyUserAsync(AddThirdPartyUserCommand command)
     {
         var thirdPartyUserDto = command.ThirdPartyUser;
+        thirdPartyUserDto.ClientId = command.ClientId;
         var (thirdPartyUser, exception) = await _thirdPartyUserDomainService.VerifyRepeatAsync(thirdPartyUserDto.ThirdPartyIdpId, thirdPartyUserDto.ThridPartyIdentity);
 
         if (thirdPartyUser != null)
@@ -193,7 +194,8 @@ public class ThirdPartyCommandHandler
             addThirdPartyUserDto.IsLdap = true;
         }
 
-        var addThirdPartyUserCommand = new AddThirdPartyUserCommand(addThirdPartyUserDto, command.WhenExisReturn, command.WhenExisUpdateClaimData);
+        var addThirdPartyUserCommand = new AddThirdPartyUserCommand(addThirdPartyUserDto, command.WhenExisReturn,
+                command.WhenExisUpdateClaimData, command.ClientId);
         await _eventBus.PublishAsync(addThirdPartyUserCommand);
         command.Result = addThirdPartyUserCommand.Result;
     }
