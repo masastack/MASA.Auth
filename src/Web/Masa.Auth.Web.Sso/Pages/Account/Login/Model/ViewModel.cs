@@ -9,6 +9,8 @@ public class ViewModel
 
     public bool EnableLocalLogin { get; set; } = true;
 
+    public string ClientLogoUrl { get; set; } = string.Empty;
+
     public IEnumerable<ExternalProvider> ExternalProviders { get; set; } = Enumerable.Empty<ExternalProvider>();
 
     public IEnumerable<ExternalProvider> VisibleExternalProviders => ExternalProviders.Where(x => !string.IsNullOrWhiteSpace(x.DisplayName));

@@ -52,6 +52,7 @@
             _targetCulture = "en-US";
         }
         LanguageProvider.SetCulture(new CultureInfo(_targetCulture));
+        CookieStorage.SetAsync(CookieKeyConfig.LangCookieKey, _targetCulture);
     }
 
     async Task<bool> OnErrorAsync(Exception e){
@@ -66,6 +67,39 @@
         if (!string.IsNullOrWhiteSpace(lang))
         {
             LanguageProvider.SetCulture(new CultureInfo(lang));
+        }
+        else
+        {
+            // 如果 Cookie 中没有语言设置，则根据浏览器语言自动设置
+            var browserLang = await JS.InvokeAsync<string>("eval", "navigator.language || navigator.userLanguage");
+            if (!string.IsNullOrWhiteSpace(browserLang))
+            {
+                // 支持的语言列表
+                var supportedCultures = new[] { "zh-CN", "en-US", "ru-RU" };
+                string targetCulture = "en-US"; // 默认英文
+                
+                // 精确匹配
+                if (supportedCultures.Contains(browserLang))
+                {
+                    targetCulture = browserLang;
+                }
+                // 模糊匹配语言（例如 zh-TW, zh-HK 匹配到 zh-CN）
+                else if (browserLang.StartsWith("zh"))
+                {
+                    targetCulture = "zh-CN";
+                }
+                else if (browserLang.StartsWith("ru"))
+                {
+                    targetCulture = "ru-RU";
+                }
+                else if (browserLang.StartsWith("en"))
+                {
+                    targetCulture = "en-US";
+                }
+                
+                LanguageProvider.SetCulture(new CultureInfo(targetCulture));
+                CookieStorage.SetAsync(CookieKeyConfig.LangCookieKey, targetCulture);
+            }
         }
     }
 }
