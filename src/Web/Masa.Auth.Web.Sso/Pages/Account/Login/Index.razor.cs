@@ -15,7 +15,7 @@ public partial class Index
 
     [Parameter] public string? Tab { get; set; }
 
-    [Parameter] [SupplyParameterFromQuery] public string ReturnUrl { get; set; } = string.Empty;
+    [Parameter][SupplyParameterFromQuery] public string ReturnUrl { get; set; } = string.Empty;
 
     private string? ComputedTab => Tab?.ToLower();
 
@@ -53,7 +53,8 @@ public partial class Index
             var local = context.IdP == IdentityServerConstants.LocalIdentityProvider;
 
             // this is meant to short circuit the UI and only trigger the one external IdP
-            _viewModel = new ViewModel {
+            _viewModel = new ViewModel
+            {
                 EnableLocalLogin = local,
             };
 
@@ -72,33 +73,33 @@ public partial class Index
 
         var providers = schemes
             .Where(x => x.DisplayName != null)
-            .Select(x => new ViewModel.ExternalProvider {
+            .Select(x => new ViewModel.ExternalProvider
+            {
                 DisplayName = x.DisplayName ?? x.Name,
                 AuthenticationScheme = x.Name
             }).ToList();
 
-        var allowLocal = true;
+        _viewModel = new ViewModel
+        {
+            AllowRememberLogin = LoginOptions.AllowRememberLogin
+        };
+
         if (context?.Client.ClientId != null)
         {
             _clientId = context.Client.ClientId;
             var client = await _clientStore.FindEnabledClientByIdAsync(_clientId);
             if (client != null)
             {
-                allowLocal = client.EnableLocalLogin;
+                _viewModel.ClientLogoUrl = client.LogoUri;
+                _viewModel.EnableLocalLogin = client.EnableLocalLogin;
                 //todo IdentityProviderRestrictions linkage auth ThirdPartyIdps
                 if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
                 {
-                    providers = providers.Where(provider =>
+                    _viewModel.ExternalProviders = providers.Where(provider =>
                         client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
                 }
             }
         }
-
-        _viewModel = new ViewModel {
-            AllowRememberLogin = LoginOptions.AllowRememberLogin,
-            EnableLocalLogin = allowLocal && LoginOptions.AllowLocalLogin,
-            ExternalProviders = providers.ToArray()
-        };
     }
 
     private void TabChanged(StringNumber? tab)
@@ -122,7 +123,7 @@ public partial class Index
                 AuthenticationScheme = idp.Name,
                 Icon = idp.Icon
             }).ToList();
-        
+
             _viewModel.RegisterFields = customLoginModel.RegisterFields;
             await InvokeAsync(StateHasChanged);
         }
