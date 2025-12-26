@@ -147,6 +147,12 @@ public class UserDomainService : DomainService
     public async Task RemoveAsync(Guid userId)
     {
         var user = await _userRepository.GetDetailAsync(userId);
+
+        if (user == null)
+        {
+            return;
+        }
+
         if (user.IsAdmin())
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ADMINISTRATOR_DELETE_ERROR);
