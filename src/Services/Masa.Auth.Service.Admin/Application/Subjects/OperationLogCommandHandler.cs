@@ -34,12 +34,12 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
             await _operationLogRepository.AddDefaultAsync(OperationTypes.EditUser, $"编辑用户：{command.Result.Account}");
         }
 
-        private async Task<string> GetUserAccountByIdAsync(Guid id)
+        private async Task<string?> GetUserAccountByIdAsync(Guid id)
         {
             var account = await _authDbContext.Set<User>()
                                               .Where(user => user.Id == id)
                                               .Select(user => user.Account)
-                                              .FirstAsync();
+                                              .FirstOrDefaultAsync();
 
             return account;
         }
@@ -48,7 +48,10 @@ namespace Masa.Auth.Service.Admin.Application.Subjects
         public async Task RemoveUserOperationLogAsync(RemoveUserCommand command)
         {
             var account = await GetUserAccountByIdAsync(command.User.Id);
-            await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveUser, $"删除用户：{account}");
+            if (!string.IsNullOrEmpty(account))
+            {
+                await _operationLogRepository.AddDefaultAsync(OperationTypes.RemoveUser, $"删除用户：{account}");
+            }
         }
 
         [EventHandler]
