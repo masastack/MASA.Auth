@@ -6,12 +6,13 @@
 @inject IAuthenticationSchemeProvider _schemeProvider
 @inject IAuthClient _authClient
 @inject EnvironmentDataService _environmentData
+@inject ILogger<Index> _logger
 @layout SimpleLayout
 @implements IDisposable
 
 @if (_viewModel.EnableLocalLogin)
 {
-    <MCard Width=510 Height=640 MaxHeight="640">
+    <MCard Style="width: 100%; max-width: 510px;" Height=640 MaxHeight="640">
         <div class="tab-header login-tab">
             <MTabs Value="@ComputedTab" ValueChanged="TabChanged" BackgroundColor="transparent" Color="primary" HideSlider Grow>
                 <MTab Value="@("login")" Class="neutral-lighten-4--text" Style="height:60px;">
@@ -30,6 +31,12 @@
                 </MTab>
             </MTabs>
         </div>
+        @if (!string.IsNullOrWhiteSpace(_viewModel.ClientLogoUrl))
+        {
+            <div class="text-center pt-6 pb-2">
+                <img src="@_viewModel.ClientLogoUrl" alt="Client Logo" class="client-logo" style="max-height: 48px; max-width: 120px; object-fit: contain;" />
+            </div>
+        }
         <MTabsItems Value="@ComputedTab">
             <MTabItem Value="@("login")">
                 <CascadingValue Value="@ReturnUrl">

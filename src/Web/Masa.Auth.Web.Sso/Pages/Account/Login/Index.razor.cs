@@ -88,8 +88,15 @@ public partial class Index
         {
             _clientId = context.Client.ClientId;
             var client = await _clientStore.FindEnabledClientByIdAsync(_clientId);
+
+            _logger.LogInformation("========== Client Info ==========");
+            _logger.LogInformation("ClientId: {ClientId}", _clientId);
+
             if (client != null)
             {
+                _logger.LogInformation("Client Found:");
+                _logger.LogInformation("  - ClientName: {ClientName}", client.ClientName);
+                _logger.LogInformation("  - LogoUri: {LogoUri}", client.LogoUri);
                 _viewModel.ClientLogoUrl = client.LogoUri;
                 _viewModel.EnableLocalLogin = client.EnableLocalLogin;
                 //todo IdentityProviderRestrictions linkage auth ThirdPartyIdps
@@ -98,6 +105,10 @@ public partial class Index
                     _viewModel.ExternalProviders = providers.Where(provider =>
                         client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
                 }
+            }
+            else
+            {
+                _logger.LogWarning("Client not found for ClientId: {ClientId}", _clientId);
             }
         }
     }

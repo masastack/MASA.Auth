@@ -8,19 +8,22 @@
         <MErrorHandler OnHandle=OnErrorAsync>
             <MMain Style="background:url('./img/login/login_bg.png');background-size: cover;">
                 <div class="d-flex flex-column full-height">
-                    <MRow>
-                        <MCol Offset="2" Md="2" Class="mt-12">
-                            <image style="height:40px;"
-                                   src="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png?x-oss-process=image/resize,w_200">
-                            </image>
-                        </MCol>
-                        <MCol Offset="6" Class="mt-14">
-                            <MButton Class="rounded-pill" Color="white" OnClick="ChangeLanguage">
-                                <MIcon Left Dark>
-                                    mdi-swap-horizontal
-                                </MIcon>
-                                @(LanguageProvider.Culture.Name == "en-US" ? "中文" : "EN")
-                            </MButton>
+                    <MRow Class="header-row" NoGutters>
+                        <MCol Cols="12" Class="d-flex justify-space-between align-center px-4 px-md-0 py-4 py-md-6">
+                            <div class="logo-container ml-md-8">
+                                <image style="height:32px; max-height: 32px;"
+                                       class="logo-image"
+                                       src="https://cdn.masastack.com/stack/images/logo/MASAStack/logo-h-en.png?x-oss-process=image/resize,w_200">
+                                </image>
+                            </div>
+                            <div class="language-container mr-md-4">
+                                <MButton Class="rounded-pill" Color="white" Small OnClick="ChangeLanguage">
+                                    <MIcon Left Dark Size="20">
+                                        mdi-swap-horizontal
+                                    </MIcon>
+                                    @(LanguageProvider.Culture.Name == "en-US" ? "中文" : "EN")
+                                </MButton>
+                            </div>
                         </MCol>
                     </MRow>
                     <MRow Class="flex-grow-1">
@@ -77,7 +80,7 @@
                 // 支持的语言列表
                 var supportedCultures = new[] { "zh-CN", "en-US", "ru-RU" };
                 string targetCulture = "en-US"; // 默认英文
-                
+
                 // 精确匹配
                 if (supportedCultures.Contains(browserLang))
                 {
@@ -96,7 +99,7 @@
                 {
                     targetCulture = "en-US";
                 }
-                
+
                 LanguageProvider.SetCulture(new CultureInfo(targetCulture));
                 CookieStorage.SetAsync(CookieKeyConfig.LangCookieKey, targetCulture);
             }
