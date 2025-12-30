@@ -1,0 +1,66 @@
+/* 头部区域样式 */
+::deep .header-row {
+    position: relative;
+    z-index: 10;
+}
+
+::deep .logo-container {
+    display: flex;
+    align-items: center;
+}
+
+::deep .language-container {
+    display: flex;
+    align-items: center;
+}
+
+/* 移动端优化 */
+@media (max-width: 600px) {
+    ::deep .logo-image {
+        height: 28px !important;
+        max-height: 28px !important;
+    }
+
+    ::deep .header-row {
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+    }
+
+    ::deep .language-container .m-btn {
+        padding: 4px 12px !important;
+        min-width: auto !important;
+        font-size: 13px;
+    }
+
+    ::deep .language-container .m-icon {
+        font-size: 18px !important;
+    }
+}
+
+/* 平板端优化 */
+@media (min-width: 601px) and (max-width: 960px) {
+    ::deep .logo-container {
+        margin-left: 24px !important;
+    }
+
+    ::deep .language-container {
+        margin-right: 24px !important;
+    }
+}
+
+/* 桌面端优化 */
+@media (min-width: 961px) {
+    ::deep .logo-image {
+        height: 40px !important;
+        max-height: 40px !important;
+    }
+
+    ::deep .logo-container {
+        margin-left: 64px !important;
+    }
+
+    ::deep .language-container {
+        margin-right: 32px !important;
+    }
+}
+
