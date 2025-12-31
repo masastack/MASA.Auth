@@ -444,7 +444,7 @@ public class StaffCommandHandler
     /// </summary>
     private bool IsLdapUserEnabled(LdapUser ldapUser)
     {
-        return ldapUser.UserAccountControl == UserAccountControl.NormalAccount;
+        return (ldapUser.UserAccountControl & UserAccountControl.AccountDisabled) == 0;
     }
 
     /// <summary>
