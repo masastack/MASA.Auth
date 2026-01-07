@@ -22,7 +22,7 @@ await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, in
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
 var identityServerUrl = masaStackConfig.GetSsoDomain();
-
+StackExchangeRedisInstrumentation redisInstrumentation = default!;
 #if DEBUG
 //identityServerUrl = "https://localhost:18201";
 #endif
@@ -32,14 +32,24 @@ builder.Services.AddDaprClient();
 
 builder.Services.AddObjectStorage(option => option.UseAliyunStorage());
 
-builder.Services.AddObservable(builder.Logging, () => new MasaObservableOptions
+builder.Services.AddObservable(builder.Logging, new MasaObservableOptions
 {
     ServiceNameSpace = builder.Environment.EnvironmentName,
     ServiceVersion = masaStackConfig.Version,
     ServiceName = masaStackConfig.GetServiceId(project),
     Layer = masaStackConfig.Namespace,
     ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")!
-}, () => masaStackConfig.OtlpUrl);
+}, masaStackConfig.OtlpUrl, traceInstrumentConfig: traceBuilder =>
+{
+    traceBuilder.AddRedisInstrumentation(options =>
+    {
+        options.SetVerboseDatabaseStatements = true;
+    })
+    .ConfigureRedisInstrumentation(instrumentation =>
+    {
+        redisInstrumentation = instrumentation;
+    });
+});
 
 builder.Services.AddMasaIdentity(options =>
 {
@@ -111,9 +121,9 @@ var redisOption = new RedisConfigurationOptions
 var multilevelCacheRedisOptions = builder.Configuration.GetMultilevelCacheRedisOptions(clientName);
 multilevelCacheRedisOptions ??= redisOption;
 
-builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(multilevelCacheRedisOptions));
-builder.Services.AddAuthClientMultilevelCache(redisOption);
-builder.Services.AddDccClient(redisOption);
+builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(multilevelCacheRedisOptions, connectConfig: connect => redisInstrumentation.AddConnection(connect)));
+builder.Services.AddAuthClientMultilevelCache(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
+builder.Services.AddDccClient(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
 builder.Services
             .AddPmClient(masaStackConfig.GetPmServiceDomain())
             .AddSchedulerClient(masaStackConfig.GetSchedulerServiceDomain())
