@@ -36,12 +36,34 @@ builder.Services.AddCors(options =>
     });
 });
 #endif
-
+StackExchangeRedisInstrumentation redisInstrumentation = default!;
 var authDomain = masaStackConfig.GetAuthServiceDomain();
 
 #if DEBUG
 authDomain = "http://localhost:18002";
 #endif
+
+//tsc
+builder.Services.AddObservable(builder.Logging, new MasaObservableOptions
+{
+    ServiceNameSpace = builder.Environment.EnvironmentName,
+    ServiceVersion = masaStackConfig.Version,
+    ServiceName = masaStackConfig.GetId(MasaStackProject.Auth, MasaStackApp.SSO),
+    Layer = masaStackConfig.Namespace,
+    ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")!
+}, masaStackConfig.OtlpUrl, true
+, traceInstrumentConfig: traceBuilder =>
+{
+    traceBuilder.AddRedisInstrumentation(options =>
+            {
+                options.SetVerboseDatabaseStatements = true;
+            })
+            .ConfigureRedisInstrumentation(instrumentation =>
+            {
+                redisInstrumentation = instrumentation;
+            });
+});
+
 
 var redisOption = new RedisConfigurationOptions
 {
@@ -56,17 +78,15 @@ var redisOption = new RedisConfigurationOptions
     Password = masaStackConfig.RedisModel.RedisPassword
 };
 
-builder.Services.AddAuthClient(authDomain, redisOption);
-
+builder.Services.AddAuthClient(authDomain, redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
 builder.Services.AddMcClient(masaStackConfig.GetMcServiceDomain());
 builder.Services.AddPmClient(masaStackConfig.GetPmServiceDomain());
-
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
 builder.Services.AddScoped<IEventSink, IdentityServerEventSink>();
 builder.Services.AddSameSiteCookiePolicy();
 builder.Services.AddMultilevelCache(distributedCacheOptions =>
 {
-    distributedCacheOptions.UseStackExchangeRedisCache(redisOption);
+    distributedCacheOptions.UseStackExchangeRedisCache(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
 });
 builder.Services.AddScoped<CookieStorage>();
 
@@ -119,28 +139,15 @@ else
         });
     });
     identityServerBuilder.AddSigningCredential(serverCertificate);
-    //tsc
-    builder.Services.AddObservable(builder.Logging, () =>
-    {
-        return new MasaObservableOptions
-        {
-            ServiceNameSpace = builder.Environment.EnvironmentName,
-            ServiceVersion = masaStackConfig.Version,
-            ServiceName = masaStackConfig.GetId(MasaStackProject.Auth, MasaStackApp.SSO),
-            Layer = masaStackConfig.Namespace,
-            ServiceInstanceId = builder.Configuration.GetValue<string>("HOSTNAME")!
-        };
-    }, () =>
-    {
-        return masaStackConfig.OtlpUrl;
-    }, true);
 }
 
 //migrate db
 await builder.MigrateDbContextAsync<SsoPersistedGrantDbContext>();
 
+var protectionConnect = ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption);
+redisInstrumentation.AddConnection(protectionConnect);
 builder.Services.AddDataProtection()
-    .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption));
+    .PersistKeysToStackExchangeRedis(protectionConnect);
 
 builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandler, RemoteAuthenticationDefaultsProvider>();
 
