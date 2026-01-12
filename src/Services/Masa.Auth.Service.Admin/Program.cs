@@ -118,12 +118,10 @@ var redisOption = new RedisConfigurationOptions
     ClientName = clientName
 };
 
-var multilevelCacheRedisOptions = builder.Configuration.GetMultilevelCacheRedisOptions(clientName);
-multilevelCacheRedisOptions ??= redisOption;
-
-builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(multilevelCacheRedisOptions, connectConfig: connect => redisInstrumentation.AddConnection(connect)));
+builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect)));
 builder.Services.AddAuthClientMultilevelCache(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
 builder.Services.AddDccClient(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
+
 builder.Services
             .AddPmClient(masaStackConfig.GetPmServiceDomain())
             .AddSchedulerClient(masaStackConfig.GetSchedulerServiceDomain())
