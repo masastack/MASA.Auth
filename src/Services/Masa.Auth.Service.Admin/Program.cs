@@ -108,10 +108,7 @@ var redisOption = new RedisConfigurationOptions
     ClientName = clientName
 };
 
-var multilevelCacheRedisOptions = builder.Configuration.GetMultilevelCacheRedisOptions(clientName);
-multilevelCacheRedisOptions ??= redisOption;
-
-builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(multilevelCacheRedisOptions));
+builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption));
 builder.Services.AddAuthClientMultilevelCache(redisOption);
 builder.Services.AddDccClient(redisOption);
 builder.Services
