@@ -112,6 +112,8 @@ public class AlipayCaller : ThirdPartyIdpCallerBase
 
         using var response = await _httpClient.GetAsync(address);
         var json = await response.Content.ReadAsStringAsync();
+        _logger.LogDebug("=======Alipay Create Ticket======");
+        _logger.LogDebug(json);
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogError("Alipay userinfo request failed: {StatusCode}, {Body}", response.StatusCode, json);
