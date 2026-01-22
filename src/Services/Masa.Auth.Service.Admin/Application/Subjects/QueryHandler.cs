@@ -779,7 +779,8 @@ public class QueryHandler
                 }
             }
             var roles = teamRoles.DistinctBy(r => r.RoleId)
-                            .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Code, tr.Role.Limit, tr.Role.AvailableQuantity))
+                            .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Code,
+                            tr.Role.Limit, tr.Role.AvailableQuantity, tr.Role.CreationTime))
                             .ToList();
             query.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));
         }

@@ -15,18 +15,15 @@ public class RoleSelectDto
 
     public int AvailableQuantity { get; set; }
 
-    public RoleSelectDto()
-    {
-        Name = "";
-        Code = "";
-    }
+    public DateTime CreationTime { get; set; }
 
-    public RoleSelectDto(Guid id, string name, string code, int limit, int availableQuantity)
+    public RoleSelectDto(Guid id, string name, string code, int limit, int availableQuantity, DateTime creationTime)
     {
         Id = id;
         Name = name;
         Code = code;
         Limit = limit;
         AvailableQuantity = availableQuantity;
+        CreationTime = creationTime;
     }
 }
