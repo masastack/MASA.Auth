@@ -314,7 +314,10 @@ public class User : FullAggregateRoot<Guid, Guid>
         {
             Id = ur.RoleId,
             Code = ur.Role?.Code ?? "",
-            Name = ur.Role?.Name ?? ""
+            Name = ur.Role?.Name ?? "",
+            CreationTime = ur.Role?.CreationTime ?? DateTime.MinValue,
+            ModificationTime = ur.Role?.ModificationTime,
+            Enabled = ur.Role?.Enabled ?? false
         }).ToList();
         var permissions = user.Permissions.Select(p => new SubjectPermissionRelationDto(p.PermissionId, p.Effect)).ToList();
         var thirdPartyIdpAvatars = user.ThirdPartyUsers.Select(tpu => tpu.IdentityProvider.Icon).ToList();
