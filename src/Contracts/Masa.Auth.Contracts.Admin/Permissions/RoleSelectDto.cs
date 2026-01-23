@@ -22,5 +22,6 @@ public class RoleSelectDto
         Code = code;
         Limit = limit;
         AvailableQuantity = availableQuantity;
+        CreationTime = creationTime;
     }
 }
