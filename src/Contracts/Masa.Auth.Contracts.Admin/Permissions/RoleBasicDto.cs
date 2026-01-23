@@ -19,12 +19,6 @@ public class RoleBasicDto
 
     public bool Enabled { get; set; }
 
-    public RoleBasicDto()
-    {
-        Name = "";
-        Code = "";
-    }
-
     public RoleBasicDto(Guid id, string name, string code, int limit, RoleTypes type, string? description, bool enabled)
     {
         Id = id;
