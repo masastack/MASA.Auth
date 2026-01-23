@@ -91,6 +91,25 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetRoleDetailByCodeAsync(RoleDetailByCodeQuery query)
+    {
+        var role = await _authDbContext.Set<Role>()
+            .Where(r => r.Code == query.Code)
+            .FirstOrDefaultAsync();
+
+        if (role is null) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ROLE_NOT_EXIST);
+        
+        query.Result = new RoleBasicDto(
+            role.Id, 
+            role.Name, 
+            role.Code, 
+            role.Limit, 
+            role.Type, 
+            role.Description, 
+            role.Enabled);
+    }
+
+    [EventHandler]
     public async Task GetDetailExternalAsync(RoleDetailExternalQuery query)
     {
         var role = await _roleRepository.GetByIdAsync(query.RoleId);

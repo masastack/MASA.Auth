@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Service.Admin.Services;
@@ -54,6 +54,13 @@ public class RoleService : RestServiceBase
     private async Task<RoleDetailDto> GetDetailAsync([FromServices] IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new RoleDetailQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    private async Task<RoleBasicDto> GetDetailByCodeAsync([FromServices] IEventBus eventBus, [FromQuery] string code)
+    {
+        var query = new RoleDetailByCodeQuery(code);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
