@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Service.Admin.Services;
@@ -14,6 +14,7 @@ public class UserService : ServiceBase
 
         RouteOptions.DisableAutoMapRoute = false;
         MapGet(GetListByRoleAsync, "getListByRole");
+        MapGet(GetUserRolesAsync, "{id}/roles");
         MapGet(GetClaimValuesAsync, "claim-values/{id}");
         MapGet(GetClaimValuesAsync, "claim-values");
         MapPost(SaveClaimValuesAsync, "claim-values").RequireAuthorization();
@@ -361,6 +362,13 @@ public class UserService : ServiceBase
     public async Task<List<UserModel>> GetListByRoleAsync(IEventBus eventBus, [FromQuery] Guid id)
     {
         var query = new UsersByRoleQuery(id);
+        await eventBus.PublishAsync(query);
+        return query.Result;
+    }
+
+    public async Task<List<UserRoleModel>> GetUserRolesAsync(IEventBus eventBus, Guid id)
+    {
+        var query = new UserRolesQuery(id);
         await eventBus.PublishAsync(query);
         return query.Result;
     }
