@@ -202,6 +202,23 @@ public class QueryHandler
     }
 
     [EventHandler]
+    public async Task GetUserRolesAsync(UserRolesQuery query)
+    {
+        var userRoles = await _authDbContext.Set<UserRole>()
+            .Include(ur => ur.Role)
+            .Where(ur => ur.UserId == query.UserId && ur.Role.Enabled)
+            .Select(ur => new UserRoleModel
+            {
+                Code = ur.Role.Code,
+                Name = ur.Role.Name,
+                BindTime = ur.CreationTime
+            })
+            .ToListAsync();
+
+        query.Result = userRoles;
+    }
+
+    [EventHandler]
     public async Task GetAllUsers(AllUsersQuery query)
     {
         var users = await _userRepository.GetAllAsync();
@@ -780,7 +797,7 @@ public class QueryHandler
             }
             var roles = teamRoles.DistinctBy(r => r.RoleId)
                             .Select(tr => new RoleSelectDto(tr.Role.Id, tr.Role.Name, tr.Role.Code,
-                            tr.Role.Limit, tr.Role.AvailableQuantity, tr.Role.CreationTime))
+                            tr.Role.Limit, tr.Role.AvailableQuantity))
                             .ToList();
             query.Result.Add(new TeamRoleSelectDto(team.Id, team.Name, team.Avatar.Url, roles));
         }
