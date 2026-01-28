@@ -262,7 +262,7 @@ public class Staff : FullAggregateRoot<Guid, Guid>
             team => team.TeamId);
     }
 
-    public void SetCurrentTeam(Guid teamId)
+    public void SetCurrentTeam(Guid? teamId)
     {
         CurrentTeamId = teamId;
     }

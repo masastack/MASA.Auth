@@ -384,7 +384,7 @@ public class StaffCommandHandler
                                 tpu.User.Staff.Disable();
                                 // 清除员工所在团队
                                 tpu.User.Staff.SetTeamStaff(new List<Guid>());
-                                tpu.User.Staff.SetCurrentTeam(Guid.Empty);
+                                tpu.User.Staff.SetCurrentTeam(null);
                             }
 
                             // 清除用户拥有的角色
