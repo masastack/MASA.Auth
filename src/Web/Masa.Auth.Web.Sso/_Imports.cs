@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 global using AlibabaCloud.SDK.Dypnsapi20170525.Models;
@@ -64,9 +64,10 @@ global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.EntityFrameworkCore;
-global using Microsoft.EntityFrameworkCore.Design;
 global using Microsoft.Extensions.Options;
 global using Microsoft.JSInterop;
+global using OpenTelemetry.Instrumentation.StackExchangeRedis;
+global using OpenTelemetry.Trace;
 global using StackExchange.Redis;
 global using System.Collections.Concurrent;
 global using System.Diagnostics;
@@ -78,5 +79,3 @@ global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using System.Text.RegularExpressions;
-global using OpenTelemetry.Instrumentation.StackExchangeRedis;
-global using OpenTelemetry.Trace;

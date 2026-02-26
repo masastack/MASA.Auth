@@ -90,9 +90,9 @@ builder.Services.AddMultilevelCache(distributedCacheOptions =>
 });
 builder.Services.AddScoped<CookieStorage>();
 
-var connectionString = masaStackConfig.GetConnectionString("sso");
+var connectionString = masaStackConfig.GetConnectionString(MasaStackProject.Auth.Name);
 
-builder.Services.AddDbContext<SsoPersistedGrantDbContext>(options =>
+builder.Services.AddDbContext<PersistedGrantDbContext>(options =>
 {
     options.UseNpgsql(connectionString);
 });
@@ -105,12 +105,14 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     })
     .AddOperationalStore<PersistedGrantDbContext>(options =>
     {
-        var migrationsAssembly = typeof(SsoPersistedGrantDbContext).Assembly.GetName().Name;
+        var migrationsAssembly = typeof(PersistedGrantDbContext).Assembly.GetName().Name;
         options.ConfigureDbContext = builder =>
             builder.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
 
-        // this enables automatic token cleanup. this is optional.
         options.EnableTokenCleanup = true;
+        // IS4 默认表名是复数形式，覆盖为与 AuthDbContext 一致的 auth schema 单数表名
+        options.PersistedGrants = new TableConfiguration("PersistedGrant", "auth");
+        options.DeviceFlowCodes = new TableConfiguration("DeviceCodes", "auth");
     })
     .AddClientStore<MasaClientStore>()
     .AddResourceStore<MasaResourceStore>()
@@ -141,11 +143,10 @@ else
     identityServerBuilder.AddSigningCredential(serverCertificate);
 }
 
-//migrate db
-await builder.MigrateDbContextAsync<SsoPersistedGrantDbContext>();
 
 var protectionConnect = ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption);
 redisInstrumentation.AddConnection(protectionConnect);
+builder.Services.AddSingleton<IConnectionMultiplexer>(protectionConnect);
 builder.Services.AddDataProtection()
     .PersistKeysToStackExchangeRedis(protectionConnect);
 
