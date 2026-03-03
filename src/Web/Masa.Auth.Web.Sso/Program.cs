@@ -1,6 +1,8 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoInject();
@@ -159,6 +161,32 @@ builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStatePr
 builder.Services.AddLadpContext();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetEntryAssembly());
+
+builder.Services.PostConfigure<CookieAuthenticationOptions>(
+    IdentityServerConstants.DefaultCookieAuthenticationScheme, options =>
+    {
+        var original = options.Events.OnValidatePrincipal;
+        options.Events.OnValidatePrincipal = async context =>
+        {
+            if (original != null)
+                await original(context);
+
+            var sub = context.Principal?.FindFirst("sub")?.Value;
+            if (sub != null)
+            {
+                var mux = context.HttpContext.RequestServices
+                    .GetRequiredService<IConnectionMultiplexer>();
+                var db = mux.GetDatabase();
+                if (await db.KeyExistsAsync($"kicked:{sub}"))
+                {
+                    context.RejectPrincipal();
+                    await context.HttpContext.SignOutAsync(
+                        IdentityServerConstants.DefaultCookieAuthenticationScheme);
+                    await db.KeyDeleteAsync($"kicked:{sub}");
+                }
+            }
+        };
+    });
 
 var app = builder.Build();
 
