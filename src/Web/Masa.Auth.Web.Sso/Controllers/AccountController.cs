@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Web.Sso.Controllers;
@@ -11,9 +11,9 @@ public class AccountController : Controller
     readonly IIdentityServerInteractionService _interaction;
     readonly IEventService _events;
     readonly I18n _i18n;
-    readonly IUserSession _userSession;
     readonly IBackChannelLogoutService _backChannelClient;
     readonly IDistributedCacheClient _distributedCacheClient;
+    readonly IPersistedGrantService _persistedGrantService;
     readonly ILogger<AccountController> _logger;
 
     public AccountController(
@@ -21,18 +21,18 @@ public class AccountController : Controller
         IEventService events,
         IAuthClient authClient,
         I18n i18n,
-        IUserSession userSession,
         IBackChannelLogoutService backChannelClient,
         IDistributedCacheClient distributedCacheClient,
+        IPersistedGrantService persistedGrantService,
         ILogger<AccountController> logger)
     {
         _interaction = interaction;
         _events = events;
         _authClient = authClient;
         _i18n = i18n;
-        _userSession = userSession;
         _backChannelClient = backChannelClient;
         _distributedCacheClient = distributedCacheClient;
+        _persistedGrantService = persistedGrantService;
         _logger = logger;
     }
 
@@ -195,23 +195,80 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public async Task LogoutUserAsync(string subjectId)
+    public async Task<IActionResult> LogoutUserAsync(string subjectId)
     {
-        var logoutSession = await _distributedCacheClient.GetAsync<LoginSession>(subjectId);
-        if (logoutSession == null)
-        {
-            return;
-        }
-        var clientIds = await _userSession.GetClientListAsync();
-        var logoutNotificationContext = new LogoutNotificationContext()
-        {
-            SessionId = logoutSession.Sid,
-            SubjectId = subjectId,
-            ClientIds = clientIds,
-        };
-        await _backChannelClient.SendLogoutNotificationsAsync(logoutNotificationContext);
+        // TODO: 上线前恢复内网 IP 检查
+        // var remoteIp = HttpContext.Connection.RemoteIpAddress;
+        // if (remoteIp != null && !IsInternalNetwork(remoteIp))
+        // {
+        //     _logger.LogWarning("LogoutUserAsync rejected from external IP {RemoteIp}", remoteIp);
+        //     return NotFound();
+        // }
 
-        // raise the logout event
-        await _events.RaiseAsync(new UserLogoutSuccessEvent(subjectId, "Logout by " + User.GetDisplayName()));
+        _logger.LogInformation("Kicking user {SubjectId}", subjectId);
+
+        var logoutSession = await _distributedCacheClient.GetAsync<LoginSession>(subjectId);
+
+        var grants = await _persistedGrantService.GetAllGrantsAsync(subjectId);
+        var clientIds = grants.Select(g => g.ClientId).Distinct().ToList();
+
+        if (logoutSession != null && clientIds.Count > 0)
+        {
+            try
+            {
+                var logoutNotificationContext = new LogoutNotificationContext()
+                {
+                    SessionId = logoutSession.Sid,
+                    SubjectId = subjectId,
+                    ClientIds = clientIds,
+                };
+                await _backChannelClient.SendLogoutNotificationsAsync(logoutNotificationContext);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Failed to send backchannel logout notifications for subject {SubjectId}", subjectId);
+            }
+        }
+
+        try
+        {
+            await _persistedGrantService.RemoveAllGrantsAsync(subjectId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,
+                "Failed to remove persisted grants for subject {SubjectId}", subjectId);
+        }
+
+        await _events.RaiseAsync(new UserLogoutSuccessEvent(subjectId, "Kicked by admin"));
+
+        await _distributedCacheClient.SetAsync(
+            $"kicked:{subjectId}", true, DateTimeOffset.UtcNow.AddHours(24));
+
+        _logger.LogInformation("User {SubjectId} kicked successfully", subjectId);
+
+        return Ok();
+    }
+
+    private static bool IsInternalNetwork(System.Net.IPAddress ip)
+    {
+        if (System.Net.IPAddress.IsLoopback(ip)) return true;
+
+        if (ip.IsIPv4MappedToIPv6)
+            ip = ip.MapToIPv4();
+
+        var bytes = ip.GetAddressBytes();
+        if (bytes.Length == 4)
+        {
+            // 10.0.0.0/8
+            if (bytes[0] == 10) return true;
+            // 172.16.0.0/12
+            if (bytes[0] == 172 && bytes[1] >= 16 && bytes[1] <= 31) return true;
+            // 192.168.0.0/16
+            if (bytes[0] == 192 && bytes[1] == 168) return true;
+        }
+
+        return false;
     }
 }

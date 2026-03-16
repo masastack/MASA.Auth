@@ -1,5 +1,7 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
+using StackExchange.Redis;
+
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
@@ -121,6 +123,16 @@ var redisOption = new RedisConfigurationOptions
 builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCache(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect)));
 builder.Services.AddAuthClientMultilevelCache(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
 builder.Services.AddDccClient(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
+
+var mux = ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption);
+redisInstrumentation.AddConnection(mux);
+builder.Services.AddSingleton<IConnectionMultiplexer>(mux);
+
+builder.Services.AddHttpClient("SsoAddr", client =>
+{
+    client.BaseAddress = new Uri(identityServerUrl);
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
 
 builder.Services
             .AddPmClient(masaStackConfig.GetPmServiceDomain())

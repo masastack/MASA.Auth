@@ -1,9 +1,9 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Contracts.Admin.Projects;
 
-public class PermissionNavDto
+public class PermissionNavDetailDto
 {
     public Guid Id { get; set; }
 
@@ -15,7 +15,7 @@ public class PermissionNavDto
 
     public string Url { get; set; } = string.Empty;
 
-    public PermissionTypes PermissionType { get; set; }
+    public string MatchPattern { get; set; } = string.Empty;
 
-    public List<PermissionNavDto> Children { get; set; } = new();
+    public PermissionTypes PermissionType { get; set; }
 }

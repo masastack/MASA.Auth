@@ -1,6 +1,8 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoInject();
@@ -90,9 +92,9 @@ builder.Services.AddMultilevelCache(distributedCacheOptions =>
 });
 builder.Services.AddScoped<CookieStorage>();
 
-var connectionString = masaStackConfig.GetConnectionString("sso");
+var connectionString = masaStackConfig.GetConnectionString(MasaStackProject.Auth.Name);
 
-builder.Services.AddDbContext<SsoPersistedGrantDbContext>(options =>
+builder.Services.AddDbContext<PersistedGrantDbContext>(options =>
 {
     options.UseNpgsql(connectionString);
 });
@@ -105,12 +107,14 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     })
     .AddOperationalStore<PersistedGrantDbContext>(options =>
     {
-        var migrationsAssembly = typeof(SsoPersistedGrantDbContext).Assembly.GetName().Name;
+        var migrationsAssembly = typeof(PersistedGrantDbContext).Assembly.GetName().Name;
         options.ConfigureDbContext = builder =>
             builder.UseNpgsql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
 
-        // this enables automatic token cleanup. this is optional.
         options.EnableTokenCleanup = true;
+        // IS4 默认表名是复数形式，覆盖为与 AuthDbContext 一致的 auth schema 单数表名
+        options.PersistedGrants = new TableConfiguration("PersistedGrant", "auth");
+        options.DeviceFlowCodes = new TableConfiguration("DeviceFlowCodes", "auth");
     })
     .AddClientStore<MasaClientStore>()
     .AddResourceStore<MasaResourceStore>()
@@ -141,11 +145,10 @@ else
     identityServerBuilder.AddSigningCredential(serverCertificate);
 }
 
-//migrate db
-await builder.MigrateDbContextAsync<SsoPersistedGrantDbContext>();
 
 var protectionConnect = ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption);
 redisInstrumentation.AddConnection(protectionConnect);
+builder.Services.AddSingleton<IConnectionMultiplexer>(protectionConnect);
 builder.Services.AddDataProtection()
     .PersistKeysToStackExchangeRedis(protectionConnect);
 
@@ -158,6 +161,32 @@ builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStatePr
 builder.Services.AddLadpContext();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetEntryAssembly());
+
+builder.Services.PostConfigure<CookieAuthenticationOptions>(
+    IdentityServerConstants.DefaultCookieAuthenticationScheme, options =>
+    {
+        var original = options.Events.OnValidatePrincipal;
+        options.Events.OnValidatePrincipal = async context =>
+        {
+            if (original != null)
+                await original(context);
+
+            var sub = context.Principal?.FindFirst("sub")?.Value;
+            if (sub != null)
+            {
+                var mux = context.HttpContext.RequestServices
+                    .GetRequiredService<IConnectionMultiplexer>();
+                var db = mux.GetDatabase();
+                if (await db.KeyExistsAsync($"kicked:{sub}"))
+                {
+                    context.RejectPrincipal();
+                    await context.HttpContext.SignOutAsync(
+                        IdentityServerConstants.DefaultCookieAuthenticationScheme);
+                    await db.KeyDeleteAsync($"kicked:{sub}");
+                }
+            }
+        };
+    });
 
 var app = builder.Build();
 

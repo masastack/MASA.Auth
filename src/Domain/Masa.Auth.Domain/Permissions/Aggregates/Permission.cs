@@ -158,4 +158,10 @@ public class Permission : FullAggregateRoot<Guid, Guid>
         Enabled = enabled;
         Legend = legend;
     }
+
+    public void UpdateMenuMeta(string icon, string matchPattern)
+    {
+        Icon = icon;
+        MatchPattern = matchPattern;
+    }
 }

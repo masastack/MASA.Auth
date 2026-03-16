@@ -1,22 +1,30 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Events;
 
 public class IdentityServerEventSink : IEventSink
 {
+    const string OnlineUsersKey = "online:users";
+    const string SsoSessionKeyPrefix = "online:sso-session:";
+
+    static string SsoSessionKey(string subjectId) => $"{SsoSessionKeyPrefix}{subjectId}";
+
     readonly ILogger<IdentityServerEventSink> _logger;
     readonly IDistributedCacheClient _distributedCacheClient;
     readonly IUserSession _userSession;
+    readonly IConnectionMultiplexer _mux;
 
     public IdentityServerEventSink(
         ILogger<IdentityServerEventSink> logger,
         IDistributedCacheClient distributedCacheClient,
-        IUserSession userSession)
+        IUserSession userSession,
+        IConnectionMultiplexer mux)
     {
         _logger = logger;
         _distributedCacheClient = distributedCacheClient;
         _userSession = userSession;
+        _mux = mux;
     }
 
     public async Task PersistAsync(Event evt)
@@ -39,6 +47,12 @@ public class IdentityServerEventSink : IEventSink
                     {
                         var subjectId = userLoginSuccessEvent.SubjectId;
                         await _distributedCacheClient.SetAsync(subjectId, new LoginSession(subjectId, await _userSession.GetSessionIdAsync()));
+
+                        var db = _mux.GetDatabase();
+                        await db.SetAddAsync(OnlineUsersKey, subjectId);
+                        await db.KeyDeleteAsync($"kicked:{subjectId}");
+                        var sessionInfo = new WebOnlineSession(DateTime.UtcNow, userLoginSuccessEvent.ClientId);
+                        await db.StringSetAsync(SsoSessionKey(subjectId), JsonSerializer.Serialize(sessionInfo), TimeSpan.FromHours(24));
                     }
                 }
                 else
@@ -46,8 +60,12 @@ public class IdentityServerEventSink : IEventSink
                     var userLogoutSuccessEvent = evt as UserLogoutSuccessEvent;
                     if (userLogoutSuccessEvent != null)
                     {
-                        var key = string.Format(userLogoutSuccessEvent.SubjectId);
-                        await _distributedCacheClient.RemoveAsync(key);
+                        var subjectId = userLogoutSuccessEvent.SubjectId;
+                        await _distributedCacheClient.RemoveAsync(subjectId);
+
+                        var db = _mux.GetDatabase();
+                        await db.SetRemoveAsync(OnlineUsersKey, subjectId);
+                        await db.KeyDeleteAsync(SsoSessionKey(subjectId));
                     }
                 }
             }
@@ -74,3 +92,5 @@ internal class LoginSession
         Sid = sid;
     }
 }
+
+internal record WebOnlineSession(DateTime LoginTime, string? ClientId);

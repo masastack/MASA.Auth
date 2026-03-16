@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 global using FluentValidation;
@@ -161,7 +161,7 @@ global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Nodes;
 global using System.Text.Json.Serialization;
-global using System.Text.RegularExpressions; 
+global using System.Text.RegularExpressions;
 global using static Masa.Auth.Contracts.Admin.UserClaimValuesDto;
 global using Client = Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain.Entities.Client;
 global using IdentityProvider = Masa.Auth.Domain.Subjects.Aggregates.IdentityProvider;

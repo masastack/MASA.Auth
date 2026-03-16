@@ -64,27 +64,59 @@ public class QueryHandler
         query.Result = await GetProjectDtoListAsync(_multiEnvironmentUserContext.Environment, AppTypes.UI);
         var permissionIds = await _userDomainService.GetPermissionIdsAsync(query.UserId);
         var menuPermissions = (await _permissionRepository.GetListAsync(p => p.Type == PermissionTypes.Menu
-                                && permissionIds.Contains(p.Id) && p.Enabled)).ToList();
+                            && permissionIds.Contains(p.Id) && p.Enabled)).ToList();
 
         await RemoveInvisibleMenu(query.ClientId, menuPermissions);
+        FillAppNavs(query.Result, menuPermissions, true);
+    }
 
-        query.Result.SelectMany(p => p.Apps).ToList().ForEach(a =>
+    [EventHandler]
+    public async Task GetProjectListByAppIdsAsync(ProjectListByAppIdsQuery query)
+    {
+        if (query.AppIds.Count == 0)
         {
-            a.Navs = menuPermissions.OrderBy(p => p.Order)
+            query.Result = new();
+            return;
+        }
+
+        query.Result = await GetProjectDtoListByAppIdsAsync(
+            _multiEnvironmentUserContext.Environment,
+            query.AppIds,
+            AppTypes.UI);
+
+        var menuPermissions = (await _permissionRepository.GetListAsync(p =>
+                p.Type == PermissionTypes.Menu &&
+                p.Enabled &&
+                query.AppIds.Contains(p.AppId)))
+            .ToList();
+
+        FillAppNavs(query.Result, menuPermissions, true);
+    }
+
+    private void FillAppNavs(List<ProjectDto> projects, List<Permission> menuPermissions, bool removeEmptyProject)
+    {
+        projects.SelectMany(p => p.Apps).ToList().ForEach(a =>
+        {
+            a.Navs = menuPermissions
                 .Where(p => p.AppId == a.Identity)
                 .Where(p => p.GetParentId() == Guid.Empty)
+                .OrderBy(p => p.Order)
                 .Select(p => new PermissionNavDto
                 {
+                    Id = p.Id,
                     Name = p.Name,
                     Icon = p.Icon,
                     Url = $"{a.Url?.EnsureTrailingSlash()}{p.Url?.TrimStart('/')}",
-                    Code = p.Id.ToString(),
+                    Code = p.Code,
                     PermissionType = p.Type,
                     Children = GetChildren(p.Id, menuPermissions, a.Url ?? "")
                 }).ToList();
         });
-        //remove all empty item
-        query.Result.RemoveAll(r => r.Apps.All(a => a.Navs.Count == 0));
+
+        if (removeEmptyProject)
+        {
+            projects.RemoveAll(r => r.Apps.All(a => a.Navs.Count == 0));
+        }
     }
 
     private async Task<List<ProjectDto>> GetProjectDtoListAsync(string? env, params AppTypes[] appTypes)
@@ -121,15 +153,44 @@ public class QueryHandler
         return result;
     }
 
+    private async Task<List<ProjectDto>> GetProjectDtoListByAppIdsAsync(
+        string? env,
+        IEnumerable<string> appIds,
+        params AppTypes[] appTypes)
+    {
+        var appIdSet = appIds
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => x.Trim())
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        if (appIdSet.Count == 0)
+        {
+            return new();
+        }
+
+        var result = await GetProjectDtoListAsync(env, appTypes);
+
+        result.ForEach(project =>
+        {
+            project.Apps = project.Apps
+                .Where(app => appIdSet.Contains(app.Identity))
+                .ToList();
+        });
+
+        result.RemoveAll(project => project.Apps.Count == 0);
+        return result;
+    }
+
     private List<PermissionNavDto> GetChildren(Guid parentId, IEnumerable<Permission> all, string domain = "")
     {
         return all.Where(p => p.ParentId == parentId)
             .OrderBy(p => p.Order).Select(p => new PermissionNavDto
             {
+                Id = p.Id,
                 Name = p.Name,
                 Icon = p.Icon,
                 Url = $"{domain?.EnsureTrailingSlash()}{p.Url?.TrimStart('/')}",
-                Code = p.Id.ToString(),
+                Code = p.Code,
                 PermissionType = p.Type,
                 Children = GetChildren(p.Id, all, domain ?? "")
             }).ToList();
@@ -163,5 +224,28 @@ public class QueryHandler
             return !visibleRecords.Any(nav =>
                 string.Equals(nav.ClientId, clientId, StringComparison.Ordinal));
         }
+    }
+
+    [EventHandler]
+    public async Task GetPermissionNavDetailAsync(PermissionNavDetailQuery query)
+    {
+        var permission = await _permissionRepository.FindAsync(x => x.Id == query.MenuId)
+            ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_NOT_FOUND);
+
+        if (permission.Type == PermissionTypes.Api)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_API_TYPE);
+        }
+
+        query.Result = new PermissionNavDetailDto
+        {
+            Id = permission.Id,
+            Code = permission.Code,
+            Name = permission.Name,
+            Icon = permission.Icon,
+            Url = permission.Url,
+            MatchPattern = permission.MatchPattern,
+            PermissionType = permission.Type
+        };
     }
 }

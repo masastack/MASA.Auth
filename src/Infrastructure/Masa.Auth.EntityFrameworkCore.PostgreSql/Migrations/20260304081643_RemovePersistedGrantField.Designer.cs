@@ -4,6 +4,7 @@ using Masa.Auth.Domain.Subjects.Aggregates;
 using Masa.Auth.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260304081643_RemovePersistedGrantField")]
+    partial class RemovePersistedGrantField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,9 +36,6 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Data")
                         .IsRequired()
@@ -2283,9 +2282,6 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
                         .HasColumnType("character varying(200)");
 
                     b.Property<DateTime?>("ConsumedTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Data")
