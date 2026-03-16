@@ -114,7 +114,7 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
         options.EnableTokenCleanup = true;
         // IS4 默认表名是复数形式，覆盖为与 AuthDbContext 一致的 auth schema 单数表名
         options.PersistedGrants = new TableConfiguration("PersistedGrant", "auth");
-        options.DeviceFlowCodes = new TableConfiguration("DeviceCodes", "auth");
+        options.DeviceFlowCodes = new TableConfiguration("DeviceFlowCodes", "auth");
     })
     .AddClientStore<MasaClientStore>()
     .AddResourceStore<MasaResourceStore>()

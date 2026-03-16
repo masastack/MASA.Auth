@@ -267,4 +267,21 @@ public class CommandHandler
             }
         }
     }
+
+    [EventHandler]
+    public async Task UpdateMenuMetaAsync(UpdateMenuMetaCommand command)
+    {
+        var dto = command.Menu;
+
+        var permission = await _permissionRepository.FindAsync(dto.Id)
+            ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PERMISSIION_NOT_FOUND);
+
+        if (permission.Type != PermissionTypes.Menu)
+        {
+            throw new UserFriendlyException("Only menu permissions can update Icon and MatchPattern");
+        }
+
+        permission.UpdateMenuMeta(dto.Icon, dto.MatchPattern ?? string.Empty);
+        await _permissionRepository.UpdateAsync(permission);
+    }
 }
