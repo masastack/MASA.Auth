@@ -9,5 +9,5 @@ public class UpdateMenuMetaDto
 
     public string Icon { get; set; } = string.Empty;
 
-    public string? MatchPattern { get; set; } = string.Empty;
+    public string MatchPattern { get; set; } = string.Empty;
 }

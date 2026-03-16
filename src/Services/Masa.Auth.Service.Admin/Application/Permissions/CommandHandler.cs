@@ -281,7 +281,7 @@ public class CommandHandler
             throw new UserFriendlyException("Only menu permissions can update Icon and MatchPattern");
         }
 
-        permission.UpdateMenuMeta(dto.Icon, dto.MatchPattern ?? string.Empty);
+        permission.UpdateMenuMeta(dto.Icon, dto.MatchPattern);
         await _permissionRepository.UpdateAsync(permission);
     }
 }
