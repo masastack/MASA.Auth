@@ -51,8 +51,11 @@ public class QueryHandler
             a.Navs = menuPermissions.Where(p => p.AppId == a.Identity && p.GetParentId() == Guid.Empty)
             .OrderBy(p => p.Order).Select(p => new PermissionNavDto
             {
+                Id = p.Id,
                 Name = p.Name,
-                Code = p.Id.ToString(),
+                Code = p.Code,
+                Icon = p.Icon,
+                PermissionType = p.Type,
                 Children = GetChildren(p.Id, menuPermissions)
             }).ToList();
         });
