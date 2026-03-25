@@ -96,7 +96,7 @@ public class QueryHandler
     [EventHandler]
     public async Task GetClientSelectAsync(ClientSelectQuery query)
     {
-        query.Result = await _oidcDbContext.Set<Client>().Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientType)).ToListAsync();
+        query.Result = await _oidcDbContext.Set<Client>().Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientUri, client.ClientType)).ToListAsync();
     }
 
     [EventHandler]
@@ -109,7 +109,7 @@ public class QueryHandler
 
         query.Result = await _oidcDbContext.Set<Client>()
                                            .Where(client => alreadyUseClientIds.Contains(client.ClientId) == false)
-                                           .Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientType))
+                                           .Select(client => new ClientSelectDto(client.Id, client.ClientName, client.LogoUri, client.Description, client.ClientId, client.ClientUri, client.ClientType))
                                            .ToListAsync();
     }
 

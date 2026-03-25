@@ -15,13 +15,15 @@ public class ClientSelectDto
 
     public string ClientId { get; set; } = string.Empty;
 
+    public string ClientUri { get; set; } = string.Empty;
+
     public ClientTypes ClientType { get; set; }
 
     public ClientSelectDto()
     {
     }
 
-    public ClientSelectDto(Guid id, string clientName, string logoUri, string description, string clientId, ClientTypes clientType)
+    public ClientSelectDto(Guid id, string clientName, string logoUri, string description, string clientId, string clientUri, ClientTypes clientType)
     {
         Id = id;
         ClientName = clientName;
@@ -29,5 +31,6 @@ public class ClientSelectDto
         Description = description;
         ClientId = clientId;
         ClientType = clientType;
+        ClientUri = clientUri;
     }
 }
