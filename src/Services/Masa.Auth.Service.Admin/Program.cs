@@ -7,7 +7,7 @@ ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
 var project = MasaStackProject.Auth;
-await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service);
+await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, callerAction: dccCallerBuilder => dccCallerBuilder.UseAuthentication());
 
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
