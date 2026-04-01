@@ -112,9 +112,9 @@ builder.Services.AddMultilevelCache(options => options.UseStackExchangeRedisCach
 builder.Services.AddAuthClientMultilevelCache(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
 builder.Services.AddDccClient(redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
 
-var mux = ConnectionMultiplexer.Connect((ConfigurationOptions)redisOption);
+var mux = await StackExchange.Redis.ConnectionMultiplexer.ConnectAsync((StackExchange.Redis.ConfigurationOptions)redisOption);
 redisInstrumentation.AddConnection(mux);
-builder.Services.AddSingleton<IConnectionMultiplexer>(mux);
+builder.Services.AddSingleton<StackExchange.Redis.IConnectionMultiplexer>(mux);
 
 builder.Services.AddHttpClient("SsoAddr", client =>
 {
