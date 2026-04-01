@@ -255,12 +255,12 @@ public class CommandHandler
             var itemSection = publicSection.GetSection(itemKey);
             if (!itemSection.Exists())
             {
-                var data = new Dictionary<string, object> { { command.Input.Name, displayName.Value } };
+                var data = new Dictionary<string, string> { { command.Input.Name, displayName.Value } };
                 await _configurationApiManage.AddAsync(environment, "Default", "public-$Config", new Dictionary<string, object> { { itemKey, data } });
             }
             else
             {
-                var data = itemSection.Get<Dictionary<string, object>>();
+                var data = itemSection.Get<Dictionary<string, string>>();
                 MasaArgumentException.ThrowIfNull(data);
                 data[command.Input.Name] = displayName.Value;
                 await _configurationApiManage.UpdateAsync(environment, "Default", "public-$Config", itemKey, data);
