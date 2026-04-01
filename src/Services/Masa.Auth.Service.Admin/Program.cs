@@ -1,6 +1,5 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
-using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,18 +7,7 @@ ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
 GlobalValidationOptions.SetDefaultCulture("zh-CN");
 
 var project = MasaStackProject.Auth;
-
-var defaultStackConfig = builder.Configuration.GetDefaultStackConfig();
-var webId = defaultStackConfig.GetWebId(project);
-var ssoDomain = defaultStackConfig.GetSsoDomain();
-var init = true;
-#if DEBUG
-init = false;
-#endif
-await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, init, null, callerAction =>
-{
-    callerAction.UseClientAuthentication(webId, ssoDomain);
-});
+await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service);
 
 var masaStackConfig = builder.Services.GetMasaStackConfig();
 var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
