@@ -91,24 +91,31 @@ public class CommandHandler
 
     async Task RegisterVerifyAsync(RegisterByEmailModel model)
     {
+        if (model.UserRegisterType == UserRegisterTypes.Undefined)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_REGISTER_TYPE);
+        }
+
         if (model.UserRegisterType == UserRegisterTypes.Email)
         {
             var emailCodeKey = CacheKey.EmailCodeRegisterKey(model.Email);
             var emailCode = await _distributedCacheClient.GetAsync<string>(emailCodeKey);
-            if (!model.EmailCode.Equals(emailCode))
+            if (!string.Equals(model.EmailCode, emailCode))
             {
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_EMAIL_CAPTCHA);
             }
+            await _distributedCacheClient.RemoveAsync(emailCodeKey);
         }
 
         if (model.UserRegisterType == UserRegisterTypes.PhoneNumber || !string.IsNullOrEmpty(model.PhoneNumber))
         {
             var smsCodeKey = CacheKey.MsgCodeRegisterAndLoginKey(model.PhoneNumber);
             var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
-            if (!model.SmsCode.Equals(smsCode))
+            if (!string.Equals(model.SmsCode, smsCode))
             {
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
             }
+            await _distributedCacheClient.RemoveAsync(smsCodeKey);
         }
     }
 
@@ -524,14 +531,19 @@ public class CommandHandler
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_RESET_PASSWORD_TYPE);
         }
         var captcha = await _distributedCacheClient.GetAsync<string>(key);
-        if (!command.Captcha.Equals(captcha))
+        if (!string.Equals(command.Captcha, captcha))
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_CAPTCHA);
         }
-        //reset password
+        await _distributedCacheClient.RemoveAsync(key);
+
         var user = await _userRepository.GetByVoucherAsync(command.Voucher);
         user.UpdatePassword(command.Password);
         await _userRepository.UpdateAsync(user);
+
+        // clear lockout — user may have locked themselves out before resetting password
+        await _distributedCacheClient.RemoveAsync<CacheLogin>(CacheKey.AccountLoginKey(user.Account));
+
         command.Result = user;
     }
 

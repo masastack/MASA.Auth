@@ -18,6 +18,7 @@
   "InvalidSendMsgCodeType": "SendMsgCodeTypeが無効です",
   "InvalidResetPasswordType": "パスワードリセットタイプが無効です",
   "InvalidThirdPartyIdpType": "サードパーティIDPタイプが無効です",
+  "InvalidRegisterType": "登録タイプが無効です",
   "CaptchaSended": "認証コードは既に送信されました。しばらくしてから再度お試しください",
   "StaffNotExist": "現在のスタッフは存在しません",
   "TeamNotExist": "現在のチームは存在しません",

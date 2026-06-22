@@ -19,6 +19,7 @@
   "InvalidResetPasswordType": "ResetPasswordType无效",
   "InvalidThirdPartyIdpType": "ThirdPartyIdpType无效",
   "CaptchaSended": "验证码已发送，请稍后再试",
+  "InvalidRegisterType": "注册类型无效",
   "StaffNotExist": "当前员工不存在",
   "TeamNotExist": "当前团队不存在",
   "TeamNameExist": "团队名称{0}已存在",

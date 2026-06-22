@@ -61,16 +61,21 @@ public class ThirdPartyCommandHandler
         {
             var emailCodeKey = CacheKey.EmailCodeBindKey(model.Email);
             var emailCode = await _distributedCacheClient.GetAsync<string>(emailCodeKey);
-            if (!model.EmailCode.Equals(emailCode))
+            if (!string.Equals(model.EmailCode, emailCode))
             {
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_EMAIL_CAPTCHA);
             }
+            await _distributedCacheClient.RemoveAsync(emailCodeKey);
         }
-        var smsCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
-        var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
-        if (!model.SmsCode.Equals(smsCode))
+        if (model.UserRegisterType == UserRegisterTypes.PhoneNumber || !string.IsNullOrEmpty(model.PhoneNumber))
         {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+            var smsCodeKey = CacheKey.MsgCodeForBindKey(model.PhoneNumber);
+            var smsCode = await _distributedCacheClient.GetAsync<string>(smsCodeKey);
+            if (!string.Equals(model.SmsCode, smsCode))
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+            }
+            await _distributedCacheClient.RemoveAsync(smsCodeKey);
         }
 
         Expression<Func<User, bool>> condition = _ => false;
@@ -142,7 +147,9 @@ public class ThirdPartyCommandHandler
                 if (model.Id != default && thirdPartyUser.UserId != model.Id) throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
                 thirdPartyUser.Update(model.ThridPartyIdentity, JsonSerializer.Serialize(model.ExtendedData));
                 await _thirdPartyUserRepository.UpdateAsync(thirdPartyUser);
-                var upsertUserCommand = new UpsertUserCommand(model.Adapt<UpsertUserModel>());
+                var upsertUserModel = model.Adapt<UpsertUserModel>();
+                upsertUserModel.Id = thirdPartyUser.UserId;
+                var upsertUserCommand = new UpsertUserCommand(upsertUserModel);
                 await _eventBus.PublishAsync(upsertUserCommand);
                 command.Result = upsertUserCommand.Result;
             }
@@ -215,7 +222,7 @@ public class ThirdPartyCommandHandler
     [EventHandler]
     public async Task RemoveThirdPartyUserByThridPartyIdentityAsync(RemoveThirdPartyUserByThridPartyIdentityCommand command)
     {
-        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThridPartyIdentity == command.ThridPartyIdentity);
+        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThirdPartyIdpId == command.ThirdPartyIdpId && tpu.ThridPartyIdentity == command.ThridPartyIdentity);
     }
 
     #region ThirdPartyIdp
