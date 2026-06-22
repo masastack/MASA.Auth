@@ -222,7 +222,7 @@ public class ThirdPartyCommandHandler
     [EventHandler]
     public async Task RemoveThirdPartyUserByThridPartyIdentityAsync(RemoveThirdPartyUserByThridPartyIdentityCommand command)
     {
-        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThridPartyIdentity == command.ThridPartyIdentity);
+        await _thirdPartyUserRepository.RemoveAsync(tpu => tpu.ThirdPartyIdpId == command.ThirdPartyIdpId && tpu.ThridPartyIdentity == command.ThridPartyIdentity);
     }
 
     #region ThirdPartyIdp
