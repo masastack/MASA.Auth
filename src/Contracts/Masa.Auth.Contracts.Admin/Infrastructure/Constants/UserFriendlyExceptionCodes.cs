@@ -19,6 +19,7 @@ public static class UserFriendlyExceptionCodes
     public const string INVALID_SEND_EMAIL_TYPE = "InvalidSendEmailType";
     public const string INVALID_SEND_MSG_CODE_TYPE = "InvalidSendMsgCodeType";
     public const string INVALID_RESET_PASSWORD_TYPE = "InvalidResetPasswordType";
+    public const string INVALID_REGISTER_TYPE = "InvalidRegisterType";
     public const string CAPTCHA_SENDED = "CaptchaSended";
     public const string STAFF_NOT_EXIST = "StaffNotExist";
     public const string TEAM_NOT_EXIST = "TeamNotExist";

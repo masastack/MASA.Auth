@@ -18,6 +18,7 @@
   "InvalidSendMsgCodeType": "Invalid SendMsgCodeType",
   "InvalidResetPasswordType": "Invalid ResetPasswordType",
   "InvalidThirdPartyIdpType": "Invalid ThirdPartyIdpType",
+  "InvalidRegisterType": "Invalid RegisterType",
   "CaptchaSended": "Captcha has been sent, please try again later",
   "StaffNotExist": "The current staff does not exist",
   "TeamNotExist": "The current team does not exist",

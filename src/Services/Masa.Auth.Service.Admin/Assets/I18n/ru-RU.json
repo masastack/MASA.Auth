@@ -18,6 +18,7 @@
   "InvalidSendMsgCodeType": "Неверный тип SendMsgCodeType",
   "InvalidResetPasswordType": "Неверный тип ResetPasswordType",
   "InvalidThirdPartyIdpType": "Неверный тип ThirdPartyIdpType",
+  "InvalidRegisterType": "Неверный тип RegisterType",
   "CaptchaSended": "Код подтверждения уже отправлен, попробуйте позже",
   "StaffNotExist": "Текущий сотрудник не существует",
   "TeamNotExist": "Текущая команда не существует",

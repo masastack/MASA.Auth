@@ -327,39 +327,36 @@ public class User : FullAggregateRoot<Guid, Guid>
     public void Update(string account, string? name, string displayName, string avatar, string? idCard, string? companyName, string? phoneNumber, string? landline, string? email, AddressValue address, string? department, string? position, GenderTypes gender)
     {
         Account = account;
-        Name = name;
-        IdCard = idCard;
-        CompanyName = companyName;
+        if (idCard != null) IdCard = idCard;
+        if (landline != null) Landline = landline;
+        if (position != null) Position = position;
         Address = address;
-        Department = department;
-        Position = position;
-        Gender = gender;
-        Landline = landline;
-        DisplayName = displayName;
         UpdateAvatar(avatar);
         VerifyPhonNumberEmail(phoneNumber, email);
+        SetBasicProfile(name, displayName, gender, companyName, department);
     }
 
     public void Update(string? name, string displayName, string? idCard, string? companyName, string? department, GenderTypes gender)
     {
-        Name = name;
-        DisplayName = displayName;
-        IdCard = idCard;
-        CompanyName = companyName;
-        Department = department;
-        Gender = gender;
+        if (idCard != null) IdCard = idCard;
+        SetBasicProfile(name, displayName, gender, companyName, department);
     }
 
-    public void UpdateBasicInfo(string name, string displayName, GenderTypes gender, string? avatar, string? companyName, string? department, string? position, AddressValue address)
+    public void UpdateBasicInfo(string? name, string displayName, GenderTypes gender, string? avatar, string? companyName, string? department, string? position, AddressValue address)
     {
-        if (!string.IsNullOrEmpty(avatar)) Avatar = avatar.ToString();
-        Name = name;
-        DisplayName = displayName;
-        Gender = gender;
-        CompanyName = companyName;
-        Department = department;
-        Position = position;
+        if (!string.IsNullOrEmpty(avatar)) Avatar = avatar;
+        if (position != null) Position = position;
         Address = address;
+        SetBasicProfile(name, displayName, gender, companyName, department);
+    }
+
+    private void SetBasicProfile(string? name, string displayName, GenderTypes gender, string? companyName, string? department)
+    {
+        if (name != null) Name = name;
+        DisplayName = displayName;
+        if (gender != 0) Gender = gender;
+        if (companyName != null) CompanyName = companyName;
+        if (department != null) Department = department;
     }
 
     public void UpdateAvatar(string avatar)
@@ -369,6 +366,10 @@ public class User : FullAggregateRoot<Guid, Guid>
 
     public void UpdatePhoneNumber(string phoneNumber)
     {
+        if (Account == PhoneNumber)
+        {
+            Account = phoneNumber;
+        }
         PhoneNumber = phoneNumber;
     }
 
@@ -394,6 +395,7 @@ public class User : FullAggregateRoot<Guid, Guid>
     public void Enable()
     {
         Enabled = true;
+        Staff?.Enable();
         _thirdPartyUsers.ForEach(thirdUser =>
         {
             thirdUser.Enable();
