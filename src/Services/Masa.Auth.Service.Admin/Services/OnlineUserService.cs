@@ -42,7 +42,7 @@ public class OnlineUserService : ServiceBase
             var sessionJson = await db.StringGetAsync(SsoSessionKey(subjectId));
             if (sessionJson.HasValue)
             {
-                var session = JsonSerializer.Deserialize<WebOnlineSessionDto>(sessionJson!);
+                var session = JsonSerializer.Deserialize<WebOnlineSessionDto>((string)sessionJson!);
                 if (session != null)
                     webSessions[subjectId] = new WebSessionDto(session.LoginTime, session.ClientId);
             }

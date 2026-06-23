@@ -29,6 +29,8 @@ public static class CacheKey
     const string EMAIL_FORGOT_PASSWORD_SEND_PRE = "email_forgot_password_send:";
     const string MSG_CODE_FORGOT_PASSWORD_CODE_PRE = "msg_forgot_password_code:";
     const string MSG_CODE_FORGOT_PASSWORD_SEND_PRE = "msg_forgot_password_send:";
+    const string EMAIL_DELETE_ACCOUNT_CODE_PRE = "email_delete_account_code:";
+    const string EMAIL_DELETE_ACCOUNT_SEND_PRE = "email_delete_account_send:";
     const string EMAIL_UPDATE_CODE_PRE = "email_update_code:";
     const string EMAIL_UPDATE_SEND_PRE = "email_update_send:";
     public const string STAFF_DEFAULT_PASSWORD = "staff_default_password";
@@ -128,6 +130,16 @@ public static class CacheKey
     public static string EmailCodeForgotPasswordKey(string email)
     {
         return $"{EMAIL_FORGOT_PASSWORD_CODE_PRE}{email}";
+    }
+
+    public static string EmailCodeDeleteAccountSendKey(string email)
+    {
+        return $"{EMAIL_DELETE_ACCOUNT_SEND_PRE}{email}";
+    }
+
+    public static string EmailCodeDeleteAccountKey(string email)
+    {
+        return $"{EMAIL_DELETE_ACCOUNT_CODE_PRE}{email}";
     }
 
     public static string EmailCodeUpdateSendKey(string email)

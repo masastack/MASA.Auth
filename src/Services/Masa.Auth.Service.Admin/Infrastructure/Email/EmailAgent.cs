@@ -47,6 +47,10 @@ public class EmailAgent : IScopedDependency
                 sendKey = CacheKey.EmailCodeBindSendKey(sendEmailModel.Email);
                 sendValueKey = CacheKey.EmailCodeBindKey(sendEmailModel.Email);
                 break;
+            case SendEmailTypes.DeleteAccount:
+                sendKey = CacheKey.EmailCodeDeleteAccountSendKey(sendEmailModel.Email);
+                sendValueKey = CacheKey.EmailCodeDeleteAccountKey(sendEmailModel.Email);
+                break;
             default:
                 break;
         }

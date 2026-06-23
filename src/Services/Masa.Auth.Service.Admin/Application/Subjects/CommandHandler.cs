@@ -714,6 +714,11 @@ public class CommandHandler
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
         }
 
+        if (command.SmsCode is not null && command.EmailCode is not null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_CAPTCHA);
+        }
+
         if (command.SmsCode is not null)
         {
             var smsCodeKey = CacheKey.MsgCodeDeleteAccountKey(user.PhoneNumber);
@@ -721,6 +726,15 @@ public class CommandHandler
             if (!command.SmsCode.Equals(smsCode))
             {
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SMS_CAPTCHA);
+            }
+        }
+        else if (command.EmailCode is not null)
+        {
+            var emailCodeKey = CacheKey.EmailCodeDeleteAccountKey(user.Email);
+            var emailCode = await _distributedCacheClient.GetAsync<string>(emailCodeKey);
+            if (!command.EmailCode.Equals(emailCode))
+            {
+                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_EMAIL_CAPTCHA);
             }
         }
 
