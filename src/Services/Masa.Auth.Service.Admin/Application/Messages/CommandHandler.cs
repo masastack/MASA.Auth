@@ -88,6 +88,7 @@ public class CommandHandler
             case SendEmailTypes.Verifiy:
             case SendEmailTypes.UpdateEmail:
             case SendEmailTypes.ForgotPassword:
+            case SendEmailTypes.DeleteAccount:
                 if (!_userRepository.Any(u => u.Email == model.Email))
                 {
                     throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_NOT_EXIST, model.Email);

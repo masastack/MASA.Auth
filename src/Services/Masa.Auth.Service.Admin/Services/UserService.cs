@@ -434,7 +434,7 @@ public class UserService : ServiceBase
     [RoutePattern("account/delete", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task DeleteAccountAsync([FromServices] IEventBus eventBus, [FromBody] DeleteAccountModel model)
     {
-        var command = new DeleteAccountCommand(model.SmsCode);
+        var command = new DeleteAccountCommand(model.SmsCode, model.EmailCode);
         await eventBus.PublishAsync(command);
     }
 
