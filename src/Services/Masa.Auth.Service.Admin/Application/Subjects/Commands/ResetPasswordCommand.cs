@@ -9,5 +9,11 @@ public record ResetPasswordCommand(ResetPasswordTypes ResetPasswordType, string 
 
     public string ConfirmPassword { get; set; } = string.Empty;
 
+    /// <summary>
+    /// The client the user is resetting their password from. This is an anonymous flow (no login),
+    /// so the caller must pass it explicitly - it cannot be resolved from a token.
+    /// </summary>
+    public string? ClientId { get; set; }
+
     public User? Result { get; set; }
 }

@@ -23,7 +23,7 @@ public class CommandHandler
     private readonly LdapDomainService _ldapDomainService;
     private readonly RoleDomainService _roleDomainService;
     private readonly IUserContext _userContext;
-    private readonly PasswordHelper _passwordHelper;
+    private readonly IPasswordRuleProvider _passwordRuleProvider;
 
     public CommandHandler(
         IUserRepository userRepository,
@@ -44,7 +44,7 @@ public class CommandHandler
         LdapDomainService ldapDomainService,
         RoleDomainService roleDomainService,
         IUserContext userContext,
-        PasswordHelper passwordHelper)
+        IPasswordRuleProvider passwordRuleProvider)
     {
         _userRepository = userRepository;
         _autoCompleteClient = autoCompleteClient;
@@ -64,7 +64,7 @@ public class CommandHandler
         _ldapDomainService = ldapDomainService;
         _roleDomainService = roleDomainService;
         _userContext = userContext;
-        _passwordHelper = passwordHelper;
+        _passwordRuleProvider = passwordRuleProvider;
     }
 
     #region User
@@ -744,8 +744,7 @@ public class CommandHandler
     [EventHandler]
     public async Task GenerateNewPasswordAsync(GenerateNewPasswordCommand command)
     {
-        command.Result = _passwordHelper.GenerateNewPassword();
-        await Task.CompletedTask;
+        command.Result = await _passwordRuleProvider.GenerateNewPasswordAsync();
     }
 
     [EventHandler(2)]
