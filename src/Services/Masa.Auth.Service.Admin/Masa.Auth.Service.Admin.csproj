@@ -29,7 +29,6 @@
 		<PackageReference Include="Masa.Contrib.StackSdks.Dcc" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.0.3" />
-		<PackageReference Include="Dapr.AspNetCore" Version="1.10.0" />
 		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="$(MasaFrameworkPackageVersion)" />
 		<!--<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="$(MasaFrameworkPackageVersion)" />-->
 		<PackageReference Include="Masa.Contrib.Extensions.BackgroundJobs.Memory" Version="$(MasaFrameworkPackageVersion)" />

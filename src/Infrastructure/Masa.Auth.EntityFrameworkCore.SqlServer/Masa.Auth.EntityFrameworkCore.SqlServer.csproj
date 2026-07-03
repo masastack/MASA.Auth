@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Masa.Auth.EntityFrameworkCore\Masa.Auth.EntityFrameworkCore.csproj" />
 	<PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" Version="$(MasaFrameworkPackageVersion)" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.9">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>

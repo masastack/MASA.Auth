@@ -10,7 +10,7 @@
 	<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.EFCore.PostgreSql" Version="$(MasaFrameworkPackageVersion)" />
 	<PackageReference Include="Masa.Contrib.Data.EFCore.PostgreSql" Version="$(MasaFrameworkPackageVersion)" />
     <ProjectReference Include="..\Masa.Auth.EntityFrameworkCore\Masa.Auth.EntityFrameworkCore.csproj" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)">
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.9">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>

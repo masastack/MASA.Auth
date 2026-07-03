@@ -19,10 +19,10 @@ namespace Masa.Auth.Service.Admin.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("auth")
-                .HasAnnotation("ProductVersion", "6.0.36")
+                .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("DeviceFlowCodes", b =>
                 {
@@ -52,8 +52,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime?>("Expiration")
-                        .IsRequired()
+                    b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SessionId")
@@ -575,13 +574,100 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("_businessType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(34)
+                        .HasColumnType("nvarchar(34)");
 
                     b.HasKey("Id");
 
                     b.ToTable("SubjectPermissionRelation", "auth");
 
                     b.HasDiscriminator<string>("_businessType").HasValue("SubjectPermissionRelation");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Masa.Auth.Domain.Sso.Aggregates.ClientConfig", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Creator")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Modifier")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PasswordPrompt")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("PasswordRule")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("PasswordRuleConfig")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("ClientConfig", "auth");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Domain.Sso.Aggregates.ClientMessageTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ChannelCode")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("ChannelType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientConfigId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Scene")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TemplateCode")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientConfigId", "ChannelType", "Scene")
+                        .IsUnique();
+
+                    b.ToTable("ClientMessageTemplate", "auth");
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.Sso.Aggregates.CustomLogin", b =>
@@ -590,7 +676,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClientId")
                         .IsRequired()
@@ -640,7 +726,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CustomLoginId")
                         .HasColumnType("int");
@@ -666,7 +752,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CustomLoginId")
                         .HasColumnType("int");
@@ -701,7 +787,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -739,6 +826,8 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.ToTable("IdentityProvider", "auth");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityProvider");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.Subjects.Aggregates.Staff", b =>
@@ -2311,6 +2400,37 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasDiscriminator().HasValue("Role");
                 });
 
+            modelBuilder.Entity("Masa.Auth.Domain.Subjects.Aggregates.TeamPermission", b =>
+                {
+                    b.HasBaseType("Masa.Auth.Domain.Permissions.Aggregates.SubjectPermissionRelation");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TeamMemberType")
+                        .HasColumnType("int");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasDiscriminator().HasValue("Team");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Domain.Subjects.Aggregates.UserPermission", b =>
+                {
+                    b.HasBaseType("Masa.Auth.Domain.Permissions.Aggregates.SubjectPermissionRelation");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasDiscriminator().HasValue("User");
+                });
+
             modelBuilder.Entity("Masa.Auth.Domain.Subjects.Aggregates.LdapIdp", b =>
                 {
                     b.HasBaseType("Masa.Auth.Domain.Subjects.Aggregates.IdentityProvider");
@@ -2351,23 +2471,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.HasDiscriminator().HasValue("LDAP");
-                });
-
-            modelBuilder.Entity("Masa.Auth.Domain.Subjects.Aggregates.TeamPermission", b =>
-                {
-                    b.HasBaseType("Masa.Auth.Domain.Permissions.Aggregates.SubjectPermissionRelation");
-
-                    b.Property<Guid>("TeamId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("TeamMemberType")
-                        .HasColumnType("int");
-
-                    b.HasIndex("PermissionId");
-
-                    b.HasIndex("TeamId");
-
-                    b.HasDiscriminator().HasValue("Team");
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.Subjects.Aggregates.ThirdPartyIdp", b =>
@@ -2411,20 +2514,6 @@ namespace Masa.Auth.Service.Admin.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("ThirdParty");
-                });
-
-            modelBuilder.Entity("Masa.Auth.Domain.Subjects.Aggregates.UserPermission", b =>
-                {
-                    b.HasBaseType("Masa.Auth.Domain.Permissions.Aggregates.SubjectPermissionRelation");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("PermissionId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasDiscriminator().HasValue("User");
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.DynamicRoles.Aggregates.DynamicRole", b =>
@@ -2652,6 +2741,15 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("ParentRole");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Domain.Sso.Aggregates.ClientMessageTemplate", b =>
+                {
+                    b.HasOne("Masa.Auth.Domain.Sso.Aggregates.ClientConfig", null)
+                        .WithMany("MessageTemplates")
+                        .HasForeignKey("ClientConfigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.Sso.Aggregates.CustomLogin", b =>
@@ -3238,6 +3336,11 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Navigation("Teams");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Masa.Auth.Domain.Sso.Aggregates.ClientConfig", b =>
+                {
+                    b.Navigation("MessageTemplates");
                 });
 
             modelBuilder.Entity("Masa.Auth.Domain.Sso.Aggregates.CustomLogin", b =>

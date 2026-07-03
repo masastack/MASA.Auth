@@ -5,8 +5,16 @@ namespace Masa.Auth.Contracts.Admin.Subjects.Validator;
 
 public class PasswordValidator : MasaAbstractValidator<string?>
 {
-    public PasswordValidator(PasswordHelper passwordHelper)
+    public PasswordValidator(IPasswordRuleProvider passwordRuleProvider)
     {
-        RuleFor(password => password).Required().MaximumLength(50).Custom(passwordHelper.ValidatePassword);
+        RuleFor(password => password).Required()
+            .CustomAsync(async (password, context, cancellation) =>
+            {
+                var failure = await passwordRuleProvider.GetFailureAsync(password, null);
+                if (failure is not null)
+                {
+                    context.AddFailure(failure);
+                }
+            });
     }
 }

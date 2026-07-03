@@ -8,29 +8,46 @@ public class Sms : IScopedDependency
     readonly IMcClient _mcClient;
     readonly IDistributedCacheClient _distributedCacheClient;
     readonly IMasaConfiguration _masaConfiguration;
+    readonly IClientMessageTemplateProvider _clientMessageTemplateProvider;
 
     public Sms(
         IMcClient mcClient,
         IDistributedCacheClient distributedCacheClient,
-        IMasaConfiguration masaConfiguration)
+        IMasaConfiguration masaConfiguration,
+        IClientMessageTemplateProvider clientMessageTemplateProvider)
     {
         _mcClient = mcClient;
         _distributedCacheClient = distributedCacheClient;
         _masaConfiguration = masaConfiguration;
+        _clientMessageTemplateProvider = clientMessageTemplateProvider;
     }
 
-    public async Task<string> SendMsgCodeAsync(string key, string phoneNumber, TimeSpan? expiration = null)
+    public async Task<string> SendMsgCodeAsync(string key, string phoneNumber, string? clientId = null, SendMsgCodeTypes scene = default, TimeSpan? expiration = null)
     {
         ArgumentExceptionExtensions.ThrowIfNullOrEmpty(phoneNumber);
-        var _smsOptions = _masaConfiguration.ConfigurationApi.GetPublic().GetSection(SmsOptions.Key).Get<SmsOptions>();
-        MasaArgumentException.ThrowIfNull(_smsOptions, nameof(SmsOptions));
+
+        // Client-level template takes precedence; fall back to the global DCC SmsOptions.
+        var channelCode = "";
+        var templateCode = "";
+        var clientTemplate = await _clientMessageTemplateProvider.ResolveAsync(clientId, ChannelTypes.Sms, (int)scene);
+        if (clientTemplate is not null)
+        {
+            (channelCode, templateCode) = clientTemplate.Value;
+        }
+        else
+        {
+            var _smsOptions = _masaConfiguration.ConfigurationApi.GetPublic().GetSection(SmsOptions.Key).Get<SmsOptions>();
+            MasaArgumentException.ThrowIfNull(_smsOptions, nameof(SmsOptions));
+            channelCode = _smsOptions.ChannelCode;
+            templateCode = _smsOptions.TemplateCode;
+        }
 
         var code = Random.Shared.Next(100000, 999999).ToString();
         await _mcClient.MessageTaskService.SendTemplateMessageByExternalAsync(new SendTemplateMessageByExternalModel
         {
-            ChannelCode = _smsOptions.ChannelCode,
+            ChannelCode = channelCode,
             ChannelType = ChannelTypes.Sms,
-            TemplateCode = _smsOptions.TemplateCode,
+            TemplateCode = templateCode,
             ReceiverType = SendTargets.Assign,
             Receivers = new List<ExternalReceiverModel>
             {

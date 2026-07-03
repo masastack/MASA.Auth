@@ -340,7 +340,8 @@ public class UserService : ServiceBase
         var command = new ResetPasswordCommand(ResetPasswordTypes.PhoneNumber, model.PhoneNumber, model.Code)
         {
             Password = model.Password,
-            ConfirmPassword = model.ConfirmPassword
+            ConfirmPassword = model.ConfirmPassword,
+            ClientId = model.ClientId
         };
         await eventBus.PublishAsync(command);
         return true;
@@ -353,7 +354,8 @@ public class UserService : ServiceBase
         var command = new ResetPasswordCommand(ResetPasswordTypes.Email, model.Email, model.Code)
         {
             Password = model.Password,
-            ConfirmPassword = model.ConfirmPassword
+            ConfirmPassword = model.ConfirmPassword,
+            ClientId = model.ClientId
         };
         await eventBus.PublishAsync(command);
         return true;

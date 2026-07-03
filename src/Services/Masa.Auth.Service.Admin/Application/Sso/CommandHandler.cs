@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Service.Admin.Application.Sso;
@@ -12,6 +12,7 @@ public class CommandHandler
     readonly IUserClaimRepository _userClaimRepository;
     readonly ICustomLoginRepository _customLoginRepository;
     readonly IUserClaimExtendRepository _userClaimExtendRepository;
+    readonly IClientConfigRepository _clientConfigRepository;
     readonly IEventBus _eventBus;
     readonly SyncCache _syncCache;
 
@@ -23,6 +24,7 @@ public class CommandHandler
         IUserClaimRepository userClaimRepository,
         ICustomLoginRepository customLoginRepository,
         IUserClaimExtendRepository userClaimExtendRepository,
+        IClientConfigRepository clientConfigRepository,
         IEventBus eventBus,
         SyncCache syncCache)
     {
@@ -33,6 +35,7 @@ public class CommandHandler
         _userClaimRepository = userClaimRepository;
         _customLoginRepository = customLoginRepository;
         _userClaimExtendRepository = userClaimExtendRepository;
+        _clientConfigRepository = clientConfigRepository;
         _eventBus = eventBus;
         _syncCache = syncCache;
     }
@@ -41,8 +44,9 @@ public class CommandHandler
     [EventHandler]
     public async Task AddClientAsync(AddClientCommand addClientCommand)
     {
-        var client = addClientCommand.AddClientDto.Adapt<Client>();
-        client.SetClientType(addClientCommand.AddClientDto.ClientType);
+        var dto = addClientCommand.AddClientDto;
+        var client = dto.Adapt<Client>();
+        client.SetClientType(dto.ClientType);
         await ValidateClientIdAsync(client.ClientId);
         await _clientRepository.AddAsync(client);
     }
@@ -50,8 +54,9 @@ public class CommandHandler
     [EventHandler]
     public async Task UpdateClientAsync(UpdateClientCommand updateClientCommand)
     {
-        var id = updateClientCommand.ClientDetailDto.Id;
-        updateClientCommand.ClientDetailDto.ClientSecrets.ForEach(secret =>
+        var dto = updateClientCommand.ClientDetailDto;
+        var id = dto.Id;
+        dto.ClientSecrets.ForEach(secret =>
         {
             HashClientSharedSecret(secret);
         });
@@ -59,11 +64,12 @@ public class CommandHandler
         var client = await _clientRepository.GetDetailAsync(id)
             ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CLIENT_NOT_EXIST);
         //Contrary to DDD
-        updateClientCommand.ClientDetailDto.Adapt(client);
+        dto.Adapt(client);
 
         await ValidateClientIdAsync(client.ClientId, client.Id);
 
         await _clientRepository.UpdateAsync(client);
+        await UpsertClientConfigAsync(client.ClientId, dto.PasswordRule, dto.SmsTemplates, dto.EmailTemplates);
         void HashClientSharedSecret(ClientSecretDto clientSecret)
         {
             if (clientSecret.Id != Guid.Empty)
@@ -104,6 +110,50 @@ public class CommandHandler
         if (client != null)
         {
             throw new UserFriendlyException(UserFriendlyExceptionCodes.CLIENT_ID_ALREADY_EXIST, clientId);
+        }
+    }
+
+    [EventHandler]
+    public async Task UpsertClientConfigAsync(UpsertClientConfigCommand command)
+    {
+        var dto = command.ClientConfig;
+        ArgumentExceptionExtensions.ThrowIfNullOrEmpty(dto.ClientId);
+
+        await UpsertClientConfigAsync(dto.ClientId, dto.PasswordRule, dto.SmsTemplates, dto.EmailTemplates);
+    }
+
+    /// <summary>
+    /// Shared by the standalone <see cref="UpsertClientConfigCommand"/> and by Add/UpdateClientAsync,
+    /// since the frontend now saves password rule + message templates together with the Client itself.
+    /// </summary>
+    private async Task UpsertClientConfigAsync(
+        string clientId,
+        ClientPasswordRuleDto? passwordRule,
+        IEnumerable<ClientSmsTemplateDto> smsTemplates,
+        IEnumerable<ClientEmailTemplateDto> emailTemplates)
+    {
+        passwordRule = ClientPasswordRuleRegexConverter.Normalize(passwordRule);
+        var passwordRuleRegex = ClientPasswordRuleRegexConverter.ToRegex(passwordRule);
+        var passwordPrompt = passwordRule.PasswordPrompt;
+        var passwordRuleConfig = ClientPasswordRuleRegexConverter.ToDomainConfig(passwordRule);
+        var templates = smsTemplates
+            .Select(t => new ClientMessageTemplate(ChannelTypes.Sms, (int)t.Scene, t.ChannelCode, t.TemplateCode))
+            .Concat(emailTemplates
+                .Select(t => new ClientMessageTemplate(ChannelTypes.Email, (int)t.Scene, t.ChannelCode, t.TemplateCode)));
+
+        var clientConfig = await _clientConfigRepository.FindByClientIdAsync(clientId);
+        if (clientConfig is null)
+        {
+            clientConfig = new ClientConfig(clientId);
+            clientConfig.UpdatePasswordRule(passwordRuleRegex, passwordPrompt, passwordRuleConfig);
+            clientConfig.SetMessageTemplates(templates);
+            await _clientConfigRepository.AddAsync(clientConfig);
+        }
+        else
+        {
+            clientConfig.UpdatePasswordRule(passwordRuleRegex, passwordPrompt, passwordRuleConfig);
+            clientConfig.SetMessageTemplates(templates);
+            await _clientConfigRepository.UpdateAsync(clientConfig);
         }
     }
 

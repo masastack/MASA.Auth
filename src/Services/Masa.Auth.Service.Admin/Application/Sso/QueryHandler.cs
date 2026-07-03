@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Service.Admin.Application.Sso;
@@ -16,6 +16,7 @@ public class QueryHandler
     private readonly OperaterProvider _operaterProvider;
     private readonly ILogger<QueryHandler> _logger;
     private readonly IMultiEnvironmentContext _environmentContext;
+    private readonly IClientConfigRepository _clientConfigRepository;
 
     public QueryHandler(
         IClientRepository clientRepository,
@@ -28,7 +29,8 @@ public class QueryHandler
         AuthDbContext authDbContext,
         OperaterProvider operaterProvider,
         ILogger<QueryHandler> logger,
-        IMultiEnvironmentContext environmentContext)
+        IMultiEnvironmentContext environmentContext,
+        IClientConfigRepository clientConfigRepository)
     {
         _clientRepository = clientRepository;
         _identityResourceRepository = identityResourceRepository;
@@ -41,6 +43,7 @@ public class QueryHandler
         _operaterProvider = operaterProvider;
         _logger = logger;
         _environmentContext = environmentContext;
+        _clientConfigRepository = clientConfigRepository;
     }
 
     #region Client
@@ -62,6 +65,63 @@ public class QueryHandler
     {
         var client = await _clientRepository.GetDetailAsync(clientDetailQuery.ClientId);
         client.Adapt(clientDetailQuery.Result);
+
+        var clientConfig = await _clientConfigRepository.FindByClientIdAsync(client!.ClientId);
+        var (passwordRule, smsTemplates, emailTemplates) = MapClientConfig(clientConfig);
+        clientDetailQuery.Result.PasswordRule = passwordRule;
+        clientDetailQuery.Result.SmsTemplates = smsTemplates;
+        clientDetailQuery.Result.EmailTemplates = emailTemplates;
+    }
+
+    [EventHandler]
+    public async Task ClientConfigDetailQueryAsync(ClientConfigDetailQuery query)
+    {
+        var clientConfig = await _clientConfigRepository.FindByClientIdAsync(query.ClientId);
+        var (passwordRule, smsTemplates, emailTemplates) = MapClientConfig(clientConfig);
+        query.Result = new ClientConfigDto
+        {
+            ClientId = query.ClientId,
+            PasswordRule = passwordRule,
+            SmsTemplates = smsTemplates,
+            EmailTemplates = emailTemplates
+        };
+    }
+
+    /// <summary>
+    /// Shared by ClientDetailQueryAsync and ClientConfigDetailQueryAsync, since the frontend now
+    /// reads/saves password rule + message templates together with the Client itself.
+    /// </summary>
+    private static (ClientPasswordRuleDto PasswordRule, List<ClientSmsTemplateDto> SmsTemplates, List<ClientEmailTemplateDto> EmailTemplates) MapClientConfig(ClientConfig? clientConfig)
+    {
+        if (clientConfig is null)
+        {
+            return (new(), new(), new());
+        }
+
+        var passwordRule = ClientPasswordRuleRegexConverter.FromStorage(
+            clientConfig.PasswordRuleConfig,
+            clientConfig.PasswordRule,
+            clientConfig.PasswordPrompt);
+
+        return (
+            passwordRule,
+            clientConfig.MessageTemplates
+                .Where(t => t.ChannelType == ChannelTypes.Sms)
+                .Select(t => new ClientSmsTemplateDto
+                {
+                    Scene = (SendMsgCodeTypes)t.Scene,
+                    ChannelCode = t.ChannelCode,
+                    TemplateCode = t.TemplateCode
+                }).ToList(),
+            clientConfig.MessageTemplates
+                .Where(t => t.ChannelType == ChannelTypes.Email)
+                .Select(t => new ClientEmailTemplateDto
+                {
+                    Scene = (SendEmailTypes)t.Scene,
+                    ChannelCode = t.ChannelCode,
+                    TemplateCode = t.TemplateCode
+                }).ToList()
+        );
     }
 
     [EventHandler]

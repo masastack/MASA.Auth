@@ -8,18 +8,21 @@ public class EmailAgent : IScopedDependency
     readonly IMcClient _mcClient;
     readonly IDistributedCacheClient _distributedCacheClient;
     readonly IMasaConfiguration _masaConfiguration;
+    readonly IClientMessageTemplateProvider _clientMessageTemplateProvider;
 
     public EmailAgent(
         IMcClient mcClient,
         IDistributedCacheClient distributedCacheClient,
-        IMasaConfiguration masaConfiguration)
+        IMasaConfiguration masaConfiguration,
+        IClientMessageTemplateProvider clientMessageTemplateProvider)
     {
         _mcClient = mcClient;
         _distributedCacheClient = distributedCacheClient;
         _masaConfiguration = masaConfiguration;
+        _clientMessageTemplateProvider = clientMessageTemplateProvider;
     }
 
-    public async Task SendEmailAsync(SendEmailModel sendEmailModel, TimeSpan? expiration = null)
+    public async Task SendEmailAsync(SendEmailModel sendEmailModel, string? clientId = null, TimeSpan? expiration = null)
     {
         //todo Abstract Factory
         var sendKey = string.Empty;
@@ -60,15 +63,27 @@ public class EmailAgent : IScopedDependency
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.EMAIL_SENDED);
         }
 
-        var _emailOptions = _masaConfiguration.ConfigurationApi.GetPublic().GetSection(EmailOptions.Key).Get<EmailOptions>();
-        MasaArgumentException.ThrowIfNull(_emailOptions, nameof(EmailOptions));
+        var channelCode = "";
+        var templateCode = "";
+        var clientTemplate = await _clientMessageTemplateProvider.ResolveAsync(clientId, ChannelTypes.Email, (int)sendEmailModel.SendEmailType);
+        if (clientTemplate is not null)
+        {
+            (channelCode, templateCode) = clientTemplate.Value;
+        }
+        else
+        {
+            var _emailOptions = _masaConfiguration.ConfigurationApi.GetPublic().GetSection(EmailOptions.Key).Get<EmailOptions>();
+            MasaArgumentException.ThrowIfNull(_emailOptions, nameof(EmailOptions));
+            channelCode = _emailOptions.ChannelCode;
+            templateCode = _emailOptions.TemplateCode;
+        }
 
         var code = Random.Shared.Next(100000, 999999).ToString();
         await _mcClient.MessageTaskService.SendTemplateMessageByExternalAsync(new SendTemplateMessageByExternalModel
         {
-            ChannelCode = _emailOptions.ChannelCode,
+            ChannelCode = channelCode,
             ChannelType = ChannelTypes.Email,
-            TemplateCode = _emailOptions.TemplateCode,
+            TemplateCode = templateCode,
             ReceiverType = SendTargets.Assign,
             Receivers = new List<ExternalReceiverModel>
             {

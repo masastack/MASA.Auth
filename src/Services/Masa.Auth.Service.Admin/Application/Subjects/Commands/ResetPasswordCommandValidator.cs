@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordCommand>
 {
-    public ResetPasswordCommandValidator(PhoneNumberValidator phoneValidator, PasswordValidator passwordValidator)
+    public ResetPasswordCommandValidator(PhoneNumberValidator phoneValidator, IPasswordRuleProvider passwordRuleProvider)
     {
         When(x => x.ResetPasswordType == ResetPasswordTypes.PhoneNumber, () =>
         {
@@ -16,7 +16,9 @@ public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordComm
             RuleFor(x => x.Voucher).Required().Email();
         });
         RuleFor(x => x.Captcha).Required();
-        RuleFor(x => x.Password).Required().SetValidator(passwordValidator);
+        // Anonymous forgot-password flow (no login) - the client rule follows whatever ClientId
+        // the caller passes for this request; falls back to the global DCC rule when absent.
+        RuleFor(x => x.Password).PasswordRule(passwordRuleProvider, x => x.ClientId);
         RuleFor(x => x.ConfirmPassword).Equal(x => x.Password);
     }
 }

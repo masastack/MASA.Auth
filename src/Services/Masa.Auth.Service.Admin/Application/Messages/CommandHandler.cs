@@ -69,7 +69,7 @@ public class CommandHandler
         }
         else
         {
-            await _sms.SendMsgCodeAsync(cacheKey, model.PhoneNumber);
+            await _sms.SendMsgCodeAsync(cacheKey, model.PhoneNumber, model.ClientId, model.SendMsgCodeType);
         }
     }
 
@@ -99,7 +99,7 @@ public class CommandHandler
             default:
                 throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_SEND_EMAIL_TYPE);
         }
-        await _emailAgent.SendEmailAsync(model);
+        await _emailAgent.SendEmailAsync(model, model.ClientId);
     }
 
     async Task<User> CheckUserExistAsync(Guid userId)
