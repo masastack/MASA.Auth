@@ -15,9 +15,9 @@ public static class PasswordRuleValidatorExtensions
         IPasswordRuleProvider passwordRuleProvider,
         Func<T, string?> clientId)
     {
-        return ruleBuilder.CustomAsync(async (password, context, cancellation) =>
+        return ruleBuilder.Custom((password, context) =>
         {
-            var failure = await passwordRuleProvider.GetFailureAsync(password, clientId(context.InstanceToValidate));
+            var failure = passwordRuleProvider.GetFailure(password, clientId(context.InstanceToValidate));
             if (failure is not null)
             {
                 context.AddFailure(failure);

@@ -18,7 +18,6 @@ StackExchangeRedisInstrumentation redisInstrumentation = default!;
 #endif
 
 builder.Services.AddAutoInject();
-builder.Services.AddScoped<IClientMessageTemplateProvider, ClientMessageTemplateProvider>();
 builder.Services.AddDaprClient();
 
 builder.Services.AddObjectStorage(option => option.UseAliyunStorage());

@@ -5,7 +5,7 @@ using Fare;
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Password;
 
-public class PasswordRuleProvider : IPasswordRuleProvider, IScopedDependency
+public class PasswordRuleProvider : IPasswordRuleProvider
 {
     public const string PASSWORDRULECONFIGNAME = "$public.AppSettings:PasswordRule";
     public const string PASSWORDPROMPTCONFIGNAME = "$public.AppSettings:PasswordPrompt";
@@ -26,6 +26,12 @@ public class PasswordRuleProvider : IPasswordRuleProvider, IScopedDependency
         _logger = logger;
     }
 
+    public string? GetFailure(string? password, string? clientId)
+    {
+        var (rule, prompt) = GetEffectiveRule(clientId);
+        return ValidatePasswordWithRule(password, rule, prompt);
+    }
+
     public async Task<string?> GetFailureAsync(string? password, string? clientId)
     {
         var (rule, prompt) = await GetEffectiveRuleAsync(clientId);
@@ -36,6 +42,26 @@ public class PasswordRuleProvider : IPasswordRuleProvider, IScopedDependency
     {
         var (passwordRule, _) = GetGlobalPasswordRule();
         return Task.FromResult(GenerateNewPassword(passwordRule));
+    }
+
+    private (string rule, string prompt) GetEffectiveRule(string? clientId)
+    {
+        var (rule, prompt) = GetGlobalPasswordRule();
+
+        if (!string.IsNullOrEmpty(clientId))
+        {
+            var clientConfig = _clientConfigRepository.FindByClientIdAsync(clientId).Result;
+            if (clientConfig is not null && !string.IsNullOrEmpty(clientConfig.PasswordRule))
+            {
+                rule = clientConfig.PasswordRule;
+                if (!string.IsNullOrEmpty(clientConfig.PasswordPrompt))
+                {
+                    prompt = clientConfig.PasswordPrompt;
+                }
+            }
+        }
+
+        return (rule, prompt);
     }
 
     private async Task<(string rule, string prompt)> GetEffectiveRuleAsync(string? clientId)

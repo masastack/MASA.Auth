@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Message;
 
-public class ClientMessageTemplateProvider : IClientMessageTemplateProvider, IScopedDependency
+public class ClientMessageTemplateProvider : IClientMessageTemplateProvider
 {
     private readonly IClientConfigRepository _clientConfigRepository;
 

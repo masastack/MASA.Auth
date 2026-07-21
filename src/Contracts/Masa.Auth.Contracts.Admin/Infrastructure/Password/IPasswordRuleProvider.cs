@@ -8,7 +8,7 @@ namespace Masa.Auth.Contracts.Admin.Infrastructure.Password;
 /// A client-level rule (stored on ClientConfig) takes precedence; when absent it falls back to
 /// the global DCC configuration.
 /// </summary>
-public interface IPasswordRuleProvider
+public interface IPasswordRuleProvider : IScopedDependency
 {
     /// <summary>
     /// Validate a password against the client's effective rule.
@@ -16,6 +16,8 @@ public interface IPasswordRuleProvider
     /// Designed to be called from a FluentValidation rule (see <see cref="PasswordRuleValidatorExtensions"/>)
     /// so client-aware password validation stays inside the single, framework-invoked validation pipeline.
     /// </summary>
+    string? GetFailure(string? password, string? clientId);
+
     Task<string?> GetFailureAsync(string? password, string? clientId);
 
     /// <summary>
