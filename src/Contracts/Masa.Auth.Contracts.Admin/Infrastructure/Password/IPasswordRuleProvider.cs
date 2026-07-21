@@ -16,6 +16,8 @@ public interface IPasswordRuleProvider
     /// Designed to be called from a FluentValidation rule (see <see cref="PasswordRuleValidatorExtensions"/>)
     /// so client-aware password validation stays inside the single, framework-invoked validation pipeline.
     /// </summary>
+    string? GetFailure(string? password, string? clientId);
+
     Task<string?> GetFailureAsync(string? password, string? clientId);
 
     /// <summary>

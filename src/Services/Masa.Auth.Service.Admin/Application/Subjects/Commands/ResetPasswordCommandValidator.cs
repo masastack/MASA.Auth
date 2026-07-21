@@ -16,8 +16,6 @@ public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordComm
             RuleFor(x => x.Voucher).Required().Email();
         });
         RuleFor(x => x.Captcha).Required();
-        // Anonymous forgot-password flow (no login) - the client rule follows whatever ClientId
-        // the caller passes for this request; falls back to the global DCC rule when absent.
         RuleFor(x => x.Password).PasswordRule(passwordRuleProvider, x => x.ClientId);
         RuleFor(x => x.ConfirmPassword).Equal(x => x.Password);
     }

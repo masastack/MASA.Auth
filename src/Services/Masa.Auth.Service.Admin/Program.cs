@@ -1,6 +1,8 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using Masa.Auth.Service.Admin.Infrastructure.Password;
+
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
@@ -19,6 +21,7 @@ StackExchangeRedisInstrumentation redisInstrumentation = default!;
 
 builder.Services.AddAutoInject();
 builder.Services.AddScoped<IClientMessageTemplateProvider, ClientMessageTemplateProvider>();
+builder.Services.AddScoped<IPasswordRuleProvider, PasswordRuleProvider>();
 builder.Services.AddDaprClient();
 
 builder.Services.AddObjectStorage(option => option.UseAliyunStorage());

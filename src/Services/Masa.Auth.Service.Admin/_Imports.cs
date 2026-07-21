@@ -85,6 +85,7 @@ global using Masa.Auth.Service.Admin.Infrastructure.Ldap;
 global using Masa.Auth.Service.Admin.Infrastructure.Message;
 global using Masa.Auth.Service.Admin.Infrastructure.Middleware;
 global using Masa.Auth.Service.Admin.Infrastructure.Models;
+global using Masa.Auth.Service.Admin.Infrastructure.Password;
 global using Masa.Auth.Service.Admin.Infrastructure.Sms;
 global using Masa.Auth.Service.Admin.Infrastructure.Utils;
 global using Masa.BuildingBlocks.Authentication.Identity;
