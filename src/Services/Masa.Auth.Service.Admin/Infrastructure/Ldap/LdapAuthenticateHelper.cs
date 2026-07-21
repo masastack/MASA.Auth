@@ -17,12 +17,12 @@ public static class LdapAuthenticateHelper
     /// <summary>
     /// LDAP result code: invalidCredentials (RFC 4511).
     /// </summary>
-    const int LdapInvalidCredentials = 49;
+    const int LDAP_INVALID_CREDENTIALS = 49;
 
     /// <summary>
     /// Connect timeout for LDAP connect-test / save validation (milliseconds).
     /// </summary>
-    const int ConnectionTimeoutMs = 10_000;
+    const int CONNECTION_TIMEOUT_MS = 10_000;
 
     public static async Task AuthenticateOrThrowAsync(LdapDetailDto ldapDetailDto)
     {
@@ -31,7 +31,7 @@ public static class LdapAuthenticateHelper
         using var connection = new LdapConnection
         {
             SecureSocketLayer = ldapDetailDto.IsLdaps,
-            ConnectionTimeout = ConnectionTimeoutMs
+            ConnectionTimeout = CONNECTION_TIMEOUT_MS
         };
 
         // Stage 1: TCP / TLS connect — address、port、LDAP vs LDAPS
@@ -39,7 +39,7 @@ public static class LdapAuthenticateHelper
         {
             await connection.ConnectAsync(ldapDetailDto.ServerAddress, ldapDetailDto.ServerPort);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // TCP 已经连通，此时失败发生在 LDAP 明文协议或 TLS 握手阶段。
             // 不再把它误报为“地址/端口不可达”。
@@ -51,7 +51,7 @@ public static class LdapAuthenticateHelper
         {
             await connection.BindAsync(ldapDetailDto.RootUserDn, ldapDetailDto.RootUserPassword);
         }
-        catch (LdapException ex) when (ex.ResultCode == LdapInvalidCredentials)
+        catch (LdapException ex) when (ex.ResultCode == LDAP_INVALID_CREDENTIALS)
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LDAP_CREDENTIALS_INVALID);
         }
@@ -69,7 +69,7 @@ public static class LdapAuthenticateHelper
 
     static async Task EnsureTcpConnectionAsync(LdapDetailDto ldapDetailDto)
     {
-        using var timeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(ConnectionTimeoutMs));
+        using var timeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(CONNECTION_TIMEOUT_MS));
         using var tcpClient = new TcpClient();
 
         try
