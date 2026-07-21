@@ -16,6 +16,10 @@ public static class UserFriendlyExceptionCodes
     public const string INVALID_EMAIL_CAPTCHA = "InvalidEmailCaptcha";
     public const string INVALID_SMS_CAPTCHA = "InvalidSMSCaptcha";
     public const string CONNECT_ERROR = "ConnectError";
+    public const string LDAP_SERVER_UNREACHABLE = "LdapServerUnreachable";
+    public const string LDAP_SSL_MISMATCH = "LdapSslMismatch";
+    public const string LDAP_CREDENTIALS_INVALID = "LdapCredentialsInvalid";
+    public const string LDAP_BIND_FAILED = "LdapBindFailed";
     public const string INVALID_SEND_EMAIL_TYPE = "InvalidSendEmailType";
     public const string INVALID_SEND_MSG_CODE_TYPE = "InvalidSendMsgCodeType";
     public const string INVALID_RESET_PASSWORD_TYPE = "InvalidResetPasswordType";

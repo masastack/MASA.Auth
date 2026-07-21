@@ -3,7 +3,7 @@
 
 namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
-public class LdapConnectTestCommandValidator : AbstractValidator<LdapUpsertCommand>
+public class LdapConnectTestCommandValidator : AbstractValidator<LdapConnectTestCommand>
 {
     public LdapConnectTestCommandValidator()
     {
