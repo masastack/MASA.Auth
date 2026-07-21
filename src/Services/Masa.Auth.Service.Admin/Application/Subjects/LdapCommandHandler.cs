@@ -31,12 +31,7 @@ public class LdapCommandHandler
     [EventHandler]
     public async Task LdapConnectTestAsync(LdapConnectTestCommand ldapConnectTestCommand)
     {
-        var ldapOptions = ldapConnectTestCommand.LdapDetailDto.Adapt<LdapOptions>();
-        var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
-        if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CONNECT_ERROR);
-        }
+        await LdapAuthenticateHelper.AuthenticateOrThrowAsync(ldapConnectTestCommand.LdapDetailDto);
     }
 
     [EventHandler]
@@ -44,12 +39,10 @@ public class LdapCommandHandler
     {
         var ldapIdpDto = ldapUpsertCommand.LdapDetailDto;
 
+        await LdapAuthenticateHelper.AuthenticateOrThrowAsync(ldapIdpDto);
+
         var ldapOptions = ldapIdpDto.Adapt<LdapOptions>();
         var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
-        if (!await ldapProvider.AuthenticateAsync(ldapOptions.RootUserDn, ldapOptions.RootUserPassword))
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CONNECT_ERROR);
-        }
 
         var ldapIdp = new LdapIdp(
                 ldapIdpDto.ServerAddress,
