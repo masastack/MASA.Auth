@@ -8,7 +8,7 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Message;
 /// (channel type, scene). Returns null when the client has no matching configuration,
 /// signalling the caller to fall back to the global DCC SmsOptions/EmailOptions.
 /// </summary>
-public interface IClientMessageTemplateProvider
+public interface IClientMessageTemplateProvider : IScopedDependency
 {
     Task<(string channelCode, string templateCode)?> ResolveAsync(string? clientId, ChannelTypes channelType, int scene);
 }

@@ -5,7 +5,7 @@ using Fare;
 
 namespace Masa.Auth.Service.Admin.Infrastructure.Password;
 
-public class PasswordRuleProvider : IPasswordRuleProvider, IScopedDependency
+public class PasswordRuleProvider : IPasswordRuleProvider
 {
     public const string PASSWORDRULECONFIGNAME = "$public.AppSettings:PasswordRule";
     public const string PASSWORDPROMPTCONFIGNAME = "$public.AppSettings:PasswordPrompt";
