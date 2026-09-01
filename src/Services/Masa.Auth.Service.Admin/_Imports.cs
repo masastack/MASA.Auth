@@ -60,6 +60,7 @@ global using Masa.Auth.Service.Admin.Application.Logs.Queries;
 global using Masa.Auth.Service.Admin.Application.Messages.Commands;
 global using Masa.Auth.Service.Admin.Application.Organizations.Commands;
 global using Masa.Auth.Service.Admin.Application.Organizations.Queries;
+global using Masa.Auth.Service.Admin.Application.Password.Queries;
 global using Masa.Auth.Service.Admin.Application.Permissions.Commands;
 global using Masa.Auth.Service.Admin.Application.Permissions.Jobs;
 global using Masa.Auth.Service.Admin.Application.Permissions.Queries;

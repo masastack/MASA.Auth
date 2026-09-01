@@ -40,13 +40,15 @@ public class PasswordRuleProvider : IPasswordRuleProvider
 
     public Task<string> GenerateNewPasswordAsync()
     {
-        var (passwordRule, _) = GetGlobalPasswordRule();
+        var passwordRule = GetGlobalPasswordRule().PasswordRule;
         return Task.FromResult(GenerateNewPassword(passwordRule));
     }
 
     private (string rule, string prompt) GetEffectiveRule(string? clientId)
     {
-        var (rule, prompt) = GetGlobalPasswordRule();
+        var globalRule = GetGlobalPasswordRule();
+        var rule = globalRule.PasswordRule;
+        var prompt = globalRule.PasswordPrompt;
 
         if (!string.IsNullOrEmpty(clientId))
         {
@@ -67,7 +69,9 @@ public class PasswordRuleProvider : IPasswordRuleProvider
     private async Task<(string rule, string prompt)> GetEffectiveRuleAsync(string? clientId)
     {
         // 全局 DCC 配置作为回退默认值
-        var (rule, prompt) = GetGlobalPasswordRule();
+        var globalRule = GetGlobalPasswordRule();
+        var rule = globalRule.PasswordRule;
+        var prompt = globalRule.PasswordPrompt;
 
         if (!string.IsNullOrEmpty(clientId))
         {
@@ -85,7 +89,7 @@ public class PasswordRuleProvider : IPasswordRuleProvider
         return (rule, prompt);
     }
 
-    private (string rule, string prompt) GetGlobalPasswordRule()
+    public GlobalPasswordRuleDto GetGlobalPasswordRule()
     {
         var passwordRule = DEFAULTPASSWORDRULE;
         var passwordPrompt = DEFAULTPASSWORDPROMPT;
@@ -106,7 +110,7 @@ public class PasswordRuleProvider : IPasswordRuleProvider
         {
             _logger.LogWarning("MasaConfiguration 为空，使用默认密码规则配置");
         }
-        return (passwordRule, passwordPrompt);
+        return new GlobalPasswordRuleDto { PasswordRule = passwordRule, PasswordPrompt = passwordPrompt };
     }
 
     private string GenerateNewPassword(string passwordRule)

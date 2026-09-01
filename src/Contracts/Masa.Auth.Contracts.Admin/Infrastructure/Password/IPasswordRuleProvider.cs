@@ -24,4 +24,9 @@ public interface IPasswordRuleProvider : IScopedDependency
     /// Generate a new password satisfying the global DCC password rule.
     /// </summary>
     Task<string> GenerateNewPasswordAsync();
+
+    /// <summary>
+    /// Get the global password rule configured in DCC.
+    /// </summary>
+    GlobalPasswordRuleDto GetGlobalPasswordRule();
 }
