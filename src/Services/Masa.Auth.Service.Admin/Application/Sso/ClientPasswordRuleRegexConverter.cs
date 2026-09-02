@@ -20,14 +20,11 @@ internal static class ClientPasswordRuleRegexConverter
         passwordRule.MaxLength = Math.Max(passwordRule.MinLength, passwordRule.MaxLength);
         passwordRule.RegexPattern = passwordRule.RegexPattern?.Trim() ?? string.Empty;
 
-        if (string.IsNullOrWhiteSpace(passwordRule.PasswordPrompt))
-        {
-            passwordRule.PasswordPrompt = BuildPasswordPrompt(passwordRule);
-        }
-        else
-        {
-            passwordRule.PasswordPrompt = passwordRule.PasswordPrompt.Trim();
-        }
+        // 失败提示完全由用户配置，不再自动生成；
+        // 为空时由 PasswordRuleProvider 回退到全局 DCC 配置的 PasswordPrompt
+        passwordRule.PasswordPrompt = string.IsNullOrWhiteSpace(passwordRule.PasswordPrompt)
+            ? null
+            : passwordRule.PasswordPrompt.Trim();
 
         return passwordRule;
     }
@@ -142,40 +139,5 @@ internal static class ClientPasswordRuleRegexConverter
             RequireDigit = checks.Contains(@"(?=\S*\d)"),
             RequireSpecialCharacter = checks.Contains(@"(?=\S*[^A-Za-z0-9\s])")
         };
-    }
-
-    private static string BuildPasswordPrompt(ClientPasswordRuleDto passwordRule)
-    {
-        if (passwordRule.UseRegexPattern)
-        {
-            return "PasswordValidateFailed";
-        }
-
-        var requirements = new List<string>
-        {
-            $"Password length must be between {passwordRule.MinLength} and {passwordRule.MaxLength} characters"
-        };
-
-        if (passwordRule.RequireUppercase)
-        {
-            requirements.Add("include an uppercase letter");
-        }
-
-        if (passwordRule.RequireLowercase)
-        {
-            requirements.Add("include a lowercase letter");
-        }
-
-        if (passwordRule.RequireDigit)
-        {
-            requirements.Add("include a digit");
-        }
-
-        if (passwordRule.RequireSpecialCharacter)
-        {
-            requirements.Add("include a special character");
-        }
-
-        return string.Join(", ", requirements);
     }
 }
