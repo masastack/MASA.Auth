@@ -23,11 +23,12 @@ namespace Masa.Auth.Service.Admin.Infrastructure.Middleware
 
             _logger.LogInformation("----- Validating command {CommandType}", typeName);
 
-            var failures = _validators
-                .Select(v => v.Validate(action))
-                .SelectMany(result => result.Errors)
-                .Where(error => error != null)
-                .ToList();
+            var failures = new List<FluentValidation.Results.ValidationFailure>();
+            foreach (var validator in _validators)
+            {
+                var result = await validator.ValidateAsync(action);
+                failures.AddRange(result.Errors.Where(error => error != null));
+            }
 
             if (failures.Any())
             {
