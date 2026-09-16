@@ -5,7 +5,7 @@ namespace Masa.Auth.Service.Admin.Application.Subjects.Commands;
 
 public class AddStaffCommandValidator : MasaAbstractValidator<AddStaffCommand>
 {
-    public AddStaffCommandValidator(PasswordValidator passwordValidator, PhoneNumberValidator phoneValidator)
+    public AddStaffCommandValidator(IPasswordRuleProvider passwordRuleProvider, PhoneNumberValidator phoneValidator)
     {
         //TODO
         //和AddStaffValidator中存在大量重复代码，后续优化
@@ -14,7 +14,7 @@ public class AddStaffCommandValidator : MasaAbstractValidator<AddStaffCommand>
         RuleFor(command => command.Staff.JobNumber).Required().MinimumLength(4).MaximumLength(12);
         RuleFor(command => command.Staff.PhoneNumber).Required().SetValidator(phoneValidator);
         RuleFor(command => command.Staff.DisplayName).MaximumLength(50);
-        WhenNotEmpty(command => command.Staff.Password, r => r.SetValidator(passwordValidator));
+        WhenNotEmpty(command => command.Staff.Password, r => r.PasswordRule(passwordRuleProvider, _ => null));
         WhenNotEmpty(command => command.Staff.Email, r => r.Email());
         WhenNotEmpty(command => command.Staff.Name, r => r.ChineseLetter().MaximumLength(20));
         WhenNotEmpty(command => command.Staff.IdCard, r => r.IdCard());

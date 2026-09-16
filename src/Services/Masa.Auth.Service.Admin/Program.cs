@@ -207,14 +207,6 @@ builder.Services
     .UseRepository<AuthDbContext>();
 });
 
-// The framework FluentValidation middleware invokes validators synchronously.
-// Remove it because this service uses validators with async rules.
-builder.Services
-    .Where(service => service.ServiceType == typeof(IEventMiddleware<>) &&
-                      service.ImplementationType == typeof(Masa.BuildingBlocks.Dispatcher.Events.ValidatorEventMiddleware<>))
-    .ToList()
-    .ForEach(service => builder.Services.Remove(service));
-
 await builder.Services.AddStackIsolationAsync(project.Name);
 
 builder.Services.AddStackMiddleware();
