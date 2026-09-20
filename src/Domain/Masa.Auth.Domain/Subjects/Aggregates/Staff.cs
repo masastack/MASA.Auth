@@ -102,10 +102,11 @@ public class Staff : FullAggregateRoot<Guid, Guid>
 
     #endregion
 
+    [AllowNull]
     public string JobNumber
     {
         get => _jobNumber;
-        private set => _jobNumber = ArgumentExceptionExtensions.ThrowIfNullOrEmpty(value, nameof(JobNumber));
+        private set => _jobNumber = value ?? "";
     }
 
     public Guid? PositionId
@@ -227,6 +228,15 @@ public class Staff : FullAggregateRoot<Guid, Guid>
         DisplayName = displayName;
         Gender = gender;
         VerifyPhonNumberEmail(phoneNumber, email);
+    }
+
+    /// <summary>
+    /// Update the job number, used e.g. when syncing from an external IdP (Ldap employeeNumber).
+    /// An empty/null value clears the job number (AD is the authoritative source).
+    /// </summary>
+    public void UpdateJobNumber(string jobNumber)
+    {
+        JobNumber = jobNumber;
     }
 
     public void UpdateAvatar(string avatar)

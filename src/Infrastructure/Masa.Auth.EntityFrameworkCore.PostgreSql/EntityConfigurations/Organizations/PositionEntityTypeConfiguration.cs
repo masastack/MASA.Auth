@@ -9,7 +9,7 @@ public class PositionEntityTypeConfiguration : IEntityTypeConfiguration<Position
     {
         builder.HasKey(p => p.Id);
         builder.HasIndex(p => p.Name);
-        builder.Property(d => d.Name).HasMaxLength(20);
+        builder.Property(d => d.Name).HasMaxLength(BusinessConsts.POSITION_NAME_MAX_LENGTH);
     }
 }
 

@@ -8,6 +8,7 @@ global using Masa.Auth.Domain.Sso.Aggregates;
 global using Masa.Auth.Domain.Subjects.Aggregates;
 global using Masa.Auth.Domain.Webhooks.Aggregates;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Enums;
+global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
 global using Masa.Auth.Contracts.Admin.Webhooks;
 global using Masa.Auth.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;

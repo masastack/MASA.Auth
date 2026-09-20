@@ -9,7 +9,7 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
     {
         builder.HasKey(s => s.Id);
         builder.HasIndex(s => s.JobNumber);
-        builder.Property(s => s.JobNumber).HasMaxLength(20);
+        builder.Property(s => s.JobNumber).HasMaxLength(BusinessConsts.STAFF_JOB_NUMBER_MAX_LENGTH);
         builder.HasOne(s => s.User).WithOne(user => user.Staff).HasForeignKey<Staff>(s => s.UserId);
         builder.HasIndex(s => s.UserId);
         builder.HasOne(s => s.Position).WithMany().HasForeignKey(s => s.PositionId).OnDelete(DeleteBehavior.ClientSetNull);
