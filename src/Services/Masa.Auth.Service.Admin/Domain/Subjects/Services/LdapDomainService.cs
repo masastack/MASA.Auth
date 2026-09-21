@@ -50,55 +50,141 @@ public class LdapDomainService : DomainService
         var existLdapUsers = ldapUsers.Where(ldapUser => thirdPartyUsers.Any(thirdPartyUser => thirdPartyUser.ThridPartyIdentity == ldapUser.ObjectGuid));
         var unExistLdapUsers = ldapUsers.ExceptBy(existLdapUsers.Select(user => user.ObjectGuid), user => user.ObjectGuid).ToList();
 
-        var addUsers = unExistLdapUsers.Select(ldapUser => new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
-            new ThirdPartyUser(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser)),
-            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true)));
-        await _userDomainService.AddRangeAsync(addUsers.ToList());
+        var positionCache = new Dictionary<string, Guid>(StringComparer.OrdinalIgnoreCase);
+        var addUsers = new List<User>();
+        foreach (var ldapUser in unExistLdapUsers)
+        {
+            try
+            {
+                var positionId = await GetPositionIdAsync(ldapUser, positionCache);
+                addUsers.Add(new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
+                    new ThirdPartyUser(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser)),
+                    new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser), positionId, StaffTypes.Internal, true)));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to prepare Ldap user for creation, skipped.---- {Account} / {DisplayName}.", ldapUser.SamAccountName, ldapUser.DisplayName);
+            }
+        }
+        await _userDomainService.AddRangeAsync(addUsers);
 
-        thirdPartyUsers.ForEach(tpu =>
+        foreach (var tpu in thirdPartyUsers)
         {
             var ldapUser = existLdapUsers.FirstOrDefault(ldapUser => ldapUser.ObjectGuid == tpu.ThridPartyIdentity);
             if (ldapUser != null)
             {
-                tpu.User.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, "", "", "", "", new());
+                try
+                {
+                    tpu.User.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, "", "", "", "", new());
 
-                if (tpu.User.Staff == null)
-                {
-                    var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company,
-                        GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid),
-                        null, StaffTypes.Internal, ldapUser.UserAccountControl == UserAccountControl.NormalAccount);
-                    tpu.User.Bind(staff);
-                }
-                else
-                {
-                    tpu.User.Staff.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress);
-                    if (ldapUser.UserAccountControl == UserAccountControl.NormalAccount)
+                    if (tpu.User.Staff == null)
                     {
-                        tpu.User.Staff.Enable();
+                        var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company,
+                            GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser),
+                            await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, ldapUser.UserAccountControl == UserAccountControl.NormalAccount);
+                        tpu.User.Bind(staff);
                     }
                     else
                     {
-                        tpu.User.Staff.Disable();
+                        tpu.User.Staff.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress);
+
+                        //JobNumber: AD is the authoritative source — always overwrite.
+                        //An empty employeeNumber clears legacy wrong values (e.g. the SID RID previously written).
+                        tpu.User.Staff.UpdateJobNumber(GetEmployeeNumber(ldapUser));
+
+                        var positionId = await GetPositionIdAsync(ldapUser, positionCache);
+                        if (positionId != null)
+                        {
+                            tpu.User.Staff.PositionId = positionId;
+                        }
+
+                        if (ldapUser.UserAccountControl == UserAccountControl.NormalAccount)
+                        {
+                            tpu.User.Staff.Enable();
+                        }
+                        else
+                        {
+                            tpu.User.Staff.Disable();
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to sync Ldap user, skipped.---- {Account} / {DisplayName}.", ldapUser.SamAccountName, ldapUser.DisplayName);
+                }
             }
-        });
+        }
         await _userDomainService.UpdateRangeAsync(thirdPartyUsers.Select(tpu => tpu.User).ToList());
     }
 
-    string GetRelativeId(string objectSid)
+    /// <summary>
+    /// JobNumber comes from AD attribute "employeeNumber"; empty when AD does not maintain it
+    /// (no fallback — the SID RID previously used as fallback was wrong data).
+    /// An over-length value is dropped with a warning: a truncated job number is still wrong data.
+    /// </summary>
+    string GetEmployeeNumber(LdapUser ldapUser)
     {
-        var parts = objectSid.Split('-');
-        if (parts.Length < 3)
+        var employeeNumber = ldapUser.EmployeeNumber?.Trim() ?? "";
+        if (employeeNumber.Length > BusinessConsts.STAFF_JOB_NUMBER_MAX_LENGTH)
         {
+            _logger.LogWarning("Ldap employeeNumber '{employeeNumber}' exceeds JobNumber max length {MaxLength}, ignored.",
+                employeeNumber, BusinessConsts.STAFF_JOB_NUMBER_MAX_LENGTH);
             return "";
         }
+        return employeeNumber;
+    }
 
-        return parts[parts.Length - 1];
+    /// <summary>
+    /// Resolve AD attribute "employeeType" (job level/category) to a Position aggregate,
+    /// matching by name and creating it when missing. Returns null when employeeType is empty.
+    /// </summary>
+    async Task<Guid?> GetPositionIdAsync(LdapUser ldapUser, Dictionary<string, Guid> positionCache)
+    {
+        var employeeType = ldapUser.EmployeeType?.Trim() ?? "";
+        if (employeeType.IsNullOrEmpty())
+        {
+            return null;
+        }
+
+        if (employeeType.Length > BusinessConsts.POSITION_NAME_MAX_LENGTH)
+        {
+            _logger.LogWarning("Ldap employeeType '{employeeType}' exceeds Position.Name max length {MaxLength}, truncated.",
+                employeeType, BusinessConsts.POSITION_NAME_MAX_LENGTH);
+            employeeType = employeeType[..BusinessConsts.POSITION_NAME_MAX_LENGTH];
+        }
+
+        if (positionCache.TryGetValue(employeeType, out var cachedPositionId))
+        {
+            return cachedPositionId;
+        }
+
+        var position = await _authDbContext.Set<Position>().FirstOrDefaultAsync(p => p.Name == employeeType);
+        if (position is null)
+        {
+            try
+            {
+                position = new Position(employeeType);
+                await _authDbContext.Set<Position>().AddAsync(position);
+                await _authDbContext.SaveChangesAsync();
+                _logger.LogInformation("Position '{PositionName}' created from Ldap employeeType.", employeeType);
+            }
+            catch (Exception ex)
+            {
+                //A failed insert would leave the entity tracked and break every following user of this batch,
+                //so detach it and keep the batch going (positionId stays null for this user).
+                _authDbContext.Entry(position).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                _logger.LogError(ex, "Failed to create Position '{PositionName}' from Ldap employeeType, skipped.", employeeType);
+                return null;
+            }
+        }
+
+        positionCache[employeeType] = position.Id;
+        return position.Id;
     }
 
     public async Task<string> UpsertLdapUserAsync(LdapUser ldapUser)
     {
+        var positionCache = new Dictionary<string, Guid>(StringComparer.OrdinalIgnoreCase);
         var ldap = await GetIdentityProviderAsync();
         var user = await _authDbContext.Set<ThirdPartyUser>().Where(tpu => tpu.ThirdPartyIdpId == ldap.Id && tpu.ThridPartyIdentity == ldapUser.ObjectGuid)
             .Include(tpu => tpu.User).ThenInclude(user => user.Staff).Select(tpu => tpu.User).FirstOrDefaultAsync();
@@ -114,10 +200,20 @@ public class LdapDomainService : DomainService
             if (user.Staff != null)
             {
                 user.Staff!.UpdateBasicInfo(ldapUser.Name, ldapUser.DisplayName, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress);
+
+                //JobNumber: AD is the authoritative source — always overwrite.
+                //An empty employeeNumber clears legacy wrong values (e.g. the SID RID previously written).
+                user.Staff!.UpdateJobNumber(GetEmployeeNumber(ldapUser));
+
+                var positionId = await GetPositionIdAsync(ldapUser, positionCache);
+                if (positionId != null)
+                {
+                    user.Staff!.PositionId = positionId;
+                }
             }
             else
             {
-                var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true);
+                var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser), await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, true);
                 user.Bind(staff);
             }
 
@@ -128,7 +224,7 @@ public class LdapDomainService : DomainService
         {
             await _userDomainService.AddAsync(new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
             new ThirdPartyUser(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser)),
-            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true)));
+            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser), await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, true)));
             return ldapUser.SamAccountName;
         }
     }
