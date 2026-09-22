@@ -86,23 +86,23 @@ public class QueryHandler
             return;
         }
 
-        // »ñÈ¡ÓÃ»§Ö±½ÓÓµÓÐµÄ½ÇÉ«ID
+        // èŽ·å–ç”¨æˆ·ç›´æŽ¥æ‹¥æœ‰çš„è§’è‰²ID
         var userRoleIds = user.Roles
             .Where(r => query.RoleIds.Contains(r.RoleId))
             .Select(r => r.RoleId)
             .ToList();
 
-        // ÑéÖ¤¶¯Ì¬½ÇÉ«
+        // éªŒè¯åŠ¨æ€è§’è‰²
         var validateCommand = new ValidateDynamicRoleCommand(query.UserId, query.RoleIds);
         await _eventBus.PublishAsync(validateCommand);
 
-        // »ñÈ¡¶¯Ì¬½ÇÉ«ID
+        // èŽ·å–åŠ¨æ€è§’è‰²ID
         var dynamicRoleIds = validateCommand.Result
             .Where(r => r.IsValid)
             .Select(r => r.RoleId)
             .ToList();
 
-        // ºÏ²¢È¥ÖØºó·µ»Ø
+        // åˆå¹¶åŽ»é‡åŽè¿”å›ž
         query.Result = userRoleIds.Union(dynamicRoleIds).ToList();
     }
 
@@ -865,7 +865,9 @@ public class QueryHandler
             .ThenByDescending(c => c.CreationTime)
             .Select(c => new ClaimValue(c.Name, c.Value)).ToListAsync();
 
-        var user = await _userRepository.FindAsync(u => u.Id == userClaimValuesQuery.UserId);
+        var user = await _userRepository.FindWithIncludAsync(u => u.Id == userClaimValuesQuery.UserId, new List<string> {
+            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}", nameof(User.Staff)
+        });
         if (user != null)
         {
             var compatibleClaims = new List<ClaimValue>();
@@ -881,6 +883,20 @@ public class QueryHandler
             if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.USER_NAME))
             {
                 compatibleClaims.Add(new ClaimValue(IdentityClaimConsts.USER_NAME, user.DisplayName));
+            }
+            // Sync website login token claims (AccountController.Login): all grant types get consistent roles/team/staff claims
+            if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.ROLES))
+            {
+                var roleCodes = user.Roles.Select(ur => ur.Role?.Code ?? "");
+                compatibleClaims.Add(new ClaimValue(IdentityClaimConsts.ROLES, JsonSerializer.Serialize(roleCodes)));
+            }
+            if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.CURRENT_TEAM))
+            {
+                compatibleClaims.Add(new ClaimValue(IdentityClaimConsts.CURRENT_TEAM, (user.Staff?.CurrentTeamId ?? Guid.Empty).ToString()));
+            }
+            if (userClaimValuesQuery.Result.All(c => c.Key != IdentityClaimConsts.STAFF))
+            {
+                compatibleClaims.Add(new ClaimValue(IdentityClaimConsts.STAFF, (user.Staff is { Enabled: true } ? user.Staff.Id : Guid.Empty).ToString()));
             }
             userClaimValuesQuery.Result.InsertRange(0, compatibleClaims);
         }
