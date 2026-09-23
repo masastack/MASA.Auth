@@ -43,6 +43,12 @@ public class OperatorType : Enumeration
 
     public static OperatorType NotContains = new NotContainsOperator();
 
+    public static OperatorType EndsWith = new EndsWithOperator();
+
+    public static OperatorType IsTrue = new IsTrueOperator();
+
+    public static OperatorType IsFalse = new IsFalseOperator();
+
     private OperatorType() : base(0, "") { }
 
     private OperatorType(int id, string name) : base(id, name)
@@ -74,6 +80,9 @@ public class OperatorType : Enumeration
         nameof(NotMatchRegex) => new NotMatchRegexOperator(),
         nameof(Contains) => new ContainsOperator(),
         nameof(NotContains) => new NotContainsOperator(),
+        nameof(EndsWith) => new EndsWithOperator(),
+        nameof(IsTrue) => new IsTrueOperator(),
+        nameof(IsFalse) => new IsFalseOperator(),
         _ => new OperatorType()
     };
 
@@ -254,6 +263,36 @@ public class OperatorType : Enumeration
         public override bool EvaluateCondition(string? data, string value)
         {
             return !(data?.Contains(value, StringComparison.Ordinal) == true);
+        }
+    }
+
+    private class EndsWithOperator : OperatorType
+    {
+        public EndsWithOperator() : base(19, nameof(EndsWith)) { }
+
+        public override bool EvaluateCondition(string? data, string value)
+        {
+            return data?.EndsWith(value, StringComparison.Ordinal) == true;
+        }
+    }
+
+    private class IsTrueOperator : OperatorType
+    {
+        public IsTrueOperator() : base(20, nameof(IsTrue)) { }
+
+        public override bool EvaluateCondition(string? data, string value)
+        {
+            return bool.TryParse(data, out var b) && b;
+        }
+    }
+
+    private class IsFalseOperator : OperatorType
+    {
+        public IsFalseOperator() : base(21, nameof(IsFalse)) { }
+
+        public override bool EvaluateCondition(string? data, string value)
+        {
+            return bool.TryParse(data, out var b) && !b;
         }
     }
 }
