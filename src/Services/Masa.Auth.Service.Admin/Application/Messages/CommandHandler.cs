@@ -86,6 +86,7 @@ public class CommandHandler
                 }
                 break;
             case SendEmailTypes.Verifiy:
+            case SendEmailTypes.Login:
             case SendEmailTypes.UpdateEmail:
             case SendEmailTypes.ForgotPassword:
             case SendEmailTypes.DeleteAccount:

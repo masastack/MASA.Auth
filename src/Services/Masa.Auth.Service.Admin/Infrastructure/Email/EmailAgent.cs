@@ -34,6 +34,10 @@ public class EmailAgent : IScopedDependency
                 sendKey = CacheKey.EmailCodeVerifiySendKey(sendEmailModel.Email);
                 sendValueKey = CacheKey.EmailCodeVerifiyKey(sendEmailModel.Email);
                 break;
+            case SendEmailTypes.Login:
+                sendKey = CacheKey.EmailCodeLoginSendKey(sendEmailModel.Email);
+                sendValueKey = CacheKey.EmailCodeLoginKey(sendEmailModel.Email);
+                break;
             case SendEmailTypes.Register:
                 sendKey = CacheKey.EmailCodeRegisterSendKey(sendEmailModel.Email);
                 sendValueKey = CacheKey.EmailCodeRegisterKey(sendEmailModel.Email);
