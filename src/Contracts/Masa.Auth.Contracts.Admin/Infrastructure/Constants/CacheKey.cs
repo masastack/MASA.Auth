@@ -25,6 +25,8 @@ public static class CacheKey
     const string EMAIL_REGISTER_SEND_PRE = "email_register_send:";
     const string EMAIL_VERIFIY_CODE_PRE = "email_verifiy_code:";
     const string EMAIL_VERIFIY_SEND_PRE = "email_verifiy_send:";
+    const string EMAIL_LOGIN_CODE_PRE = "email_login_code:";
+    const string EMAIL_LOGIN_SEND_PRE = "email_login_send:";
     const string EMAIL_FORGOT_PASSWORD_CODE_PRE = "email_forgot_password_code:";
     const string EMAIL_FORGOT_PASSWORD_SEND_PRE = "email_forgot_password_send:";
     const string MSG_CODE_FORGOT_PASSWORD_CODE_PRE = "msg_forgot_password_code:";
@@ -120,6 +122,16 @@ public static class CacheKey
     public static string EmailCodeVerifiyKey(string email)
     {
         return $"{EMAIL_VERIFIY_CODE_PRE}{email}";
+    }
+
+    public static string EmailCodeLoginSendKey(string email)
+    {
+        return $"{EMAIL_LOGIN_SEND_PRE}{email}";
+    }
+
+    public static string EmailCodeLoginKey(string email)
+    {
+        return $"{EMAIL_LOGIN_CODE_PRE}{email}";
     }
 
     public static string EmailCodeForgotPasswordSendKey(string email)

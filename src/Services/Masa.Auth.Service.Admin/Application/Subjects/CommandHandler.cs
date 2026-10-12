@@ -366,6 +366,39 @@ public class CommandHandler
         command.Result = _userDomainService.UserSplicingData(user);
     }
 
+    [EventHandler(1)]
+    public async Task LoginByEmailAsync(LoginByEmailCommand command)
+    {
+        var model = command.Model;
+        var user = await _userRepository.AsQueryable()
+            .Include(x => x.Roles).ThenInclude(x => x.Role)
+            .Include(x => x.Staff)
+            .FirstOrDefaultAsync(u => u.Email == model.Email);
+        if (user is null)
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
+        }
+
+        var verifiedKey = await VerifyEmailCodeAsync(model.Email, model.Code);
+        await _distributedCacheClient.RemoveAsync(verifiedKey);
+        command.Result = _userDomainService.UserSplicingData(user);
+    }
+
+    /// <summary>
+    /// Verify email login verification code (sent via SendEmailTypes.Login).
+    /// Returns the cache key that matched.
+    /// </summary>
+    private async Task<string> VerifyEmailCodeAsync(string email, string code)
+    {
+        var key = CacheKey.EmailCodeLoginKey(email);
+        var cachedCode = await _distributedCacheClient.GetAsync<string>(key);
+        if (string.IsNullOrEmpty(cachedCode) || !string.Equals(code, cachedCode))
+        {
+            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.INVALID_EMAIL_CAPTCHA);
+        }
+        return key;
+    }
+
     [EventHandler]
     public async Task RemoveUserRolesAsync(RemoveUserRolesCommand command)
     {

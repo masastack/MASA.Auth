@@ -253,6 +253,16 @@ public class UserService : ServiceBase
         return ConvertToModel(command.Result); ;
     }
 
+    [AllowAnonymous]
+    public async Task<UserModel?> PostLoginByEmailAsync(
+        IEventBus eventBus,
+        [FromBody] LoginByEmailModel model)
+    {
+        var command = new LoginByEmailCommand(model);
+        await eventBus.PublishAsync(command);
+        return ConvertToModel(command.Result);
+    }
+
     public async Task RemoveUserRolesAsync(
         IEventBus eventBus,
         [FromBody] RemoveUserRolesModel model)
