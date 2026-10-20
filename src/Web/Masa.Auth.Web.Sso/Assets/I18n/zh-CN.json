@@ -1,0 +1,18 @@
+{
+  "MustProviderEmailAndCode": "必须提供邮箱和邮箱验证码",
+  "MustProviderPhoneNumberAndCode": "必须提供手机号和短信验证码",
+  "InvalidCustomCredential": "自定义凭证无效",
+  "MustProviderUserName": "必须提供用户名",
+  "NoLdapConfig": "未找到LDAP配置",
+  "LdapConnectError": "LDAP连接错误",
+  "LdapUserValidateFailed": "LDAP账号{0}验证失败",
+  "LdapUserNotExist": "LDAP中不存在该用户",
+  "MustProviderScheme": "必须提供scheme",
+  "NoIdpConfigFound": "未找到{0}的配置信息",
+  "MustProviderCode": "必须提供code",
+  "MustProviderCodeOrIdToken": "必须提供code或idToken",
+  "MustProviderPhoneNumberAndSpToken": "必须提供手机号和SpToken",
+  "PhoneNumberUserNotExist": "用户{0}不存在",
+  "MustProviderImpersonationToken": "必须提供impersonationToken",
+  "ImpersonatedUserNotExist": "被模拟登录的用户不存在"
+}

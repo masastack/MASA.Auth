@@ -19,7 +19,7 @@ public class PhoneCodeGrantValidator : BaseGrantValidator, IExtensionGrantValida
             var phoneNumber = context.Request.Raw["PhoneNumber"];
             var code = context.Request.Raw["Code"];
             if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(code))
-                throw new UserFriendlyException("must provider phone number and msg code");
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.MUST_PROVIDER_PHONE_NUMBER_AND_CODE);
 
             var user = await _authClient.UserService.LoginByPhoneNumberAsync(new LoginByPhoneNumberModel
             {
@@ -35,9 +35,7 @@ public class PhoneCodeGrantValidator : BaseGrantValidator, IExtensionGrantValida
             }
             else
             {
-                context.Result = new GrantValidationResult(
-                    TokenRequestErrors.InvalidGrant,
-                    "invalid custom credential");
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.INVALID_CUSTOM_CREDENTIAL);
             }
         }
         catch (Exception ex)

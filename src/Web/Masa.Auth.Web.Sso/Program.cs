@@ -2,6 +2,8 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Masa.BuildingBlocks.Globalization.I18n;
+using Microsoft.Extensions.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,9 @@ builder.Services.AddMasaBlazor(builder =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
+
+// i18n：用于 connect/token 等非 Blazor 管线的多语言报错（资源仅覆盖登录端点 validator 的硬编码消息）
+builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
 
 #if DEBUG
 builder.Services.AddCors(options =>
@@ -81,6 +86,14 @@ var redisOption = new RedisConfigurationOptions
 };
 
 builder.Services.AddAuthClient(authDomain, redisOption, connectConfig: connect => redisInstrumentation.AddConnection(connect));
+// 将入站请求的语言信息（Accept-Language / ?culture= / 语言 Cookie）透传给 Auth 服务，
+// 使 connect/token 流程中 Auth 返回的 UserFriendlyException 报错文案按请求语言本地化
+builder.Services.Configure<HttpClientFactoryOptions>(Masa.Contrib.StackSdks.Auth.Constants.DEFAULT_CLIENT_NAME, options =>
+{
+    options.HttpMessageHandlerBuilderActions.Add(hb =>
+        hb.AdditionalHandlers.Add(new CultureForwardingHandler(
+            hb.Services.GetRequiredService<IHttpContextAccessor>())));
+});
 builder.Services.AddMcClient(masaStackConfig.GetMcServiceDomain());
 builder.Services.AddPmClient(masaStackConfig.GetPmServiceDomain());
 builder.Services.AddTransient<IConsentMessageStore, ConsentResponseStore>();
@@ -245,6 +258,7 @@ app.Use(async (context, next) =>
 });
 
 app.UseStaticFiles();
+app.UseI18n();
 app.UseRouting();
 
 #if DEBUG

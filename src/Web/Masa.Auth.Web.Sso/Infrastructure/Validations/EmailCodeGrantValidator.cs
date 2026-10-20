@@ -19,7 +19,7 @@ public class EmailCodeGrantValidator : BaseGrantValidator, IExtensionGrantValida
             var email = context.Request.Raw["Email"];
             var code = context.Request.Raw["Code"];
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(code))
-                throw new UserFriendlyException("must provider email and email code");
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.MUST_PROVIDER_EMAIL_AND_CODE);
 
             var user = await _authClient.UserService.LoginByEmailAsync(new LoginByEmailModel
             {
@@ -35,9 +35,7 @@ public class EmailCodeGrantValidator : BaseGrantValidator, IExtensionGrantValida
             }
             else
             {
-                context.Result = new GrantValidationResult(
-                    TokenRequestErrors.InvalidGrant,
-                    "invalid custom credential");
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.INVALID_CUSTOM_CREDENTIAL);
             }
         }
         catch (Exception ex)

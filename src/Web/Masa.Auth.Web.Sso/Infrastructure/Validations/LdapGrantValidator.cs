@@ -24,7 +24,7 @@ public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
             var userName = context.Request.Raw["userName"];
             if (string.IsNullOrEmpty(userName))
             {
-                throw new UserFriendlyException("must provider userName");
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.MUST_PROVIDER_USER_NAME);
             }
 
             var password = context.Request.Raw["password"] ?? string.Empty;
@@ -32,13 +32,13 @@ public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
             var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(LdapConsts.LDAP_NAME);
             if (ldapOption is null)
             {
-                throw new UserFriendlyException($"Not find ldap");
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.NO_LDAP_CONFIG);
             }
             var ldapOptions = ldapOption.Adapt<LdapOptions>();
             var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
             if (await ldapProvider.AuthenticateAsync(ldapOption.RootUserDn, ldapOption.RootUserPassword) is false)
             {
-                throw new UserFriendlyException($"Ldap connect error");
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_CONNECT_ERROR);
             }
 
             if (!string.IsNullOrEmpty(password))
@@ -46,14 +46,14 @@ public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
                 var dc = new Regex("(?<=DC=).+(?=,)").Match(ldapOptions.BaseDn).Value;
                 if (!await ldapProvider.AuthenticateAsync($"{dc}\\{userName}", password))
                 {
-                    throw new UserFriendlyException($"LDAP account {userName} validation failed");
+                    throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_VALIDATE_FAILED, userName);
                 }
             }
 
             var ldapUser = await ldapProvider.GetUserByUserNameAsync(userName);
             if (ldapUser is null)
             {
-                throw new UserFriendlyException($"Ldap does not exist this user");
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_NOT_EXIST);
             }
             var authUser = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
             {

@@ -24,8 +24,8 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
                 context.Result = new GrantValidationResult
                 {
                     IsError = true,
-                    Error = "Must provide impersonationToken",
-                    ErrorDescription = "Must provide impersonationToken"
+                    Error = SsoErrorCodes.MUST_PROVIDER_IMPERSONATION_TOKEN,
+                    ErrorDescription = Masa.BuildingBlocks.Globalization.I18n.I18n.T(SsoErrorCodes.MUST_PROVIDER_IMPERSONATION_TOKEN)
                 };
                 return;
             }
@@ -42,8 +42,8 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
                 context.Result = new GrantValidationResult
                 {
                     IsError = true,
-                    Error = "Impersonated user does not exist",
-                    ErrorDescription = "Impersonated user does not exist",
+                    Error = SsoErrorCodes.IMPERSONATED_USER_NOT_EXIST,
+                    ErrorDescription = Masa.BuildingBlocks.Globalization.I18n.I18n.T(SsoErrorCodes.IMPERSONATED_USER_NOT_EXIST)
                 };
                 return;
             }
