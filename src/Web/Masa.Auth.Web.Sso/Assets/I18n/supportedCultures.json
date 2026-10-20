@@ -1,0 +1,18 @@
+[
+  {
+    "Culture": "zh-CN",
+    "DisplayName": "中文简体"
+  },
+  {
+    "Culture": "en-US",
+    "DisplayName": "English (United States)"
+  },
+  {
+    "Culture": "ru-RU",
+    "DisplayName": "Русский (Россия)"
+  },
+  {
+    "Culture": "ja-JP",
+    "DisplayName": "Japanese (Japan)"
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "MustProviderEmailAndCode": "メールアドレスとメール認証コードを入力してください",
+  "MustProviderPhoneNumberAndCode": "電話番号とSMS認証コードを入力してください",
+  "InvalidCustomCredential": "カスタム資格情報が無効です",
+  "MustProviderUserName": "ユーザー名を入力してください",
+  "NoLdapConfig": "LDAP構成が見つかりません",
+  "LdapConnectError": "LDAP接続エラー",
+  "LdapUserValidateFailed": "LDAPアカウント {0} の検証に失敗しました",
+  "LdapUserNotExist": "LDAPに該当ユーザーが存在しません",
+  "MustProviderScheme": "schemeを入力してください",
+  "NoIdpConfigFound": "{0}の構成情報が見つかりません",
+  "MustProviderCode": "codeを入力してください",
+  "MustProviderCodeOrIdToken": "codeまたはidTokenを入力してください",
+  "MustProviderPhoneNumberAndSpToken": "電話番号とSpTokenを入力してください",
+  "PhoneNumberUserNotExist": "ユーザー {0} は存在しません",
+  "MustProviderImpersonationToken": "impersonationTokenを入力してください",
+  "ImpersonatedUserNotExist": "なりすまし対象ユーザーが存在しません"
+}

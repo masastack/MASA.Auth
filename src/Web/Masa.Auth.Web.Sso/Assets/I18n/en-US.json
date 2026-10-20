@@ -1,0 +1,18 @@
+{
+  "MustProviderEmailAndCode": "must provider email and email code",
+  "MustProviderPhoneNumberAndCode": "must provider phone number and msg code",
+  "InvalidCustomCredential": "invalid custom credential",
+  "MustProviderUserName": "must provider userName",
+  "NoLdapConfig": "Not find ldap",
+  "LdapConnectError": "Ldap connect error",
+  "LdapUserValidateFailed": "LDAP account {0} validation failed",
+  "LdapUserNotExist": "Ldap does not exist this user",
+  "MustProviderScheme": "must provider scheme",
+  "NoIdpConfigFound": "No {0} configuration information found",
+  "MustProviderCode": "must provider code",
+  "MustProviderCodeOrIdToken": "must provider code or idToken",
+  "MustProviderPhoneNumberAndSpToken": "Must provide phone number and spToken",
+  "PhoneNumberUserNotExist": "User {0} does not exist",
+  "MustProviderImpersonationToken": "Must provide impersonationToken",
+  "ImpersonatedUserNotExist": "Impersonated user does not exist"
+}

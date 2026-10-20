@@ -35,9 +35,9 @@ public class ThirdPartyIdpGrantValidator : BaseGrantValidator, IExtensionGrantVa
 
             if (string.IsNullOrEmpty(scheme))
             {
-                throw new UserFriendlyException("must provider scheme");
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.MUST_PROVIDER_SCHEME);
             }
-            var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(scheme) ?? throw new UserFriendlyException($"No {scheme} configuration information found");
+            var authenticationDefaults = await _remoteAuthenticationDefaultsProvider.GetAsync(scheme) ?? throw new UserFriendlyException(errorCode: SsoErrorCodes.NO_IDP_CONFIG_FOUND, scheme);
             Security.OAuth.Providers.Identity? identity = null;
 
             string? thridPartyIdentity;
@@ -45,7 +45,7 @@ public class ThirdPartyIdpGrantValidator : BaseGrantValidator, IExtensionGrantVa
             {
                 if (string.IsNullOrEmpty(code))
                 {
-                    throw new UserFriendlyException("must provider code");
+                    throw new UserFriendlyException(errorCode: SsoErrorCodes.MUST_PROVIDER_CODE);
                 }
                 var options = new OAuthOptions();
                 authenticationDefaults.BindOAuthOptions(options);
@@ -69,7 +69,7 @@ public class ThirdPartyIdpGrantValidator : BaseGrantValidator, IExtensionGrantVa
                 {
                     if (string.IsNullOrEmpty(idToken))
                     {
-                        throw new UserFriendlyException("must provider code or idToken");
+                        throw new UserFriendlyException(errorCode: SsoErrorCodes.MUST_PROVIDER_CODE_OR_ID_TOKEN);
                     }
                     identity = await _thirdPartyIdpCallerProvider.GetIdentityByIdToken(authenticationDefaults, idToken);
                 }

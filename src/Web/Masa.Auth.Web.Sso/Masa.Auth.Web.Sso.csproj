@@ -27,6 +27,7 @@
 		<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" Version="$(MasaStackSdksPackageVersion)" />
 		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.Contrib.Globalization.I18n.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.9" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(MicrosoftPackageVersion)" />
 		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="$(MasaFrameworkPackageVersion)" />
@@ -44,6 +45,12 @@
 		</Content>
 		<Content Update="wwwroot\i18n\zh-CN.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Update="Assets\I18n\*.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 

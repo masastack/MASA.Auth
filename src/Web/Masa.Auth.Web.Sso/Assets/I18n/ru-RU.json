@@ -1,0 +1,18 @@
+{
+  "MustProviderEmailAndCode": "Необходимо указать адрес электронной почты и код подтверждения",
+  "MustProviderPhoneNumberAndCode": "Необходимо указать номер телефона и SMS-код",
+  "InvalidCustomCredential": "Недействительные пользовательские учетные данные",
+  "MustProviderUserName": "Необходимо указать имя пользователя",
+  "NoLdapConfig": "Конфигурация LDAP не найдена",
+  "LdapConnectError": "Ошибка подключения к LDAP",
+  "LdapUserValidateFailed": "Не удалось проверить учетную запись LDAP {0}",
+  "LdapUserNotExist": "Пользователь не существует в LDAP",
+  "MustProviderScheme": "Необходимо указать scheme",
+  "NoIdpConfigFound": "Конфигурация для {0} не найдена",
+  "MustProviderCode": "Необходимо указать code",
+  "MustProviderCodeOrIdToken": "Необходимо указать code или idToken",
+  "MustProviderPhoneNumberAndSpToken": "Необходимо указать номер телефона и SpToken",
+  "PhoneNumberUserNotExist": "Пользователь {0} не существует",
+  "MustProviderImpersonationToken": "Необходимо указать impersonationToken",
+  "ImpersonatedUserNotExist": "Имитируемый пользователь не существует"
+}

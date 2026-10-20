@@ -26,8 +26,8 @@ public class LocalPhoneNumberGrantValidator : BaseGrantValidator, IExtensionGran
                 context.Result = new GrantValidationResult
                 {
                     IsError = true,
-                    Error = "Must provide phone number and spToken",
-                    ErrorDescription = "Must provide phone number and spToken"
+                    Error = SsoErrorCodes.MUST_PROVIDER_PHONE_NUMBER_AND_SP_TOKEN,
+                    ErrorDescription = Masa.BuildingBlocks.Globalization.I18n.I18n.T(SsoErrorCodes.MUST_PROVIDER_PHONE_NUMBER_AND_SP_TOKEN)
                 };
                 return;
             }
@@ -41,8 +41,8 @@ public class LocalPhoneNumberGrantValidator : BaseGrantValidator, IExtensionGran
                     context.Result = new GrantValidationResult
                     {
                         IsError = true,
-                        Error = $"User {phoneNumber} does not exist",
-                        ErrorDescription = errorMsg
+                        Error = SsoErrorCodes.PHONE_NUMBER_USER_NOT_EXIST,
+                        ErrorDescription = Masa.BuildingBlocks.Globalization.I18n.I18n.T(SsoErrorCodes.PHONE_NUMBER_USER_NOT_EXIST, phoneNumber)
                     };
                 }
                 else
