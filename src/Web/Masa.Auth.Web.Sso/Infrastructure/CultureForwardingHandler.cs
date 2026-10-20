@@ -11,12 +11,11 @@ namespace Masa.Auth.Web.Sso.Infrastructure;
 /// 将入站请求的语言信息透传给下游服务（当前为 Auth 服务），
 /// 使下游返回的 UserFriendlyException 报错文案按请求语言本地化。
 /// 语言来源与 <see cref="RequestLocalizationMiddleware"/> 一致，优先级：
-/// URL ?culture= > 语言 Cookie > Accept-Language > 默认语言。
+/// URL ?culture= > Accept-Language > 默认语言。
 /// </summary>
 public class CultureForwardingHandler : DelegatingHandler
 {
     private const string CultureQueryKey = "culture";
-    private const string CultureCookieName = "ASPNETCORE_CULTURE";
     private const string AcceptLanguageHeaderName = "Accept-Language";
 
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -57,11 +56,6 @@ public class CultureForwardingHandler : DelegatingHandler
         if (httpContext.Request.Query.TryGetValue(CultureQueryKey, out var cultureQuery) && !string.IsNullOrEmpty(cultureQuery))
         {
             request.RequestUri = AppendCultureQuery(request.RequestUri, cultureQuery.ToString());
-        }
-
-        if (httpContext.Request.Cookies.TryGetValue(CultureCookieName, out var cultureCookie) && !string.IsNullOrEmpty(cultureCookie))
-        {
-            request.Headers.TryAddWithoutValidation("Cookie", $"{CultureCookieName}={Uri.EscapeDataString(cultureCookie)}");
         }
 
         if (request.Headers.AcceptLanguage.Count == 0
