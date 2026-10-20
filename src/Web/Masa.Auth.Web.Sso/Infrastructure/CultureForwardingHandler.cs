@@ -1,17 +1,15 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-using System.Globalization;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace Masa.Auth.Web.Sso.Infrastructure;
 
 /// <summary>
-/// 将入站请求的语言信息透传给下游服务（当前为 Auth 服务），
+/// 将入站请求中显式携带的语言信息透传给下游服务（当前为 Auth 服务），
 /// 使下游返回的 UserFriendlyException 报错文案按请求语言本地化。
-/// 语言来源与 <see cref="RequestLocalizationMiddleware"/> 一致，优先级：
-/// URL ?culture= > Accept-Language > 默认语言。
+/// 仅支持客户端通过 HTTP 显式指定的语言：URL ?culture= 与 Accept-Language 请求头；
+/// 请求未携带语言信息时不做处理，由下游服务使用自身默认语言。
 /// </summary>
 public class CultureForwardingHandler : DelegatingHandler
 {
@@ -42,22 +40,13 @@ public class CultureForwardingHandler : DelegatingHandler
             return;
         }
 
-        // 1) 优先使用 RequestLocalization（UseI18n 中间件）解析出的请求文化，
-        //    此时无需关心语言来自 query、Cookie 还是 Accept-Language
-        var resolvedCulture = httpContext.Features.Get<IRequestCultureFeature>()?.RequestCulture.Culture;
-        if (resolvedCulture is not null && !string.IsNullOrEmpty(resolvedCulture.Name))
-        {
-            request.RequestUri = AppendCultureQuery(request.RequestUri, resolvedCulture.Name);
-            return;
-        }
-
-        // 2) 兜底：UseI18n 未生效时（如后台线程调用），原样转发语言信息，
-        //    由下游服务端按相同优先级自行解析
+        // URL ?culture=
         if (httpContext.Request.Query.TryGetValue(CultureQueryKey, out var cultureQuery) && !string.IsNullOrEmpty(cultureQuery))
         {
             request.RequestUri = AppendCultureQuery(request.RequestUri, cultureQuery.ToString());
         }
 
+        // Accept-Language 请求头
         if (request.Headers.AcceptLanguage.Count == 0
             && httpContext.Request.Headers.TryGetValue(AcceptLanguageHeaderName, out var acceptLanguages)
             && acceptLanguages.Count > 0)
