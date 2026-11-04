@@ -184,6 +184,24 @@ public class StaffCommandHandler
             }
             catch (Exception ex)
             {
+                //唯一索引恢复后，VerifyRepeat 的预检查存在竞态窗口，漏掉的冲突会在这里以
+                //DbUpdateException 浮出。失败的条目仍以 Added/Modified 留在 ChangeTracker 里，
+                //会把同一 scope 的后续行一起拖死，先 detach（新增路径的图已在
+                //UserDomainService.AddAsync 内 detach 并重抛，这里兜住更新路径与漏网的条目）。
+                if (ex is DbUpdateException dbUpdateException)
+                {
+                    foreach (var entry in dbUpdateException.Entries)
+                    {
+                        entry.State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                    }
+                    _logger.LogError(dbUpdateException,
+                        "Sync staff {JobNumber} failed by database conflict, skipped.", syncStaff.JobNumber);
+                }
+                else
+                {
+                    _logger.LogError(ex, "Sync staff {JobNumber} failed.", syncStaff.JobNumber);
+                }
+
                 var errorMsg = ex is UserFriendlyException ? ex.Message : "Unknown exception, please contact the administrator";
                 syncResults[i] = new()
                 {

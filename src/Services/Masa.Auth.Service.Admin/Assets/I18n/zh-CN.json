@@ -71,8 +71,6 @@
   "PasswordFailed": "密码验证失败",
   "PhoneNumberAndEmailEmptyError": "电话号码和邮件其中一个必须有值",
   "EmailSended": "邮件已发送，请稍后重试",
-  "GuestAccountOperate": "演示账号禁止操作",
-  "DemoEnvironmentForbidden": "演示环境禁止该动作",
   "FileReadFailed": "文件读取失败",
   "ThirdPartyIdpNotFound": "ThirdPartyIdp该数据不存在",
   "ThirdPartyUserNotFound": "ThirdPartyUser该数据不存在",

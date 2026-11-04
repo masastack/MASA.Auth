@@ -194,16 +194,16 @@ public class AccountController : Controller
         return Redirect(redirectUrl);
     }
 
-    [HttpGet]
+    //强制下线仅供管理端内部调用:POST + 内网来源双重限制,防止外网任意吊销会话
+    [HttpPost]
     public async Task<IActionResult> LogoutUserAsync(string subjectId)
     {
-        // TODO: 上线前恢复内网 IP 检查
-        // var remoteIp = HttpContext.Connection.RemoteIpAddress;
-        // if (remoteIp != null && !IsInternalNetwork(remoteIp))
-        // {
-        //     _logger.LogWarning("LogoutUserAsync rejected from external IP {RemoteIp}", remoteIp);
-        //     return NotFound();
-        // }
+        var remoteIp = HttpContext.Connection.RemoteIpAddress;
+        if (remoteIp != null && !IsInternalNetwork(remoteIp))
+        {
+            _logger.LogWarning("LogoutUserAsync rejected from external IP {RemoteIp}", remoteIp);
+            return NotFound();
+        }
 
         _logger.LogInformation("Kicking user {SubjectId}", subjectId);
 

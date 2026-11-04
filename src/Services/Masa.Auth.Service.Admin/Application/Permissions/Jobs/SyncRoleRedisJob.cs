@@ -19,9 +19,10 @@ public class SyncRoleRedisJob : BackgroundJobBase<SyncRoleRedisArgs>
 
         var roles = await roleRepository.GetListWithPermissionsAsync();
 
-        foreach (var role in roles)
-        {
-            var cacheRole = new CacheRole
+        //批量写入：单条 SetAsync = SET+PUB 两次串行往返；SetListAsync 一次脚本完成
+        var keyValues = roles.ToDictionary(
+            role => CacheKey.RoleKey(role.Id),
+            role => (CacheRole?)new CacheRole
             {
                 Name = role.Name,
                 Description = role.Description,
@@ -29,9 +30,8 @@ public class SyncRoleRedisJob : BackgroundJobBase<SyncRoleRedisArgs>
                 Limit = role.Limit,
                 Permissions = role.Permissions.Select(x => new SubjectPermissionRelationDto(x.PermissionId, x.Effect)).ToList(),
                 ChildrenRoles = role.ChildrenRoles.Select(x => x.RoleId).ToList()
-            };
-            await cacheClient.SetAsync(CacheKey.RoleKey(role.Id), cacheRole);
-        }
+            });
+        await cacheClient.SetListAsync(keyValues);
     }
 
     private async Task<(IDistributedCacheClient, IRoleRepository)> GetRequiredServiceAsync(IServiceProvider serviceProvider, string environment)

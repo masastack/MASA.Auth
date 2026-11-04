@@ -8,7 +8,7 @@ public class PositionEntityTypeConfiguration : IEntityTypeConfiguration<Position
     public void Configure(EntityTypeBuilder<Position> builder)
     {
         builder.HasKey(p => p.Id);
-        builder.HasIndex(p => p.Name);
+        builder.HasIndex(p => p.Name).IsUnique().HasFilter("NOT \"IsDeleted\"");
         builder.Property(d => d.Name).HasMaxLength(BusinessConsts.POSITION_NAME_MAX_LENGTH);
     }
 }

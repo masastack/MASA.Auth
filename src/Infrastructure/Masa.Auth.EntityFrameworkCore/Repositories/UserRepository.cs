@@ -15,6 +15,16 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
         return Context.Set<User>().Where(d => !d.IsDeleted).Any(predicate);
     }
 
+    public Task<bool> AnyAccountEqualsAsync(string? account, CancellationToken cancellationToken = default)
+        => Context.Set<User>()
+            .Where(u => !u.IsDeleted)
+            .AnyAsync(UserUniqueKeyQueries.AccountEquals(Context, account), cancellationToken);
+
+    public Task<bool> AnyEmailEqualsAsync(string? email, CancellationToken cancellationToken = default)
+        => Context.Set<User>()
+            .Where(u => !u.IsDeleted)
+            .AnyAsync(UserUniqueKeyQueries.EmailEquals(Context, email), cancellationToken);
+
     public IQueryable<User> AsQueryable()
     {
         return Context.Set<User>().AsQueryable();
@@ -59,8 +69,11 @@ public class UserRepository : Repository<AuthDbContext, User>, IUserRepository
 
     public async Task<User> GetByVoucherAsync(string voucher)
     {
-        return await Context.Set<User>().FirstOrDefaultAsync(u => u.Account == voucher
-            || u.PhoneNumber == voucher || u.Email == voucher) ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
+        return await Context.Set<User>()
+            .Where(UserUniqueKeyQueries.AccountEquals(Context, voucher)
+                .Or(user => user.PhoneNumber == voucher)
+                .Or(UserUniqueKeyQueries.EmailEquals(Context, voucher)))
+            .FirstOrDefaultAsync() ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_FOUND);
     }
 
     public async Task<User> GetDetailAsync(Guid id)

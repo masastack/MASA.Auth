@@ -71,8 +71,6 @@
   "PasswordFailed": "Password verification failed",
   "PhoneNumberAndEmailEmptyError": "One of phone number and email must have a value",
   "EmailSended": "Email has been sent, please try again later",
-  "GuestAccountOperate": "Guest account is forbidden to operate",
-  "DemoEnvironmentForbidden": "This action is forbidden in the demo environment",
   "FileReadFailed": "File read failed",
   "ThirdPartyIdpNotFound": "This thirdPartyIdp data does not exist",
   "ThirdPartyUserNotFound": "This thirdPartyUser data does not exist",

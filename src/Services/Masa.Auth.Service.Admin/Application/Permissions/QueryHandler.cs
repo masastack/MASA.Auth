@@ -15,6 +15,12 @@ public class QueryHandler
     private readonly OperaterProvider _operaterProvider;
     private readonly IConfigurationApi _configurationApi;
 
+    //角色子树权限集的请求级记忆化（handler 为 scoped，同一请求内多次权限查询复用，如多团队逐个发布权限查询）。
+    //递归前先播种空结果再计算，顺带防住角色关系成环导致的无限递归（现状无 visited 集，成环会栈溢出）。
+    //缓存/DB 两条走法各用一份：缓存整体落空回源 DB 时，DB 兜底必须重新查库，不能吃到缓存路径的记忆化结果。
+    readonly Dictionary<Guid, List<Guid>> _dbRolePermissionMemo = new();
+    readonly Dictionary<Guid, List<Guid>> _cacheRolePermissionMemo = new();
+
     public QueryHandler(
         IRoleRepository roleRepository,
         IPermissionRepository permissionRepository,
@@ -59,7 +65,8 @@ public class QueryHandler
 
         roleQuery = roleQuery.Where(condition);
         var total = await roleQuery.LongCountAsync();
-        var roles = await roleQuery.OrderByDescending(s => s.ModificationTime)
+        var roles = await roleQuery.AsNoTracking()
+                                   .OrderByDescending(s => s.ModificationTime)
                                    .ThenByDescending(s => s.CreationTime)
                                    .Skip((query.Page - 1) * query.PageSize)
                                    .Take(query.PageSize)
@@ -414,66 +421,99 @@ public class QueryHandler
             return;
         }
 
-        var cacheRolePermissions = await GetPermissionsByCacheAsync(query.Roles);
+        var cacheRolePermissions = await GetPermissionsByCacheAsync(_cacheRolePermissionMemo, query.Roles);
         if (cacheRolePermissions == null || cacheRolePermissions.Count < 1)
         {
-            cacheRolePermissions = await GetPermissionsAsync(query.Roles);
+            cacheRolePermissions = await GetPermissionsAsync(_dbRolePermissionMemo, query.Roles);
         }
         query.Result = cacheRolePermissions;
 
-        async Task<List<Guid>> GetPermissionsAsync(IEnumerable<Guid> roleIds)
+        async Task<List<Guid>> GetPermissionsAsync(Dictionary<Guid, List<Guid>> memo, IEnumerable<Guid> roleIds)
         {
             roleIds = roleIds.Distinct().ToList();
-            var permissions = new List<Guid>();
-            var rolePermissions = await _authDbContext.Set<Role>()
-                                          .Where(r => r.Enabled == true && roleIds.Contains(r.Id))
-                                          .Include(r => r.ChildrenRoles)
-                                          .Include(r => r.Permissions)
-                                          .Select(r => new { r.Permissions, r.ChildrenRoles })
-                                          .ToListAsync();
-            foreach (var rolePermission in rolePermissions)
+            //已记忆化的角色直接复用（同一请求内多团队/多层重复出现的角色不再回源）
+            var missing = roleIds.Where(id => !memo.ContainsKey(id)).ToList();
+            if (missing.Count > 0)
             {
-                var childPermissions = new List<Guid>();
-                if (rolePermission.ChildrenRoles.Any())
+                var rolePermissions = await _authDbContext.Set<Role>()
+                                              .Where(r => r.Enabled == true && missing.Contains(r.Id))
+                                              .Include(r => r.ChildrenRoles)
+                                              .Include(r => r.Permissions)
+                                              .Select(r => new { r.Id, r.Permissions, r.ChildrenRoles })
+                                              .ToListAsync();
+                var queriedIds = rolePermissions.Select(r => r.Id).ToHashSet();
+                //DB 路径的子角色继续走 DB（同一份 memo）
+                Func<IEnumerable<Guid>, Task<List<Guid>>> resolveChildren = childRoleIds => GetPermissionsAsync(memo, childRoleIds);
+                foreach (var rolePermission in rolePermissions)
                 {
-                    childPermissions = await GetPermissionsAsync(rolePermission.ChildrenRoles.Select(cr => cr.RoleId));
-                    var rejectPermissions = rolePermission.Permissions.Where(p => p.Effect is false).ToList();
-                    childPermissions = childPermissions.Where(p => rejectPermissions.All(rp => rp.PermissionId != p)).ToList();
-                    childPermissions.AddRange(rolePermission.Permissions.Where(p => p.Effect).Select(p => p.PermissionId));
-                    permissions.AddRange(childPermissions);
+                    //先播种空结果再递归：子角色回指当前角色（关系成环）时命中空 memo 短路，避免无限递归
+                    memo[rolePermission.Id] = new List<Guid>();
+                    memo[rolePermission.Id] = await ResolveRolePermissionsAsync(
+                        resolveChildren,
+                        rolePermission.ChildrenRoles.Select(cr => cr.RoleId),
+                        rolePermission.Permissions.Select(p => (p.PermissionId, p.Effect)));
                 }
-                childPermissions.AddRange(rolePermission.Permissions.Where(p => p.Effect).Select(p => p.PermissionId));
-                permissions.AddRange(childPermissions);
+                //查询未命中（角色不存在或被禁用）的 id 也播种空结果：同一请求内不再重复回源
+                foreach (var id in missing)
+                {
+                    if (!queriedIds.Contains(id))
+                        memo[id] = new List<Guid>();
+                }
             }
-
-            return permissions.Distinct().ToList();
+            return roleIds.SelectMany(id => memo[id]).Distinct().ToList();
         }
 
-        async Task<List<Guid>> GetPermissionsByCacheAsync(IEnumerable<Guid> roleIds)
+        //汇总单个角色的子树权限集：子树结果先按本角色的 reject(Effect=false) 过滤，再并入自身生效权限。
+        //子角色由调用方传入的 resolveChildren 解析：DB 路径回 DB、缓存路径回缓存（缓存命中的父角色不能再为子角色查库）。
+        //调用方负责先把 memo[roleId] 播种为空（环保护），计算完成后覆盖写回。
+        async Task<List<Guid>> ResolveRolePermissionsAsync(
+            Func<IEnumerable<Guid>, Task<List<Guid>>> resolveChildren,
+            IEnumerable<Guid> childrenRoleIds,
+            IEnumerable<(Guid PermissionId, bool Effect)> permissions)
+        {
+            var result = new List<Guid>();
+            var childIds = childrenRoleIds.Distinct().ToList();
+            if (childIds.Count > 0)
+            {
+                var children = await resolveChildren(childIds);
+                var rejectPermissionIds = permissions.Where(p => !p.Effect).Select(p => p.PermissionId).ToHashSet();
+                result.AddRange(children.Where(p => !rejectPermissionIds.Contains(p)));
+            }
+            result.AddRange(permissions.Where(p => p.Effect).Select(p => p.PermissionId));
+            return result.Distinct().ToList();
+        }
+
+        async Task<List<Guid>> GetPermissionsByCacheAsync(Dictionary<Guid, List<Guid>> memo, IEnumerable<Guid> roleIds)
         {
             roleIds = roleIds.Distinct().ToList();
-            var permissions = new List<Guid>();
-            var roleCacheKeys = roleIds.Select(e => CacheKey.RoleKey(e));
-            var rolePermissions = await _cacheClient.GetListAsync<CacheRole>(roleCacheKeys);
-            foreach (var rolePermission in rolePermissions)
+            var missing = roleIds.Where(id => !memo.ContainsKey(id)).ToList();
+            if (missing.Count > 0)
             {
-                if (rolePermission == null)
+                //GetListAsync 返回值与传入 key 按下标一一对应（未命中为 null），据此回填 roleId
+                var missingIds = missing.ToArray();
+                //缓存路径的子角色继续走缓存（同一份 memo）；子角色缓存未命中时按原有语义视为无权限，不回源 DB
+                Func<IEnumerable<Guid>, Task<List<Guid>>> resolveChildren = childRoleIds => GetPermissionsByCacheAsync(memo, childRoleIds);
+                var roleCacheKeys = missingIds.Select(e => CacheKey.RoleKey(e)).ToList();
+                var rolePermissions = (await _cacheClient.GetListAsync<CacheRole>(roleCacheKeys)).ToArray();
+                for (var i = 0; i < missingIds.Length; i++)
                 {
-                    continue;
+                    var rolePermission = i < rolePermissions.Length ? rolePermissions[i] : null;
+                    if (rolePermission == null)
+                    {
+                        //缓存未命中不播种 memo：保持"缓存整体落空回源 DB"的原有语义
+                        continue;
+                    }
+                    //先播种空结果再递归：环保护同 DB 路径
+                    memo[missingIds[i]] = new List<Guid>();
+                    memo[missingIds[i]] = await ResolveRolePermissionsAsync(
+                        resolveChildren,
+                        rolePermission.ChildrenRoles ?? Enumerable.Empty<Guid>(),
+                        rolePermission.Permissions.Select(p => (p.PermissionId, p.Effect)));
                 }
-                var childPermissions = new List<Guid>();
-                if (rolePermission.ChildrenRoles != null && rolePermission.ChildrenRoles.Any())
-                {
-                    childPermissions = await GetPermissionsByCacheAsync(rolePermission.ChildrenRoles);
-                    var rejectPermissions = rolePermission.Permissions.Where(p => p.Effect is false).ToList();
-                    childPermissions = childPermissions.Where(p => rejectPermissions.All(rp => rp.PermissionId != p)).ToList();
-                    childPermissions.AddRange(rolePermission.Permissions.Where(p => p.Effect).Select(p => p.PermissionId));
-                    permissions.AddRange(childPermissions);
-                }
-                childPermissions.AddRange(rolePermission.Permissions.Where(p => p.Effect).Select(p => p.PermissionId));
-                permissions.AddRange(childPermissions);
             }
-            return permissions.Distinct().ToList();
+            return roleIds.SelectMany(id => memo.TryGetValue(id, out var value) ? value : Enumerable.Empty<Guid>())
+                          .Distinct()
+                          .ToList();
         }
     }
 

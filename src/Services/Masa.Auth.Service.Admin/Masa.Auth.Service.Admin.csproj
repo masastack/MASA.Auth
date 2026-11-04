@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
@@ -20,24 +20,29 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Middleware" Version="$(MasaStackSdksPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Scheduler" Version="$(MasaStackSdksPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Data.Contracts" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Dcc" Version="$(MasaStackSdksPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" Version="$(MasaStackSdksPackageVersion)" />
-		<PackageReference Include="FluentValidation.AspNetCore" Version="11.0.3" />
-		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="$(MasaFrameworkPackageVersion)" />
-		<!--<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="$(MasaFrameworkPackageVersion)" />-->
-		<PackageReference Include="Masa.Contrib.Extensions.BackgroundJobs.Memory" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Utils.Ldap.Novell" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Globalization.I18n.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" />
+		<PackageReference Include="MASA.Lingua.SDK.MasaI18n" />
+		<PackageReference Include="Fare" />
+		<!--员工批量导入(ICsvImporter)与 Elasticsearch 注册(UseElasticSearch)是宿主职责,由宿主直接引用-->
+		<PackageReference Include="Magicodes.IE.Csv" />
+		<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Middleware" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Scheduler" />
+		<PackageReference Include="Masa.Contrib.Authentication.Identity" />
+		<PackageReference Include="Masa.Contrib.Authentication.OpenIdConnect.Cache" />
+		<PackageReference Include="Masa.Contrib.Data.Contracts" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Dcc" />
+		<PackageReference Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" />
+		<PackageReference Include="FluentValidation.AspNetCore" />
+		<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" />
+		<!--<PackageReference Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" />-->
+		<PackageReference Include="Masa.Contrib.Extensions.BackgroundJobs.Memory" />
+		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" />
+		<PackageReference Include="Masa.Utils.Ldap.Novell" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+		<PackageReference Include="Masa.Contrib.Globalization.I18n.AspNetCore" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+		<PackageReference Include="Swashbuckle.AspNetCore" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -49,10 +54,14 @@
 		<ProjectReference Include="..\..\Web\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
 	</ItemGroup>
 
+	<!--Lingua 离线兜底 + 同步落盘目录 = Assets/I18n（MASA I18n 原生资源目录，Lingua:LocalJsonDirectory 指向这里）：
+	    语种 JSON 随构建拷到输出目录，Lingua 同步的最新版本会原地覆盖写回同一位置
+	    （PreserveNewest：构建不反向覆盖比仓库快照更新的已同步文件）；
+	    supportedCultures.json 是 MASA 的语种清单元数据，SDK 目录扫描/监听时会跳过（LinguaResourceFiles），不会当作语种加载。-->
 	<ItemGroup>
-	  <Content Update="Assets\I18n\*.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
+		<Content Update="Assets\I18n\*.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>

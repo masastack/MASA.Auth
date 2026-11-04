@@ -23,7 +23,7 @@ public class UserDomainEventHandler
     public async Task GetPermissions(QueryUserPermissionDomainEvent userEvent)
     {
         var user = await GetUserAsync(userEvent.UserId);
-        if (user.Account == "admin")
+        if (WellKnownAccounts.IsAdmin(user.Account))
         {
             var cachePermissions = await _cacheClient.GetAsync<List<CachePermission>>(CacheKey.AllPermissionKey());
             if (cachePermissions?.Count > 0)

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Masa.Auth.EntityFrameworkCore\Masa.Auth.EntityFrameworkCore.csproj" />
-	<PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" Version="$(MasaFrameworkPackageVersion)" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.9">
+	<PackageReference Include="Masa.Contrib.Data.EFCore.SqlServer" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>

@@ -71,8 +71,6 @@
   "PasswordFailed": "Ошибка проверки пароля",
   "PhoneNumberAndEmailEmptyError": "Номер телефона или электронная почта должны быть указаны",
   "EmailSended": "Письмо отправлено, попробуйте позже",
-  "GuestAccountOperate": "Действие с демонстрационным аккаунтом запрещено",
-  "DemoEnvironmentForbidden": "Это действие запрещено в демонстрационной среде",
   "FileReadFailed": "Ошибка чтения файла",
   "ThirdPartyIdpNotFound": "Данные ThirdPartyIdp не найдены",
   "ThirdPartyUserNotFound": "Данные ThirdPartyUser не найдены",

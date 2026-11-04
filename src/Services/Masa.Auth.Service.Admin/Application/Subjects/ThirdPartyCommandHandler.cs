@@ -80,7 +80,7 @@ public class ThirdPartyCommandHandler
 
         Expression<Func<User, bool>> condition = _ => false;
         condition = condition.Or(!model.PhoneNumber.IsNullOrEmpty(), u => u.PhoneNumber == model.PhoneNumber);
-        condition = condition.Or(!model.Email.IsNullOrEmpty(), u => u.Email == model.Email);
+        condition = condition.Or(!model.Email.IsNullOrEmpty(), UserUniqueKeyQueries.EmailEquals(_authDbContext, model.Email));
         var user = await _userRepository.FindAsync(condition);
         if (user != null)
         {

@@ -42,12 +42,17 @@ public class QueryHandler
         var operatorIds = query.Result.Items.Select(o => o.Operator);
         var staffs = await _staffRepository.GetListAsync(staff => operatorIds.Contains(staff.UserId));
 
+        //UserId 可能因软删数据重复（唯一索引带 IsDeleted 过滤），GroupBy 取首个，避免 ToDictionary 直接抛异常
+        var staffNameDict = staffs
+            .Where(staff => staff != null && !string.IsNullOrEmpty(staff.DisplayName))
+            .GroupBy(staff => staff.UserId)
+            .ToDictionary(group => group.Key, group => group.First().DisplayName);
+
         query.Result.Items.ForEach(item =>
         {
-            var staff = staffs.FirstOrDefault(staff => staff?.UserId == item.Operator);
-            if (staff is not null && !string.IsNullOrEmpty(staff.DisplayName))
+            if (staffNameDict.TryGetValue(item.Operator, out var displayName))
             {
-                item.OperatorName = staff.DisplayName;
+                item.OperatorName = displayName;
             }
         });
     }

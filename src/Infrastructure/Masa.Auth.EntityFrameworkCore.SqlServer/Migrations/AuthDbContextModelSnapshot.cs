@@ -19,7 +19,7 @@ namespace Masa.Auth.Service.Admin.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("auth")
-                .HasAnnotation("ProductVersion", "10.0.9")
+                .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -251,9 +251,13 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Level");
+                    b.HasIndex("Level")
+                        .IsUnique()
+                        .HasFilter("Level = 1");
 
-                    b.HasIndex("Name", "ParentId");
+                    b.HasIndex("Name", "ParentId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Department", "auth");
                 });
@@ -322,7 +326,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Position", "auth");
                 });
@@ -402,7 +408,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.HasIndex("SystemId", "AppId", "Code");
+                    b.HasIndex("SystemId", "AppId", "Code")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Permission", "auth");
                 });
@@ -438,7 +446,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasIndex("AffiliationPermissionId");
 
-                    b.HasIndex("LeadingPermissionId", "AffiliationPermissionId");
+                    b.HasIndex("LeadingPermissionId", "AffiliationPermissionId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("PermissionRelation", "auth");
                 });
@@ -715,7 +725,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasIndex("Modifier");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("CustomLogin", "auth");
                 });
@@ -821,7 +833,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("IdentityProvider", "auth");
 
@@ -906,12 +919,15 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasIndex("CurrentTeamId");
 
-                    b.HasIndex("JobNumber");
+                    b.HasIndex("JobNumber")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0 and JobNumber!=''");
 
                     b.HasIndex("PositionId");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Staff", "auth");
                 });
@@ -952,7 +968,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Team", "auth");
                 });
@@ -1078,7 +1096,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("ThridPartyIdentity")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -1087,11 +1106,13 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasIndex("IdentityProviderId");
 
-                    b.HasIndex("ThirdPartyIdpId");
-
                     b.HasIndex("UserId");
 
                     b.HasIndex("CreationTime", "ModificationTime");
+
+                    b.HasIndex("ThirdPartyIdpId", "ThridPartyIdentity")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("ThirdPartyUser", "auth");
                 });
@@ -1105,7 +1126,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.Property<string>("Account")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CS_AS");
+                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
                     b.Property<string>("Avatar")
                         .IsRequired()
@@ -1138,7 +1159,8 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(450)")
+                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
@@ -1188,17 +1210,25 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Account");
+                    b.HasIndex("Account")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("Email");
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0 and Email!=''");
 
-                    b.HasIndex("IdCard");
+                    b.HasIndex("IdCard")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0 and IdCard!=''");
 
                     b.HasIndex("Name");
 
-                    b.HasIndex("PhoneNumber");
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0 and PhoneNumber!=''");
 
                     b.HasIndex("CreationTime", "ModificationTime");
 
@@ -1311,7 +1341,9 @@ namespace Masa.Auth.Service.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "SystemId");
+                    b.HasIndex("UserId", "SystemId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("UserSystemBusinessData", "auth");
                 });

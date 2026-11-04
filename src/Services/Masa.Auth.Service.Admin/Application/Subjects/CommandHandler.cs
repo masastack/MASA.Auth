@@ -9,18 +9,16 @@ public class CommandHandler
     private readonly IAutoCompleteClient _autoCompleteClient;
     private readonly AuthDbContext _authDbContext;
     private readonly UserDomainService _userDomainService;
+    private readonly AuthenticationDomainService _authenticationDomainService;
     private readonly IDistributedCacheClient _distributedCacheClient;
     private readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
-    private readonly ILdapFactory _ldapFactory;
-    private readonly ILdapIdpRepository _ldapIdpRepository;
     private readonly ILogger<CommandHandler> _logger;
     private readonly IEventBus _eventBus;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly Sms _sms;
     private readonly IMasaStackConfig _masaStackConfig;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IMasaConfiguration _masaConfiguration;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly LdapDomainService _ldapDomainService;
     private readonly RoleDomainService _roleDomainService;
     private readonly IUserContext _userContext;
     private readonly IPasswordRuleProvider _passwordRuleProvider;
@@ -30,18 +28,16 @@ public class CommandHandler
         IAutoCompleteClient autoCompleteClient,
         AuthDbContext authDbContext,
         UserDomainService userDomainService,
+        AuthenticationDomainService authenticationDomainService,
         IDistributedCacheClient distributedCacheClient,
         IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
-        ILdapFactory ldapFactory,
-        ILdapIdpRepository ldapIdpRepository,
         ILogger<CommandHandler> logger,
         IEventBus eventBus,
+        IHttpClientFactory httpClientFactory,
         Sms sms,
         IMasaStackConfig masaStackConfig,
         IHttpContextAccessor httpContextAccessor,
-        IMasaConfiguration masaConfiguration,
         IUnitOfWork unitOfWork,
-        LdapDomainService ldapDomainService,
         RoleDomainService roleDomainService,
         IUserContext userContext,
         IPasswordRuleProvider passwordRuleProvider)
@@ -50,18 +46,16 @@ public class CommandHandler
         _autoCompleteClient = autoCompleteClient;
         _authDbContext = authDbContext;
         _userDomainService = userDomainService;
+        _authenticationDomainService = authenticationDomainService;
         _distributedCacheClient = distributedCacheClient;
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
-        _ldapFactory = ldapFactory;
-        _ldapIdpRepository = ldapIdpRepository;
         _logger = logger;
         _eventBus = eventBus;
+        _httpClientFactory = httpClientFactory;
         _sms = sms;
         _masaStackConfig = masaStackConfig;
         _httpContextAccessor = httpContextAccessor;
-        _masaConfiguration = masaConfiguration;
         _unitOfWork = unitOfWork;
-        _ldapDomainService = ldapDomainService;
         _roleDomainService = roleDomainService;
         _userContext = userContext;
         _passwordRuleProvider = passwordRuleProvider;
@@ -373,7 +367,7 @@ public class CommandHandler
         var user = await _userRepository.AsQueryable()
             .Include(x => x.Roles).ThenInclude(x => x.Role)
             .Include(x => x.Staff)
-            .FirstOrDefaultAsync(u => u.Email == model.Email);
+            .FirstOrDefaultAsync(UserUniqueKeyQueries.EmailEquals(_authDbContext, model.Email));
         if (user is null)
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
@@ -419,7 +413,7 @@ public class CommandHandler
     public async Task DisableUserAsync(DisableUserCommand command)
     {
         var userModel = command.User;
-        var user = await _userRepository.FindAsync(u => u.Account == userModel.Account);
+        var user = await _userRepository.FindAsync(UserUniqueKeyQueries.AccountEquals(_authDbContext, userModel.Account));
         if (user is null)
             throw new UserFriendlyException(UserFriendlyExceptionCodes.ACCOUNT_NOT_EXIST, userModel.Account);
 
@@ -431,96 +425,8 @@ public class CommandHandler
     [EventHandler(1)]
     public async Task ValidateByAccountAsync(ValidateByAccountCommand validateByAccountCommand)
     {
-        //TODO UserDomainService
-        var account = validateByAccountCommand.ValidateAccountModel.Account;
-        var password = validateByAccountCommand.ValidateAccountModel.Password;
-
-        var loginFreeze = _masaConfiguration.ConfigurationApi.GetDefault()
-            .GetValue("AppSettings:LoginFreeze", false);
-        var key = CacheKey.AccountLoginKey(account);
-        CacheLogin? loginCache = null;
-        if (loginFreeze)
-        {
-            loginCache = await _distributedCacheClient.GetAsync<CacheLogin>(key);
-            if (loginCache is not null && loginCache.LoginErrorCount >= 5)
-            {
-                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LOGIN_FREEZE);
-            }
-        }
-
-        var isLdap = validateByAccountCommand.ValidateAccountModel.LdapLogin;
-        if (isLdap)
-        {
-            var ldaps = await _ldapIdpRepository.GetListAsync();
-            if (!ldaps.Any())
-            {
-                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.LDAP_NOT_CONFIGURED);
-            }
-            if (ldaps.Count() > 1)
-            {
-                _logger.LogWarning("There are multiple Ldap configurations, and the first configuration is used when logging in with a domain account");
-            }
-            var ldap = ldaps.First();
-            var ldapOptions = ldap.Adapt<LdapOptions>();
-            var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
-
-            var ldapUser = await ldapProvider.GetUserByUserNameAsync(account);
-            if (ldapUser == null)
-            {
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_NOTEXIST, account);
-            }
-
-            //if (ldapUser.UserAccountControl != UserAccountControl.NormalAccount)
-            //{
-            //    throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_ABNORMAL, account);
-            //}
-
-            var dc = new Regex("(?<=DC=).+(?=,)").Match(ldapOptions.BaseDn).Value;
-            if (!await ldapProvider.AuthenticateAsync($"{dc}\\{account}", password))
-            {
-                throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_VALIDATION_FAILED, account);
-            }
-
-            account = await _ldapDomainService.UpsertLdapUserAsync(ldapUser);
-        }
-
-        Expression<Func<User, bool>> condition = u => u.Account == account;
-        condition = condition.Or(!isLdap, u => u.PhoneNumber == account);
-
-        var user = await _userRepository.FindWithIncludAsync(condition, new List<string> {
-            $"{nameof(User.Roles)}.{nameof(UserRole.Role)}",nameof(User.Staff)
-        });
-
-        if (user == null)
-        {
-            throw new UserFriendlyException(UserFriendlyExceptionCodes.ACCOUNT_NOT_EXIST, account);
-        }
-
-        if (!user.Enabled)
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.ACCOUNT_DISABLED);
-        }
-
-        if (!isLdap)
-        {
-            if (!user.VerifyPassword(password))
-            {
-                if (loginFreeze)
-                {
-                    loginCache ??= new() { FreezeTime = DateTimeOffset.Now.AddMinutes(30), Account = account };
-                    loginCache.LoginErrorCount++;
-                    await _distributedCacheClient.SetAsync(key, loginCache, loginCache.FreezeTime);
-                }
-                throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.PASSWORD_FAILED);
-            }
-
-            if (loginCache is not null)
-            {
-                await _distributedCacheClient.RemoveAsync<CacheLogin>(key);
-            }
-        }
-
-        validateByAccountCommand.Result = _userDomainService.UserSplicingData(user);
+        var model = validateByAccountCommand.ValidateAccountModel;
+        validateByAccountCommand.Result = await _authenticationDomainService.ValidateByAccountAsync(model.Account, model.Password, model.LdapLogin);
     }
 
     [EventHandler]
@@ -583,7 +489,8 @@ public class CommandHandler
     [EventHandler]
     public async Task LoginByAccountAsync(LoginByAccountCommand command)
     {
-        var httpClient = new HttpClient();
+        //Swagger 免登录用的 ROPC 登录;走 IHttpClientFactory,避免每次请求新建连接池
+        var httpClient = _httpClientFactory.CreateClient("SsoAddr");
         var docUrl = _masaStackConfig.GetSsoDomain();
 #if DEBUG
         docUrl = "http://localhost:18200";

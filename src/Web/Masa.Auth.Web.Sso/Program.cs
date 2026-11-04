@@ -1,6 +1,8 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using MASA.Lingua.SDK.AspNetCore;
+using Masa.Auth.Web.Sso.Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Masa.BuildingBlocks.Globalization.I18n;
 using Microsoft.Extensions.Http;
@@ -29,8 +31,19 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 builder.Services.AddMasaIdentity();
 
-// i18n：用于 connect/token 等非 Blazor 管线的多语言报错（资源仅覆盖登录端点 validator 的硬编码消息）
-builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
+// i18n 接口链：用于 connect/token 等非 Blazor 管线的多语言报错（资源覆盖登录端点 validator 的硬编码消息）。
+// 词条来源改为 Lingua 平台（热更新），本地 Assets/I18n JSON 即离线兜底（Lingua 同步的最新版本也会落盘到同一位置）。
+builder.Services.AddLinguaMasaI18n(options =>
+    builder.Services.GetMasaConfiguration().Local.GetSection("Lingua").Bind(options));
+
+// i18n UI 链：登录页 Blazor 词条（T("Login") 等）也由 Lingua 供词。检测到 AddLinguaMasaI18n 注册的共享
+// store 后自动进入订阅模式：与接口报错共用同一条 SSE/轮询同步链，平台发布后新 circuit 秒级生效；
+// wwwroot/i18n 静态 JSON 保留作离线兜底，Lingua 不可达时 UI 照常显示。
+builder.Services.AddLinguaForMasaBlazor(options =>
+    builder.Services.GetMasaConfiguration().Local.GetSection("Lingua").Bind(options));
+
+// 多语言诊断（SDK 内置）：状态快照 + 启动结论日志，不依赖业务代码；端点由 MapLinguaStatus 暴露
+builder.Services.AddLinguaDiagnostics();
 
 #if DEBUG
 builder.Services.AddCors(options =>
@@ -258,7 +271,8 @@ app.Use(async (context, next) =>
 });
 
 app.UseStaticFiles();
-app.UseI18n();
+// 默认语种由 Lingua 平台的项目配置（DefaultCulture）决定，宿主不写死任何语种
+app.UseLinguaI18n();
 app.UseRouting();
 
 #if DEBUG
@@ -275,6 +289,10 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
+
+// 多语言运行状态（匿名，便于运维/流水线探活）：词条版本、SSE 连接、各语种词条数
+app.MapLinguaStatus().AllowAnonymous();
+
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

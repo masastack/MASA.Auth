@@ -1,6 +1,9 @@
 // Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
+using MASA.Lingua.SDK.AspNetCore;
+using Masa.Auth.Service.Admin.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 ValidatorOptions.Global.LanguageManager = new MasaLanguageManager();
@@ -10,7 +13,8 @@ var project = MasaStackProject.Auth;
 await builder.Services.AddMasaStackConfigAsync(project, MasaStackApp.Service, callerAction: dccCallerBuilder => dccCallerBuilder.UseAuthentication());
 
 var masaStackConfig = builder.Services.GetMasaStackConfig();
-var publicConfiguration = builder.Services.GetMasaConfiguration().ConfigurationApi.GetPublic();
+var masaConfiguration = builder.Services.GetMasaConfiguration();
+var publicConfiguration = masaConfiguration.ConfigurationApi.GetPublic();
 var identityServerUrl = masaStackConfig.GetSsoDomain();
 StackExchangeRedisInstrumentation redisInstrumentation = default!;
 #if DEBUG
@@ -86,7 +90,15 @@ builder.Services
             { return true; }
         };
     });
-builder.Services.AddI18n(Path.Combine("Assets", "I18n"));
+// 多语言词条改由 Lingua 平台（MASA.Lingua）统一管理与热更新：
+// MASA I18n 的调用链（静态 I18n.T / II18n<T> / UserFriendlyException 错误码 / FluentValidation / UseI18n 语言协商）不变，
+// 词条来源变为「Lingua 发布的 {culture}.json（SSE 实时通知 + 空闲对账兜底，发布后秒级~60s 生效）」，
+// 输出目录 Assets/I18n 下的 JSON 即离线兜底（构建拷入仓库快照，Lingua 同步的最新版本原地覆盖）。
+builder.Services.AddLinguaMasaI18n(options =>
+    masaConfiguration.Local.GetSection("Lingua").Bind(options));
+
+// 多语言诊断（SDK 内置）：状态快照 + 启动结论日志，不依赖业务代码；端点由 MapLinguaStatus 暴露
+builder.Services.AddLinguaDiagnostics();
 
 builder.Services.AddDynamicRoleServices();
 
@@ -119,6 +131,12 @@ builder.Services.AddSingleton<StackExchange.Redis.IConnectionMultiplexer>(mux);
 builder.Services.AddHttpClient("SsoAddr", client =>
 {
     client.BaseAddress = new Uri(identityServerUrl);
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
+
+//Webhook 推送:超时收紧,避免目标不可达时拖住保存流程
+builder.Services.AddHttpClient("Webhook", client =>
+{
     client.Timeout = TimeSpan.FromSeconds(10);
 });
 
@@ -230,7 +248,9 @@ var app = builder.AddServices(options =>
     options.PostPrefixes = new() { "Post", "Add", "Create", "Send" };
 });
 
-app.UseI18n();
+// 默认语种由 Lingua 平台的项目配置（DefaultCulture）决定，宿主不写死任何语种。
+// UseLinguaI18n 内部仍调用 MASA 的 UseI18n，只在请求本地化的 provider 链末尾补一层「平台默认语种」兜底。
+app.UseLinguaI18n();
 
 app.UseMasaExceptionHandler(opt =>
 {
@@ -290,6 +310,9 @@ app.UseCloudEvents();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapSubscribeHandler();
+
+    // 多语言运行状态（匿名，便于运维/流水线探活）：词条版本、SSE 连接、各语种词条数
+    endpoints.MapLinguaStatus().AllowAnonymous();
 });
 app.UseHttpsRedirection();
 

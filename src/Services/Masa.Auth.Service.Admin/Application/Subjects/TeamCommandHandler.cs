@@ -12,9 +12,10 @@ public class TeamCommandHandler
     readonly IObjectStorageClient _aliyunClient;
     readonly IUnitOfWork _unitOfWork;
     readonly ILogger<TeamCommandHandler> _logger;
+    readonly IMasaConfiguration _masaConfiguration;
 
-    string _bucket = "";
-    string _cdnEndpoint = "";
+    string? _bucket;
+    string? _cdnEndpoint;
 
     public TeamCommandHandler(
         ITeamRepository teamRepository,
@@ -23,31 +24,33 @@ public class TeamCommandHandler
         IMasaConfiguration masaConfiguration,
         IObjectStorageClient aliyunClient,
         IUnitOfWork unitOfWork,
-        ILogger<TeamCommandHandler> logger,
-        IConfigurationApiClient configurationApiClient,
-        IMasaStackConfig masaStackConfig,
-        IMultiEnvironmentContext multiEnvironmentContext)
+        ILogger<TeamCommandHandler> logger)
     {
         _teamRepository = teamRepository;
         _teamDomainService = teamDomainService;
         _roleDomainService = roleDomainService;
+        _masaConfiguration = masaConfiguration;
         _aliyunClient = aliyunClient;
         _unitOfWork = unitOfWork;
         _logger = logger;
+    }
 
-        var environment = multiEnvironmentContext.CurrentEnvironment;
-        if (environment.IsNullOrEmpty())
+    /// <summary>
+    /// OSS 配置按需读取,不放构造函数:配置缺失时的异常应落在调用处的 try/catch 里(如 AddTeamAsync 的头像回退),
+    /// 而不是让整个处理器构造失败、连带 RemoveTeam 等与 OSS 无关的命令一起不可用。
+    /// </summary>
+    (string Bucket, string CdnEndpoint) GetOssConfig()
+    {
+        if (_bucket is null || _cdnEndpoint is null)
         {
-            environment = masaStackConfig.Environment;
-        }
+            var publicConfiguration = _masaConfiguration.ConfigurationApi.GetPublic();
+            var ossOptions = publicConfiguration.GetSection(OssOptions.Key).Get<OssOptions>();
+            MasaArgumentException.ThrowIfNull(ossOptions, nameof(OssOptions));
 
-        _bucket = configurationApiClient.GetAsync<OssOptions>(environment, "Default", "public-$Config", "$public.OSS")
-            .ConfigureAwait(false).GetAwaiter().GetResult().Bucket;
-        _cdnEndpoint = configurationApiClient.GetDynamicAsync(environment, "Default", "public-$Config", "$public.Cdn")
-            .ConfigureAwait(false).GetAwaiter().GetResult().CdnEndpoint;
-        //TODO:mf stack isolation sdk is issue,update package use the following code
-        //_bucket = masaConfiguration.ConfigurationApi.GetPublic().GetSection(OssOptions.Key).Get<OssOptions>().Bucket;
-        //_cdnEndpoint = masaConfiguration.ConfigurationApi.GetPublic().GetValue<string>("$public.Cdn:CdnEndpoint");
+            _bucket = ossOptions.Bucket;
+            _cdnEndpoint = publicConfiguration.GetValue<string>("$public.Cdn:CdnEndpoint");
+        }
+        return (_bucket, _cdnEndpoint!);
     }
 
     [EventHandler(1)]
@@ -66,9 +69,10 @@ public class TeamCommandHandler
         Team team;
         try
         {
+            var (bucket, cdnEndpoint) = GetOssConfig();
             var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.ParseHex(colorGroup.FrontColor), Color.ParseHex(colorGroup.BackColor), 200);
-            await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
-            team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{_cdnEndpoint}{avatarName}"));
+            await _aliyunClient.PutObjectAsync(bucket, avatarName, image);
+            team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{cdnEndpoint}{avatarName}"));
         }
         catch (Exception e)
         {
@@ -106,10 +110,11 @@ public class TeamCommandHandler
         if (team.Avatar.Name != dto.Avatar.Name || team.Avatar.Color != dto.Avatar.Color ||
                 string.IsNullOrWhiteSpace(team.Avatar.Url))
         {
+            var (bucket, cdnEndpoint) = GetOssConfig();
             var colorGroup = ColorPairHelper.GetColorGroup(dto.Avatar.Color);
             var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.ParseHex(colorGroup.FrontColor), Color.ParseHex(colorGroup.BackColor), 200);
-            await _aliyunClient.PutObjectAsync(_bucket, avatarName, image);
-            avatarUrl = $"{_cdnEndpoint}{avatarName}";
+            await _aliyunClient.PutObjectAsync(bucket, avatarName, image);
+            avatarUrl = $"{cdnEndpoint}{avatarName}";
         }
         team.UpdateBasicInfo(dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, avatarUrl));
         await _teamRepository.UpdateAsync(team);
