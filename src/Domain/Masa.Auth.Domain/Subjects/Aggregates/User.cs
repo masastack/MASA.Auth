@@ -453,10 +453,7 @@ public class User : FullAggregateRoot<Guid, Guid>
         _staff = staff;
     }
 
-    public bool IsAdmin()
-    {
-        return Account == "admin";
-    }
+    public bool IsAdmin() => WellKnownAccounts.IsAdmin(Account);
 
     [MemberNotNull(nameof(PhoneNumber))]
     [MemberNotNull(nameof(Email))]

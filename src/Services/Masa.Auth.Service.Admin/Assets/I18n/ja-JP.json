@@ -71,8 +71,6 @@
   "PasswordFailed": "パスワードの検証に失敗しました",
   "PhoneNumberAndEmailEmptyError": "電話番号とメールのどちらか一方は必須です",
   "EmailSended": "メールは既に送信されました。しばらくしてから再度お試しください",
-  "GuestAccountOperate": "デモアカウントでは操作禁止です",
-  "DemoEnvironmentForbidden": "デモ環境ではこのアクションは禁止されています",
   "FileReadFailed": "ファイルの読み込みに失敗しました",
   "ThirdPartyIdpNotFound": "サードパーティIDPデータは存在しません",
   "ThirdPartyUserNotFound": "サードパーティユーザーデータは存在しません",

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -7,24 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fare" Version="2.2.1" />
-    <PackageReference Include="FluentValidation" Version="11.4.0" />
-	<PackageReference Include="Magicodes.IE.Csv" Version="2.6.4" />
-	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain" Version="$(MasaFrameworkPackageVersion)" />
-	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="$(MasaFrameworkPackageVersion)" />
-	<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaStackSdksPackageVersion)" />
-    <PackageReference Include="Masa.Contrib.Configuration.ConfigurationApi.Dcc" Version="$(MasaFrameworkPackageVersion)" />
-	<PackageReference Include="Masa.Contrib.Caching.Distributed.StackExchangeRedis" Version="$(MasaFrameworkPackageVersion)" />
-	<PackageReference Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="$(MasaFrameworkPackageVersion)" />
-	<PackageReference Include="Masa.Contrib.StackSdks.Auth" Version="$(MasaStackSdksPackageVersion)" />
-    <PackageReference Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="Masa.Utils.Extensions.Validations.FluentValidation" Version="$(MasaFrameworkPackageVersion)" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.7" />
-    <PackageReference Include="Util.Reflection" Version="1.0.3" />
-	<PackageReference Include="Masa.Contrib.StackSdks.Mc" Version="$(MasaStackSdksPackageVersion)" />
-	<PackageReference Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaStackSdksPackageVersion)" />
-	<PackageReference Include="Mapster" Version="7.3.0" />
+    <PackageReference Include="FluentValidation" />
+	<PackageReference Include="Magicodes.IE.Core" />
+	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain" />
+	<PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" />
+	<PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" />
+	<!--契约层只需要 AutoComplete 的抽象(AutoCompleteDocument 基类),ElasticSearch 实现由宿主注册-->
+	<PackageReference Include="Masa.BuildingBlocks.SearchEngine.AutoComplete" />
+	<PackageReference Include="Masa.Contrib.StackSdks.Auth" />
+    <PackageReference Include="Masa.Utils.Extensions.Enums" />
+    <PackageReference Include="Masa.Utils.Extensions.Validations.FluentValidation" />
+    <PackageReference Include="Util.Reflection" />
+	<PackageReference Include="Masa.Contrib.StackSdks.Pm" />
+	<PackageReference Include="Mapster" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--FromUri 等绑定工具用到 ASP.NET Core 的 HttpRequest/HttpContext,用框架引用替代 2.2.0 的零散包-->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 </Project>

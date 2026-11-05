@@ -10,6 +10,9 @@ public partial class Error
     [SupplyParameterFromQuery]
     public string ErrorId { get; set; } = string.Empty;
 
+    [Inject]
+    public ILogger<Error> Logger { get; set; } = null!;
+
     ErrorViewModel _errorViewModel = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -22,11 +25,12 @@ public partial class Error
             {
                 _errorViewModel.Error = message;
 
-                if (!_environment.IsDevelopment())
-                {
-                    // only show in development
-                    message.ErrorDescription = null;
-                }
+                // Error level so it is written even with the default "Error" log level;
+                // use RequestId to correlate with the IdentityServer4 validation logs.
+                Logger.LogError(
+                    "IdentityServer error page: Error={Error}, ErrorDescription={ErrorDescription}, ClientId={ClientId}, RedirectUri={RedirectUri}, RequestId={RequestId}",
+                    message.Error, message.ErrorDescription, message.ClientId, message.RedirectUri, message.RequestId);
+
                 StateHasChanged();
             }
         }

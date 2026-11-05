@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
@@ -7,16 +7,16 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-	  <PackageReference Include="AspNet.Security.OAuth.Alipay" Version="6.0.15" />
-	  <PackageReference Include="AspNet.Security.OAuth.Apple" Version="6.0.15" />
-	  <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.15" />
-	  <PackageReference Include="AspNet.Security.OAuth.Weixin" Version="6.0.15" />
-	  <PackageReference Include="AspNet.Security.OAuth.WorkWeixin" Version="6.0.15" />
-	  <PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="$(MasaFrameworkPackageVersion)" />
-	  <PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaStackSdksPackageVersion)" />
-	  <PackageReference Include="Masa.Contrib.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
-	  <PackageReference Include="Masa.Contrib.Caching.Distributed.StackExchangeRedis" Version="$(MasaFrameworkPackageVersion)" />
-	  <PackageReference Include="Masa.Utils.Extensions.DependencyInjection" Version="$(MasaFrameworkPackageVersion)" />
+	  <PackageReference Include="AspNet.Security.OAuth.Alipay" />
+	  <PackageReference Include="AspNet.Security.OAuth.Apple" />
+	  <PackageReference Include="AspNet.Security.OAuth.GitHub" />
+	  <PackageReference Include="AspNet.Security.OAuth.Weixin" />
+	  <PackageReference Include="AspNet.Security.OAuth.WorkWeixin" />
+	  <PackageReference Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" />
+	  <PackageReference Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" />
+	  <PackageReference Include="Masa.Contrib.Exceptions" />
+	  <PackageReference Include="Masa.Contrib.Caching.Distributed.StackExchangeRedis" />
+	  <PackageReference Include="Masa.Utils.Extensions.DependencyInjection" />
 	</ItemGroup>
 	
 	<ItemGroup>

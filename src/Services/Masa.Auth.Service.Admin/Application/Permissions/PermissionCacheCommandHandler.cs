@@ -51,28 +51,23 @@ public class PermissionCacheCommandHandler
     [EventHandler(99)]
     public async Task SeedPermissionsAsync(SeedPermissionsCommand seedPermissionsCommand)
     {
-        var allPermissions = new List<CachePermission>();
-        foreach (var permission in seedPermissionsCommand.Permissions)
-        {
-            var cachePermission = permission.Adapt<CachePermission>();
-            await _cacheClient.SetAsync(permission.Id.ToString(), cachePermission);
-            allPermissions.Add(cachePermission);
-        }
-        await _cacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
+        //批量写入：单条 SetAsync = SET+PUB 两次串行往返，N 条权限同步时开销显著；SetListAsync 一次脚本完成
+        var keyValues = seedPermissionsCommand.Permissions.ToDictionary(
+            permission => permission.Id.ToString(),
+            permission => (CachePermission?)permission.Adapt<CachePermission>());
+        await _cacheClient.SetListAsync(keyValues);
+        await _cacheClient.SetAsync(CacheKey.AllPermissionKey(), keyValues.Values.ToList());
     }
 
     [EventHandler]
     public async Task SyncPermissionsRedisAsync(SyncPermissionRedisCommand command)
     {
         var permissions = await _permissionRepository.GetAllAsync();
-        var allPermissions = new List<CachePermission>();
-        foreach (var permission in permissions)
-        {
-            var cachePermission = permission.Adapt<CachePermission>();
-            await _cacheClient.SetAsync(permission.Id.ToString(), cachePermission);
-            allPermissions.Add(cachePermission);
-        }
-        await _cacheClient.SetAsync(CacheKey.AllPermissionKey(), allPermissions);
+        var keyValues = permissions.ToDictionary(
+            permission => permission.Id.ToString(),
+            permission => (CachePermission?)permission.Adapt<CachePermission>());
+        await _cacheClient.SetListAsync(keyValues);
+        await _cacheClient.SetAsync(CacheKey.AllPermissionKey(), keyValues.Values.ToList());
         command.Count = permissions.Count();
     }
 

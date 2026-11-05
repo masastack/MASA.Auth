@@ -3,6 +3,7 @@
 
 global using Masa.Auth.Contracts.Admin;
 global using Masa.Auth.Contracts.Admin.Infrastructure.Constants;
+global using Masa.Auth.Contracts.Admin.Webhooks;
 global using Masa.Auth.Domain.DynamicRoles.Aggregates;
 global using Masa.Auth.Domain.DynamicRoles.Repositories;
 global using Masa.Auth.Domain.GlobalNavs.Aggregates;
@@ -23,13 +24,16 @@ global using Masa.Auth.EntityFrameworkCore.PostgreSql.Converters;
 global using Masa.Auth.Service.Admin.Infrastructure;
 global using Masa.BuildingBlocks.Authentication.Identity;
 global using Masa.BuildingBlocks.Caching;
+global using Masa.BuildingBlocks.Data.Contracts;
 global using Masa.BuildingBlocks.Data.UoW;
+global using Masa.BuildingBlocks.Ddd.Domain.Entities;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Enum;
 global using Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model;
 global using Masa.Contrib.Authentication.OpenIdConnect.EFCore.Repositories;
 global using Masa.Contrib.Ddd.Domain.Repository.EFCore;
 global using Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;

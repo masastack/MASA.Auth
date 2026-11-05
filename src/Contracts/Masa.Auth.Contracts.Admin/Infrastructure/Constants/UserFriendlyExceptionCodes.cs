@@ -79,8 +79,6 @@ public static class UserFriendlyExceptionCodes
     public const string PHONE_NUMBER_AND_EMAIL_EMPTY_ERROR = "PhoneNumberAndEmailEmptyError";
     public const string PHONE_NUMBER_MISMATCH = "PhoneNumberMismatch";
     public const string EMAIL_SENDED = "EmailSended";
-    public const string GUEST_ACCOUNT_OPERATE = "GuestAccountOperate";
-    public const string DEMO_ENVIRONMENT_FORBIDDEN = "DemoEnvironmentForbidden";
     public const string FILE_READ_FAILED = "FileReadFailed";
     public const string THIRD_PARTY_IDP_NOT_FOUND = "ThirdPartyIdpNotFound";
     public const string THIRD_PARTY_USER_NOT_FOUND = "ThirdPartyUserNotFound";

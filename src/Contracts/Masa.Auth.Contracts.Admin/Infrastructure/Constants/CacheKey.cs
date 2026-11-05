@@ -71,7 +71,8 @@ public static class CacheKey
 
     public static string AccountLoginKey(string account)
     {
-        return $"{ACCOUNT_LOGIN_PRE}{account}";
+        //账号唯一性按不区分大小写生效，缓存键统一小写，避免 Admin/admin 等变体各自计数绕过冻结
+        return $"{ACCOUNT_LOGIN_PRE}{account.ToLowerInvariant()}";
     }
 
     public static string MsgCodeForUpdateUserPhoneNumberKey(string userId, string phoneNumber)

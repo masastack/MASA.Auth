@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -7,8 +7,10 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
-		<PackageReference Include="Masa.Contrib.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
+		<PackageReference Include="Masa.BuildingBlocks.Ddd.Domain" />
+		<PackageReference Include="Masa.Contrib.Ddd.Domain" />
+		<!--ClientMessageTemplate 使用 MC 的 ChannelTypes 枚举,本项目的直接依赖,不再经 Contracts 传递-->
+		<PackageReference Include="Masa.Contrib.StackSdks.Mc" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
-global using Fare;
 global using FluentValidation;
 global using FluentValidation.Validators;
 global using Magicodes.ExporterAndImporter.Core;
@@ -28,11 +27,6 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Primitives;
-global using SixLabors.Fonts;
-global using SixLabors.ImageSharp;
-global using SixLabors.ImageSharp.Drawing.Processing;
-global using SixLabors.ImageSharp.PixelFormats;
-global using SixLabors.ImageSharp.Processing;
 global using System.Collections.Concurrent;
 global using System.ComponentModel;
 global using System.Diagnostics.CodeAnalysis;

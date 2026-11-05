@@ -26,10 +26,10 @@ public class CommandHandler
                 await _repository.AddAsync(new GlobalNavVisible(dto.AppId, string.Empty, false));
                 break;
             case GlobalNavVisibleTypes.Client:
-                foreach (var item in dto.ClientIds.Where(x => !string.IsNullOrEmpty(x)))
-                {
-                    await _repository.AddAsync(new GlobalNavVisible(dto.AppId, item, true));
-                }
+                //批量入 change tracker，UoW 统一提交，避免逐条 await
+                await _repository.AddRangeAsync(dto.ClientIds.Where(x => !string.IsNullOrEmpty(x))
+                    .Select(clientId => new GlobalNavVisible(dto.AppId, clientId, true))
+                    .ToList());
                 break;
         }
     }

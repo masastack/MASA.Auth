@@ -80,7 +80,7 @@ public class CommandHandler
         switch (model.SendEmailType)
         {
             case SendEmailTypes.Register:
-                if (_userRepository.Any(u => u.Email == model.Email))
+                if (await _userRepository.AnyEmailEqualsAsync(model.Email))
                 {
                     throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_EXIST, model.Email);
                 }
@@ -90,7 +90,7 @@ public class CommandHandler
             case SendEmailTypes.UpdateEmail:
             case SendEmailTypes.ForgotPassword:
             case SendEmailTypes.DeleteAccount:
-                if (!_userRepository.Any(u => u.Email == model.Email))
+                if (!await _userRepository.AnyEmailEqualsAsync(model.Email))
                 {
                     throw new UserFriendlyException(UserFriendlyExceptionCodes.USER_EMAIL_NOT_EXIST, model.Email);
                 }
