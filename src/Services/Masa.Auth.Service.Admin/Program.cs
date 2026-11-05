@@ -2,7 +2,6 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using MASA.Lingua.SDK.AspNetCore;
-using Masa.Auth.Service.Admin.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -95,7 +94,13 @@ builder.Services
 // 词条来源变为「Lingua 发布的 {culture}.json（SSE 实时通知 + 空闲对账兜底，发布后秒级~60s 生效）」，
 // 输出目录 Assets/I18n 下的 JSON 即离线兜底（构建拷入仓库快照，Lingua 同步的最新版本原地覆盖）。
 builder.Services.AddLinguaMasaI18n(options =>
-    masaConfiguration.Local.GetSection("Lingua").Bind(options));
+{
+    //ProjectCode 按 MASA_STACK 推导(service.id,如 auth-service-staging),离线目录固定;
+    //环境差异配置与 WriteKey 走 DCC(唯一密钥来源,不入仓库)
+    options.ProjectCode = masaStackConfig.GetId(project, MasaStackApp.Service);
+    options.LocalJsonDirectory = "Assets/I18n";
+    masaConfiguration.ConfigurationApi.GetDefault().GetSection("Lingua").Bind(options);
+});
 
 // 多语言诊断（SDK 内置）：状态快照 + 启动结论日志，不依赖业务代码；端点由 MapLinguaStatus 暴露
 builder.Services.AddLinguaDiagnostics();

@@ -194,8 +194,8 @@ public class AccountController : Controller
         return Redirect(redirectUrl);
     }
 
-    //强制下线仅供管理端内部调用:POST + 内网来源双重限制,防止外网任意吊销会话
-    [HttpPost]
+    //强制下线仅供管理端内部调用:内网来源限制,防止外网任意吊销会话
+    [HttpGet]
     public async Task<IActionResult> LogoutUserAsync(string subjectId)
     {
         var remoteIp = HttpContext.Connection.RemoteIpAddress;

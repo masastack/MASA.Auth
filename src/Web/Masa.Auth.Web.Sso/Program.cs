@@ -3,6 +3,7 @@
 
 using MASA.Lingua.SDK.AspNetCore;
 using Masa.Auth.Web.Sso.Infrastructure;
+using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Masa.BuildingBlocks.Globalization.I18n;
 using Microsoft.Extensions.Http;
@@ -34,13 +35,24 @@ builder.Services.AddMasaIdentity();
 // i18n 接口链：用于 connect/token 等非 Blazor 管线的多语言报错（资源覆盖登录端点 validator 的硬编码消息）。
 // 词条来源改为 Lingua 平台（热更新），本地 Assets/I18n JSON 即离线兜底（Lingua 同步的最新版本也会落盘到同一位置）。
 builder.Services.AddLinguaMasaI18n(options =>
-    builder.Services.GetMasaConfiguration().Local.GetSection("Lingua").Bind(options));
+{
+    //ProjectCode 按 MASA_STACK 推导(sso.id,如 auth-sso-staging),离线目录固定;
+    //环境差异配置与 WriteKey 走 DCC(唯一密钥来源,不入仓库)
+    options.ProjectCode = masaStackConfig.GetId(MasaStackProject.Auth, MasaStackApp.SSO);
+    options.LocalJsonDirectory = "Assets/I18n";
+    builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault().GetSection("Lingua").Bind(options);
+});
 
 // i18n UI 链：登录页 Blazor 词条（T("Login") 等）也由 Lingua 供词。检测到 AddLinguaMasaI18n 注册的共享
 // store 后自动进入订阅模式：与接口报错共用同一条 SSE/轮询同步链，平台发布后新 circuit 秒级生效；
 // wwwroot/i18n 静态 JSON 保留作离线兜底，Lingua 不可达时 UI 照常显示。
 builder.Services.AddLinguaForMasaBlazor(options =>
-    builder.Services.GetMasaConfiguration().Local.GetSection("Lingua").Bind(options));
+{
+    //与 AddLinguaMasaI18n 同口径:ProjectCode 代码推导 + DCC 环境配置
+    options.ProjectCode = masaStackConfig.GetId(MasaStackProject.Auth, MasaStackApp.SSO);
+    options.LocalJsonDirectory = "Assets/I18n";
+    builder.Services.GetMasaConfiguration().ConfigurationApi.GetDefault().GetSection("Lingua").Bind(options);
+});
 
 // 多语言诊断（SDK 内置）：状态快照 + 启动结论日志，不依赖业务代码；端点由 MapLinguaStatus 暴露
 builder.Services.AddLinguaDiagnostics();
