@@ -73,10 +73,11 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
-    <!--3.1.11 有 4 高+2 中已知漏洞（TIFF 解码/编码越界写、BigTIFF 死循环等），3.x 线修复版本为 3.2.0，
-        ImageSharp.Drawing 2.1.7 的依赖下限 >= 3.1.11 可直接满足-->
-    <PackageVersion Include="SixLabors.ImageSharp" Version="3.2.0" />
-    <PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.1.7" />
+    <!--头像生成用 SkiaSharp(MIT):原先的 SixLabors.ImageSharp 3.2.0 在 Release 编译期强制校验商业许可,
+        会给 CI/镜像构建引入密钥注入点。Linux 原生库用 NoDependencies 变体——它不依赖 fontconfig,
+        正好适配 aspnet:10.0 运行时镜像(该镜像未装 fontconfig),且字体由代码显式加载字体文件。-->
+    <PackageVersion Include="SkiaSharp" Version="3.119.4" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.4" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageVersion Include="Util.Reflection" Version="1.0.3" />
     <PackageVersion Include="xunit" Version="2.9.3" />

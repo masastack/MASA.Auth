@@ -17,8 +17,6 @@
 	<PackageReference Include="Masa.Contrib.StackSdks.Auth" />
     <PackageReference Include="Masa.Utils.Extensions.Enums" />
     <PackageReference Include="Masa.Utils.Extensions.Validations.FluentValidation" />
-    <PackageReference Include="SixLabors.ImageSharp" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" />
     <PackageReference Include="Util.Reflection" />
 	<PackageReference Include="Masa.Contrib.StackSdks.Pm" />
 	<PackageReference Include="Mapster" />

@@ -10,85 +10,26 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_UserSystemBusinessData_UserId_SystemId",
-                schema: "auth",
-                table: "UserSystemBusinessData");
-
-            migrationBuilder.DropIndex(
-                name: "IX_User_Account",
-                schema: "auth",
-                table: "User");
-
-            migrationBuilder.DropIndex(
-                name: "IX_User_Email",
-                schema: "auth",
-                table: "User");
-
-            migrationBuilder.DropIndex(
-                name: "IX_User_IdCard",
-                schema: "auth",
-                table: "User");
-
-            migrationBuilder.DropIndex(
-                name: "IX_User_PhoneNumber",
-                schema: "auth",
-                table: "User");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ThirdPartyUser_ThirdPartyIdpId",
-                schema: "auth",
-                table: "ThirdPartyUser");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Team_Name",
-                schema: "auth",
-                table: "Team");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Staff_JobNumber",
-                schema: "auth",
-                table: "Staff");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Staff_UserId",
-                schema: "auth",
-                table: "Staff");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Position_Name",
-                schema: "auth",
-                table: "Position");
-
-            migrationBuilder.DropIndex(
-                name: "IX_PermissionRelation_LeadingPermissionId_AffiliationPermissio~",
-                schema: "auth",
-                table: "PermissionRelation");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Permission_SystemId_AppId_Code",
-                schema: "auth",
-                table: "Permission");
-
-            migrationBuilder.DropIndex(
-                name: "IX_IdentityProvider_Name",
-                schema: "auth",
-                table: "IdentityProvider");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Department_Level",
-                schema: "auth",
-                table: "Department");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Department_Name_ParentId",
-                schema: "auth",
-                table: "Department");
-
-            migrationBuilder.DropIndex(
-                name: "IX_CustomLogin_Name",
-                schema: "auth",
-                table: "CustomLogin");
+            // 幂等删除：存量库可能因备份恢复/手工清理导致索引缺失，
+            // 若用 DropIndex 会在索引不存在时直接报 42704，故改用 DROP INDEX IF EXISTS。
+            migrationBuilder.Sql("""
+                DROP INDEX IF EXISTS auth."IX_UserSystemBusinessData_UserId_SystemId";
+                DROP INDEX IF EXISTS auth."IX_User_Account";
+                DROP INDEX IF EXISTS auth."IX_User_Email";
+                DROP INDEX IF EXISTS auth."IX_User_IdCard";
+                DROP INDEX IF EXISTS auth."IX_User_PhoneNumber";
+                DROP INDEX IF EXISTS auth."IX_ThirdPartyUser_ThirdPartyIdpId";
+                DROP INDEX IF EXISTS auth."IX_Team_Name";
+                DROP INDEX IF EXISTS auth."IX_Staff_JobNumber";
+                DROP INDEX IF EXISTS auth."IX_Staff_UserId";
+                DROP INDEX IF EXISTS auth."IX_Position_Name";
+                DROP INDEX IF EXISTS auth."IX_PermissionRelation_LeadingPermissionId_AffiliationPermissio~";
+                DROP INDEX IF EXISTS auth."IX_Permission_SystemId_AppId_Code";
+                DROP INDEX IF EXISTS auth."IX_IdentityProvider_Name";
+                DROP INDEX IF EXISTS auth."IX_Department_Level";
+                DROP INDEX IF EXISTS auth."IX_Department_Name_ParentId";
+                DROP INDEX IF EXISTS auth."IX_CustomLogin_Name";
+                """);
 
             migrationBuilder.AlterColumn<string>(
                 name: "ThridPartyIdentity",

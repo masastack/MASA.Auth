@@ -70,7 +70,7 @@ public class TeamCommandHandler
         try
         {
             var (bucket, cdnEndpoint) = GetOssConfig();
-            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.ParseHex(colorGroup.FrontColor), Color.ParseHex(colorGroup.BackColor), 200);
+            var image = AvatarImageGenerator.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), colorGroup.FrontColor, colorGroup.BackColor, 200);
             await _aliyunClient.PutObjectAsync(bucket, avatarName, image);
             team = new Team(teamId, dto.Name, dto.Description, dto.Type, new AvatarValue(dto.Avatar.Name, dto.Avatar.Color, $"{cdnEndpoint}{avatarName}"));
         }
@@ -112,7 +112,7 @@ public class TeamCommandHandler
         {
             var (bucket, cdnEndpoint) = GetOssConfig();
             var colorGroup = ColorPairHelper.GetColorGroup(dto.Avatar.Color);
-            var image = ImageSharper.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), Color.ParseHex(colorGroup.FrontColor), Color.ParseHex(colorGroup.BackColor), 200);
+            var image = AvatarImageGenerator.GeneratePortrait(dto.Avatar.Name.FirstOrDefault(), colorGroup.FrontColor, colorGroup.BackColor, 200);
             await _aliyunClient.PutObjectAsync(bucket, avatarName, image);
             avatarUrl = $"{cdnEndpoint}{avatarName}";
         }

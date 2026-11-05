@@ -42,6 +42,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Masa.Contrib.Globalization.I18n.AspNetCore" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+		<PackageReference Include="SkiaSharp" />
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" />
 		<PackageReference Include="Swashbuckle.AspNetCore" />
 	</ItemGroup>
 

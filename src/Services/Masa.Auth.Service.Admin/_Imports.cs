@@ -154,7 +154,7 @@ global using Microsoft.OpenApi.Models;
 global using Novell.Directory.Ldap;
 global using OpenTelemetry.Instrumentation.StackExchangeRedis;
 global using OpenTelemetry.Trace;
-global using SixLabors.ImageSharp;
+global using SkiaSharp;
 global using System.Collections.Concurrent;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Linq.Expressions;
