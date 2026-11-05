@@ -119,7 +119,7 @@ public class AuthenticationDomainService : DomainService
             throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_NOTEXIST, account);
         }
 
-        var dc = new Regex("(?<=DC=).+(?=,)").Match(ldapOptions.BaseDn).Value;
+        var dc = new Regex("(?<=DC=).+(?=,)", options: RegexOptions.None, matchTimeout: TimeSpan.FromSeconds(1)).Match(ldapOptions.BaseDn).Value;
         if (!await ldapProvider.AuthenticateAsync($"{dc}\\{account}", password))
         {
             await RecordLoginFailureAsync(account, loginFreeze);
