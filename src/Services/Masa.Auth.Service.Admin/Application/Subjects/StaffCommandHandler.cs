@@ -356,7 +356,7 @@ public class StaffCommandHandler
                 if (ldapUser != null)
                 {
                     // LDAP中存在该用户，检查状态同步
-                    var isLdapUserEnabled = IsLdapUserEnabled(ldapUser);
+                    var isLdapUserEnabled = !ldapUser.IsAccountDisabled;
                     var isAuthUserEnabled = tpu.User.Enabled;
 
                     // 更新基本信息
@@ -415,14 +415,6 @@ public class StaffCommandHandler
             _logger.LogError(ex, "Error occurred during LDAP staff synchronization");
             throw;
         }
-    }
-
-    /// <summary>
-    /// 检查LDAP用户是否启用
-    /// </summary>
-    private bool IsLdapUserEnabled(LdapUser ldapUser)
-    {
-        return !ldapUser.IsAccountDisabled;
     }
 
     /// <summary>
