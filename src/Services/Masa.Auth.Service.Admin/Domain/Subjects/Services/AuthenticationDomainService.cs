@@ -119,6 +119,14 @@ public class AuthenticationDomainService : DomainService
             throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_NOTEXIST, account);
         }
 
+        //A disabled AD account would fail the bind below with result code 49 ("invalid
+        //credentials"), which is misleading — reject it up-front with an accurate message.
+        if (ldapUser.IsAccountDisabled)
+        {
+            await RecordLoginFailureAsync(account, loginFreeze);
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.LDAP_ACCOUNT_DISABLED, account);
+        }
+
         var dc = new Regex("(?<=DC=).+(?=,)", options: RegexOptions.None, matchTimeout: TimeSpan.FromSeconds(1)).Match(ldapOptions.BaseDn).Value;
         if (!await ldapProvider.AuthenticateAsync($"{dc}\\{account}", password))
         {

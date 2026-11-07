@@ -38,6 +38,7 @@
   "ClientIdNotFound": "Клиент с id = {0} не найден",
   "LdapAccountNotexist": "LDAP-аккаунт {0} не существует",
   "LdapAccountValidationFailed": "Ошибка проверки LDAP-аккаунта {0}",
+  "LdapAccountDisabled": "Доменная учетная запись {0} отключена",
   "LdapNotConfigured": "LDAP-аутентификация не настроена",
   "AccountDisabled": "Аккаунт отключен",
   "AccountNotExist": "Аккаунт {0} не существует",

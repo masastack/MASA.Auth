@@ -36,6 +36,7 @@
   "ClientIdNotFound": "Client id = {0} not found",
   "LdapAccountNotexist": "LDAP account {0} not exist",
   "LdapAccountValidationFailed": "LDAP account {0} validation failed",
+  "LdapAccountDisabled": "LDAP account {0} is disabled",
   "LdapNotConfigured": "LDAP authentication is not configured",
   "AccountDisabled": "Account Disabled",
   "AccountNotExist": "Account {0} does not exist",

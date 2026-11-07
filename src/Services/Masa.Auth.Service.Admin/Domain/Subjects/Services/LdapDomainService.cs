@@ -1,4 +1,4 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 namespace Masa.Auth.Service.Admin.Domain.Subjects.Services;
 
@@ -53,7 +53,9 @@ public class LdapDomainService : DomainService
         var ldap = await GetIdentityProviderAsync();
 
         var thirdPartyUsers = await _authDbContext.Set<ThirdPartyUser>().Where(tpu => tpu.ThirdPartyIdpId == ldap.Id)
-            .Include(tpu => tpu.User).ThenInclude(user => user.Staff).ToListAsync();
+            .Include(tpu => tpu.User).ThenInclude(user => user.Staff)
+            .Include(tpu => tpu.User).ThenInclude(user => user.Roles)
+            .ToListAsync();
 
         //Index the batch by identity once: the add loop walks the (deduplicated) values skipping
         //identities already stored, and the update loop looks up the matching ldap user. GroupBy
@@ -98,22 +100,21 @@ public class LdapDomainService : DomainService
                 if (tpu.User.Staff == null)
                 {
                     var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company,
-                        GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser),
-                        await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, ldapUser.UserAccountControl == UserAccountControl.NormalAccount);
+                        GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser, _logger),
+                        await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, !ldapUser.IsAccountDisabled);
                     tpu.User.Bind(staff);
                 }
                 else
                 {
                     ApplyLdapProfile(tpu.User.Staff, ldapUser, await GetPositionIdAsync(ldapUser, positionCache));
+                }
 
-                    if (ldapUser.UserAccountControl == UserAccountControl.NormalAccount)
-                    {
-                        tpu.User.Staff.Enable();
-                    }
-                    else
-                    {
-                        tpu.User.Staff.Disable();
-                    }
+                //AD is the authoritative source for the account state: keep User.Enabled in sync
+                //(not just Staff.Enabled), so a user disabled here is re-enabled once AD re-enables it.
+                var ldapUserEnabled = !ldapUser.IsAccountDisabled;
+                if (tpu.User.Enabled != ldapUserEnabled || (tpu.User.Staff != null && tpu.User.Staff.Enabled != ldapUserEnabled))
+                {
+                    tpu.User.SyncExternalIdpEnabled(ldapUserEnabled);
                 }
             }
             catch (Exception ex)
@@ -160,12 +161,12 @@ public class LdapDomainService : DomainService
     /// (no fallback — the SID RID previously used as fallback was wrong data).
     /// An over-length value is dropped with a warning: a truncated job number is still wrong data.
     /// </summary>
-    string GetEmployeeNumber(LdapUser ldapUser)
+    internal static string GetEmployeeNumber(LdapUser ldapUser, ILogger logger)
     {
         var employeeNumber = ldapUser.EmployeeNumber?.Trim() ?? "";
         if (employeeNumber.Length > BusinessConsts.STAFF_JOB_NUMBER_MAX_LENGTH)
         {
-            _logger.LogWarning("Ldap employeeNumber '{employeeNumber}' exceeds JobNumber max length {MaxLength}, ignored.",
+            logger.LogWarning("Ldap employeeNumber '{employeeNumber}' exceeds JobNumber max length {MaxLength}, ignored.",
                 employeeNumber, BusinessConsts.STAFF_JOB_NUMBER_MAX_LENGTH);
             return "";
         }
@@ -285,9 +286,15 @@ public class LdapDomainService : DomainService
     async Task<User> BuildLdapUserAsync(IdentityProvider ldap, LdapUser ldapUser, Dictionary<string, Guid> positionCache)
     {
         var positionId = await GetPositionIdAsync(ldapUser, positionCache);
-        return new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
+        var user = new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
             new ThirdPartyUser(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser)),
-            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser), positionId, StaffTypes.Internal, true));
+            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser, _logger), positionId, StaffTypes.Internal, !ldapUser.IsAccountDisabled));
+        //An account disabled in AD must not be created as enabled.
+        if (ldapUser.IsAccountDisabled)
+        {
+            user.Disable();
+        }
+        return user;
     }
 
     async Task UpdateLdapBoundUserAsync(User user, LdapUser ldapUser, Dictionary<string, Guid> positionCache)
@@ -299,8 +306,17 @@ public class LdapDomainService : DomainService
         }
         else
         {
-            var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser), await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, true);
+            var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser, _logger), await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, !ldapUser.IsAccountDisabled);
             user.Bind(staff);
+        }
+
+        //AD is the authoritative source: an account re-enabled in AD must be usable again
+        //(a sync may have disabled it earlier, which would otherwise block login forever).
+        if (!user.Enabled && !ldapUser.IsAccountDisabled)
+        {
+            _logger.LogWarning("Ldap user was disabled in Auth but enabled in AD, re-enabled on login.---- {Account} / {DisplayName}.",
+                ldapUser.SamAccountName, ldapUser.DisplayName);
+            user.Enable();
         }
 
         await _userDomainService.UpdateAsync(user);
@@ -309,8 +325,9 @@ public class LdapDomainService : DomainService
     /// <summary>
     /// Apply the AD-sourced profile (name/display/gender/phone/email, job number, position) to an
     /// existing staff. Pure in-memory mutation - no Save, no webhook - shared by the batch sync and
-    /// the single-user upsert. Account enable/disable is NOT part of it: the batch sync derives it
-    /// from UserAccountControl, while the login upsert must not flip the staff state.
+    /// the single-user upsert. Account enable/disable is NOT part of it: the batch sync applies
+    /// User.SyncExternalIdpEnabled (user + staff + roles/teams), while the login upsert
+    /// only re-enables a user disabled in Auth but enabled in AD.
     /// </summary>
     void ApplyLdapProfile(Staff staff, LdapUser ldapUser, Guid? positionId)
     {
@@ -318,7 +335,7 @@ public class LdapDomainService : DomainService
 
         //JobNumber: AD is the authoritative source — always overwrite.
         //An empty employeeNumber clears legacy wrong values (e.g. the SID RID previously written).
-        staff.UpdateJobNumber(GetEmployeeNumber(ldapUser));
+        staff.UpdateJobNumber(GetEmployeeNumber(ldapUser, _logger));
 
         if (positionId != null)
         {

@@ -38,6 +38,7 @@
   "ClientIdNotFound": "クライアントID = {0} は存在しません",
   "LdapAccountNotexist": "ドメインアカウント {0} は存在しません",
   "LdapAccountValidationFailed": "ドメインアカウント {0} の検証に失敗しました",
+  "LdapAccountDisabled": "ドメインアカウント{0}は無効になっています",
   "LdapNotConfigured": "LDAP認証が設定されていません",
   "AccountDisabled": "アカウントは無効になっています",
   "AccountNotExist": "アカウント {0} は存在しません",

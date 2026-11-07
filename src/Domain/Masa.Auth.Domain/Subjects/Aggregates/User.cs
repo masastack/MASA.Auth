@@ -402,6 +402,28 @@ public class User : FullAggregateRoot<Guid, Guid>
         });
     }
 
+    /// <summary>
+    /// Sync enabled state from the authoritative external IdP (Ldap/AD).
+    /// Unlike <see cref="Disable"/>, disabling from the external IdP is a stronger business
+    /// semantic: the account is deactivated, so no permissions may remain (roles/teams cleared).
+    /// </summary>
+    public void SyncExternalIdpEnabled(bool enabled)
+    {
+        if (enabled)
+        {
+            Enable();
+            return;
+        }
+
+        Disable();
+        Staff?.SetTeamStaff(new List<Guid>());
+        Staff?.SetCurrentTeam(null);
+        if (_roles.Count > 0)
+        {
+            RemoveRoles(_roles.Select(role => role.RoleId).ToList());
+        }
+    }
+
     [MemberNotNull(nameof(Password))]
     public void UpdatePassword(string? password)
     {

@@ -56,8 +56,13 @@ public class ThirdPartyUserDomainService : DomainService
             var ldapUser = JsonSerializer.Deserialize<LdapUser>(dto.ExtendedData, options);
             if (ldapUser != null)
             {
-                var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetRelativeId(ldapUser.ObjectSid), null, StaffTypes.Internal, true);
+                var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, LdapDomainService.GetEmployeeNumber(ldapUser, _logger), null, StaffTypes.Internal, !ldapUser.IsAccountDisabled);
                 user.Bind(staff);
+                //An account disabled in AD must not be created as enabled.
+                if (ldapUser.IsAccountDisabled)
+                {
+                    user.Disable();
+                }
             }
         }
         var (existUser, e) = await _userDomainService.VerifyRepeatAsync(userDto.PhoneNumber, userDto.Email, default, userDto.Account);
@@ -115,16 +120,5 @@ public class ThirdPartyUserDomainService : DomainService
             exception = new UserFriendlyException(UserFriendlyExceptionCodes.THIRD_PARTY_USER_EXIST, thridPartyIdentity);
         }
         return (thirdPartyUser, exception);
-    }
-
-    string GetRelativeId(string objectSid)
-    {
-        var parts = objectSid.Split('-');
-        if (parts.Length < 3)
-        {
-            return "";
-        }
-
-        return parts[parts.Length - 1];
     }
 }
