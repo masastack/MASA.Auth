@@ -55,6 +55,11 @@ public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
             {
                 throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_NOT_EXIST);
             }
+            //A disabled AD account must never get a token (the password may be skipped above).
+            if (ldapUser.IsAccountDisabled)
+            {
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_VALIDATE_FAILED, userName);
+            }
             var authUser = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
             {
                 ThirdPartyIdpType = ThirdPartyIdpTypes.Ldap,

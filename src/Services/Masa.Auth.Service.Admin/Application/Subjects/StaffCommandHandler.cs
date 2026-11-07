@@ -365,35 +365,13 @@ public class StaffCommandHandler
                     // 检查启用状态是否需要同步
                     if (isLdapUserEnabled != isAuthUserEnabled)
                     {
+                        tpu.User.SyncExternalIdpEnabled(isLdapUserEnabled);
                         if (isLdapUserEnabled)
                         {
-                            // LDAP用户已启用，Auth用户被禁用 -> 启用Auth用户
-                            tpu.User.Enable();
-                            if (tpu.User.Staff != null)
-                            {
-                                tpu.User.Staff.Enable();
-                            }
                             _logger.LogInformation($"Enabled user {tpu.User.Account} based on LDAP status");
                         }
                         else
                         {
-                            // LDAP用户已禁用，Auth用户被启用 -> 禁用Auth用户
-                            tpu.User.Disable();
-                            if (tpu.User.Staff != null)
-                            {
-                                tpu.User.Staff.Disable();
-                                // 清除员工所在团队
-                                tpu.User.Staff.SetTeamStaff(new List<Guid>());
-                                tpu.User.Staff.SetCurrentTeam(null);
-                            }
-
-                            // 清除用户拥有的角色
-                            if (tpu.User.Roles.Any())
-                            {
-                                var roleIds = tpu.User.Roles.Select(r => r.RoleId).ToList();
-                                tpu.User.RemoveRoles(roleIds);
-                            }
-
                             _logger.LogInformation($"Disabled user {tpu.User.Account} and cleared roles/teams based on LDAP status");
                         }
                     }
@@ -444,7 +422,7 @@ public class StaffCommandHandler
     /// </summary>
     private bool IsLdapUserEnabled(LdapUser ldapUser)
     {
-        return (ldapUser.UserAccountControl & UserAccountControl.AccountDisabled) == 0;
+        return !ldapUser.IsAccountDisabled;
     }
 
     /// <summary>

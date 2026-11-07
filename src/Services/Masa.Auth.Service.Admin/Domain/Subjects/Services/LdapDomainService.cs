@@ -46,7 +46,9 @@ public class LdapDomainService : DomainService
         var ldap = await GetIdentityProviderAsync();
 
         var thirdPartyUsers = await _authDbContext.Set<ThirdPartyUser>().Where(tpu => tpu.ThirdPartyIdpId == ldap.Id)
-            .Include(tpu => tpu.User).ThenInclude(user => user.Staff).ToListAsync();
+            .Include(tpu => tpu.User).ThenInclude(user => user.Staff)
+            .Include(tpu => tpu.User).ThenInclude(user => user.Roles)
+            .ToListAsync();
         var existLdapUsers = ldapUsers.Where(ldapUser => thirdPartyUsers.Any(thirdPartyUser => thirdPartyUser.ThridPartyIdentity == ldapUser.ObjectGuid));
         var unExistLdapUsers = ldapUsers.ExceptBy(existLdapUsers.Select(user => user.ObjectGuid), user => user.ObjectGuid).ToList();
 
@@ -57,9 +59,15 @@ public class LdapDomainService : DomainService
             try
             {
                 var positionId = await GetPositionIdAsync(ldapUser, positionCache);
-                addUsers.Add(new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
+                var user = new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
                     new ThirdPartyUser(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser)),
-                    new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser), positionId, StaffTypes.Internal, true)));
+                    new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser, _logger), positionId, StaffTypes.Internal, !ldapUser.IsAccountDisabled));
+                //An account disabled in AD must not be imported as enabled.
+                if (ldapUser.IsAccountDisabled)
+                {
+                    user.Disable();
+                }
+                addUsers.Add(user);
             }
             catch (Exception ex)
             {
@@ -80,8 +88,8 @@ public class LdapDomainService : DomainService
                     if (tpu.User.Staff == null)
                     {
                         var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company,
-                            GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser),
-                            await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, ldapUser.UserAccountControl == UserAccountControl.NormalAccount);
+                            GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser, _logger),
+                            await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, !ldapUser.IsAccountDisabled);
                         tpu.User.Bind(staff);
                     }
                     else
@@ -90,22 +98,21 @@ public class LdapDomainService : DomainService
 
                         //JobNumber: AD is the authoritative source — always overwrite.
                         //An empty employeeNumber clears legacy wrong values (e.g. the SID RID previously written).
-                        tpu.User.Staff.UpdateJobNumber(GetEmployeeNumber(ldapUser));
+                        tpu.User.Staff.UpdateJobNumber(GetEmployeeNumber(ldapUser, _logger));
 
                         var positionId = await GetPositionIdAsync(ldapUser, positionCache);
                         if (positionId != null)
                         {
                             tpu.User.Staff.PositionId = positionId;
                         }
+                    }
 
-                        if (ldapUser.UserAccountControl == UserAccountControl.NormalAccount)
-                        {
-                            tpu.User.Staff.Enable();
-                        }
-                        else
-                        {
-                            tpu.User.Staff.Disable();
-                        }
+                    //AD is the authoritative source for the account state: keep User.Enabled in sync
+                    //(not just Staff.Enabled), so a user disabled here is re-enabled once AD re-enables it.
+                    var ldapUserEnabled = !ldapUser.IsAccountDisabled;
+                    if (tpu.User.Enabled != ldapUserEnabled || (tpu.User.Staff != null && tpu.User.Staff.Enabled != ldapUserEnabled))
+                    {
+                        tpu.User.SyncExternalIdpEnabled(ldapUserEnabled);
                     }
                 }
                 catch (Exception ex)
@@ -122,12 +129,12 @@ public class LdapDomainService : DomainService
     /// (no fallback — the SID RID previously used as fallback was wrong data).
     /// An over-length value is dropped with a warning: a truncated job number is still wrong data.
     /// </summary>
-    string GetEmployeeNumber(LdapUser ldapUser)
+    internal static string GetEmployeeNumber(LdapUser ldapUser, ILogger logger)
     {
         var employeeNumber = ldapUser.EmployeeNumber?.Trim() ?? "";
         if (employeeNumber.Length > BusinessConsts.STAFF_JOB_NUMBER_MAX_LENGTH)
         {
-            _logger.LogWarning("Ldap employeeNumber '{employeeNumber}' exceeds JobNumber max length {MaxLength}, ignored.",
+            logger.LogWarning("Ldap employeeNumber '{employeeNumber}' exceeds JobNumber max length {MaxLength}, ignored.",
                 employeeNumber, BusinessConsts.STAFF_JOB_NUMBER_MAX_LENGTH);
             return "";
         }
@@ -203,7 +210,7 @@ public class LdapDomainService : DomainService
 
                 //JobNumber: AD is the authoritative source — always overwrite.
                 //An empty employeeNumber clears legacy wrong values (e.g. the SID RID previously written).
-                user.Staff!.UpdateJobNumber(GetEmployeeNumber(ldapUser));
+                user.Staff!.UpdateJobNumber(GetEmployeeNumber(ldapUser, _logger));
 
                 var positionId = await GetPositionIdAsync(ldapUser, positionCache);
                 if (positionId != null)
@@ -213,8 +220,17 @@ public class LdapDomainService : DomainService
             }
             else
             {
-                var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser), await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, true);
+                var staff = new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser, _logger), await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, !ldapUser.IsAccountDisabled);
                 user.Bind(staff);
+            }
+
+            //AD is the authoritative source: an account re-enabled in AD must be usable again
+            //(a sync may have disabled it earlier, which would otherwise block login forever).
+            if (!user.Enabled && !ldapUser.IsAccountDisabled)
+            {
+                _logger.LogWarning("Ldap user was disabled in Auth but enabled in AD, re-enabled on login.---- {Account} / {DisplayName}.",
+                    ldapUser.SamAccountName, ldapUser.DisplayName);
+                user.Enable();
             }
 
             await _userDomainService.UpdateAsync(user);
@@ -222,9 +238,15 @@ public class LdapDomainService : DomainService
         }
         else
         {
-            await _userDomainService.AddAsync(new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
+            var newUser = new User(ldapUser.Name, ldapUser.DisplayName, "", ldapUser.SamAccountName, "", ldapUser.Company, ldapUser.EmailAddress, ldapUser.Phone,
             new ThirdPartyUser(ldap.Id, ldapUser.ObjectGuid, JsonSerializer.Serialize(ldapUser)),
-            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser), await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, true)));
+            new Staff(ldapUser.Name, ldapUser.DisplayName, "", "", ldapUser.Company, GenderTypes.Male, ldapUser.Phone, ldapUser.EmailAddress, GetEmployeeNumber(ldapUser, _logger), await GetPositionIdAsync(ldapUser, positionCache), StaffTypes.Internal, !ldapUser.IsAccountDisabled));
+            //An account disabled in AD must not be created as enabled.
+            if (ldapUser.IsAccountDisabled)
+            {
+                newUser.Disable();
+            }
+            await _userDomainService.AddAsync(newUser);
             return ldapUser.SamAccountName;
         }
     }
