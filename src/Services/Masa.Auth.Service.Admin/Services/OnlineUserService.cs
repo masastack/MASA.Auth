@@ -37,18 +37,26 @@ public class OnlineUserService : ServiceBase
 
         var staleWebIds = new List<string>();
         var webSessions = new Dictionary<string, WebSessionDto>();
-        foreach (var subjectId in webSubjectIds)
+        //一次 MGET 取全部会话，替代逐 subjectId 的 N 次串行往返（此处为裸 Redis，无多级缓存 L1）
+        var webSubjectIdArray = webSubjectIds.ToArray();
+        if (webSubjectIdArray.Length > 0)
         {
-            var sessionJson = await db.StringGetAsync(SsoSessionKey(subjectId));
-            if (sessionJson.HasValue)
+            var sessionKeys = webSubjectIdArray.Select(SsoSessionKey).Select(k => (RedisKey)k).ToArray();
+            var sessionJsons = await db.StringGetAsync(sessionKeys);
+            for (var i = 0; i < webSubjectIdArray.Length; i++)
             {
-                var session = JsonSerializer.Deserialize<WebOnlineSessionDto>((string)sessionJson!);
-                if (session != null)
-                    webSessions[subjectId] = new WebSessionDto(session.LoginTime, session.ClientId);
-            }
-            else
-            {
-                staleWebIds.Add(subjectId);
+                var subjectId = webSubjectIdArray[i];
+                var sessionJson = sessionJsons[i];
+                if (sessionJson.HasValue)
+                {
+                    var session = JsonSerializer.Deserialize<WebOnlineSessionDto>((string)sessionJson!);
+                    if (session != null)
+                        webSessions[subjectId] = new WebSessionDto(session.LoginTime, session.ClientId);
+                }
+                else
+                {
+                    staleWebIds.Add(subjectId);
+                }
             }
         }
 

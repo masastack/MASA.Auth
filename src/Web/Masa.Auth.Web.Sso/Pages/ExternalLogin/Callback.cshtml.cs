@@ -82,6 +82,11 @@ public class CallbackModel : PageModel
                 return this.LoadingPage(returnUrl);
             }
         }
+        else if (!Url.IsLocalUrl(returnUrl))
+        {
+            //returnUrl 不是 OIDC 授权请求时必须是本地地址,防止开放重定向(与 Challenge 页同规则)
+            return Redirect("~/");
+        }
 
         return Redirect(returnUrl);
     }

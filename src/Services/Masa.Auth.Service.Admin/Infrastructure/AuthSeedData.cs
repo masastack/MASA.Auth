@@ -18,8 +18,7 @@ public class AuthSeedData
 
         var departmentId = Guid.Empty;
         var adminStaffId = Guid.Empty;
-        var guestStaffId = Guid.Empty;
-        string system = "system", admin = "admin", guest = "guest";
+        string system = "system", admin = WellKnownAccounts.Admin;
 
         var userSetter = serviceProvider.GetService<IUserSetter>();
         var auditUser = new IdentityUser() { Id = masaStackConfig.GetDefaultUserId().ToString(), UserName = system };
@@ -174,7 +173,7 @@ public class AuthSeedData
             departmentId = dapertmentCommand.Result;
         }
 
-        if (!context.Set<User>().Any(u => u.Account == admin))
+        if (!context.Set<User>().Any(UserUniqueKeyQueries.AccountEquals(context, admin)))
         {
             var addStaffDto = new AddStaffDto
             {
@@ -200,7 +199,7 @@ public class AuthSeedData
             adminStaffId = addStaffCommand!.Result?.Id ?? Guid.Empty;
         }
 
-        if (!context.Set<User>().Any(u => u.Account == system))
+        if (!context.Set<User>().Any(UserUniqueKeyQueries.AccountEquals(context, system)))
         {
             await eventBus.PublishAsync(new AddUserCommand(new AddUserDto
             {
@@ -212,11 +211,6 @@ public class AuthSeedData
                 Email = "system@masastack.com",
                 Enabled = true
             }));
-        }
-
-        if (masaStackConfig.IsDemo)
-        {
-            guestStaffId = await AddDemoGuestDataAsync(context, guest, eventBus, departmentId);
         }
 
         if (!context.Set<Team>().Any())
@@ -235,10 +229,6 @@ public class AuthSeedData
             if (adminStaffId != Guid.Empty)
             {
                 addTeamDto.AdminStaffs.Add(adminStaffId);
-            }
-            if (guestStaffId != Guid.Empty)
-            {
-                addTeamDto.MemberStaffs.Add(guestStaffId);
             }
             await eventBus.PublishAsync(new AddTeamCommand(addTeamDto));
         }
@@ -299,65 +289,5 @@ public class AuthSeedData
         #endregion
 
         userSetterHandle.Dispose();
-    }
-
-    private async Task<Guid> AddDemoGuestDataAsync(AuthDbContext context, string guest, IEventBus eventBus, Guid departmentId)
-    {
-        var guestStaffId = Guid.Empty;
-        var permissions = await context.Set<Permission>().Select(p => new SubjectPermissionRelationDto(p.Id, true)).ToListAsync();
-
-        if (!context.Set<Role>().Any(r => r.Name == guest))
-        {
-            var addRoleDto = new AddRoleDto()
-            {
-                Name = guest,
-                Code = guest,
-                Description = guest,
-                Enabled = true,
-                Limit = 0,
-                Permissions = permissions
-            };
-
-            await eventBus.PublishAsync(new AddRoleCommand(addRoleDto));
-        }
-
-        if (!context.Set<User>().Any(u => u.Account == guest))
-        {
-            var addStaffDto = new AddStaffDto
-            {
-                Name = guest,
-                Account = guest,
-                JobNumber = "4399",
-                Password = "guest123",
-                StaffType = StaffTypes.External,
-                Gender = GenderTypes.Female,
-                DisplayName = "Guest",
-                Avatar = "https://cdn.masastack.com/stack/images/avatar/mr.gu.svg",
-                Email = "Guest@masastack.com",
-                CompanyName = "ShuShan",
-                PhoneNumber = "15666666666",
-                Enabled = true,
-                IdCard = "330104202002020906"
-            };
-            if (departmentId != Guid.Empty)
-            {
-                addStaffDto.DepartmentId = departmentId;
-            }
-
-            var addStaffCommand = new AddStaffCommand(addStaffDto);
-
-            await eventBus.PublishAsync(addStaffCommand);
-
-            guestStaffId = addStaffCommand?.Result?.Id ?? Guid.Empty;
-
-            var guestRole = await context.Set<Role>().FirstOrDefaultAsync(p => p.Code == guest);
-            var guestUser = await context.Set<User>().FirstOrDefaultAsync(u => u.Account == guest);
-            await eventBus.PublishAsync(new UpdateUserAuthorizationCommand(new UpdateUserAuthorizationDto()
-            {
-                Id = guestUser!.Id,
-                Roles = new List<Guid>() { guestRole!.Id }
-            }));
-        }
-        return guestStaffId;
     }
 }

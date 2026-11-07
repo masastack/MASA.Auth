@@ -12,6 +12,9 @@ public class ThirdPartyUserEntityTypeConfiguration : IEntityTypeConfiguration<Th
         builder.HasOne(tpu => tpu.IdentityProvider).WithMany().HasForeignKey(tpu => tpu.ThirdPartyIdpId);
         builder.HasIndex(u => new { u.CreationTime, u.ModificationTime });//.IsDescending(); supported 7.0
         builder.Navigation(tpu => tpu.IdentityProvider).AutoInclude();
+        builder.Property(tpu => tpu.ThridPartyIdentity).HasMaxLength(256).IsRequired();
+        builder.HasIndex(tpu => new { tpu.ThirdPartyIdpId, tpu.ThridPartyIdentity })
+            .IsUnique().HasFilter("NOT \"IsDeleted\"");
         builder.Property(tpu => tpu.ClaimData).HasConversion(new JsonValueConverter<Dictionary<string, string>>());
     }
 }

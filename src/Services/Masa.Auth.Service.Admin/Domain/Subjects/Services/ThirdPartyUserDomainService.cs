@@ -24,6 +24,23 @@ public class ThirdPartyUserDomainService : DomainService
 
     public async Task<UserModel> AddThirdPartyUserAsync(AddThirdPartyUserDto dto)
     {
+        //Serialize concurrent "check-then-create" flows for the same third-party identity, so two
+        //concurrent requests (e.g. token requests with grant_type=ldap) cannot both create the user.
+        return await SegmentedAsyncGate.RunExclusiveAsync(dto.ThridPartyIdentity, () => AddThirdPartyUserCoreAsync(dto));
+    }
+
+    /// <summary>Must be called under the identity lock of dto.ThridPartyIdentity.</summary>
+    async Task<UserModel> AddThirdPartyUserCoreAsync(AddThirdPartyUserDto dto)
+    {
+        //Re-checked inside the lock: a concurrent creation for the same identity may have completed already.
+        var existingIdentityUser = await _authDbContext.Set<ThirdPartyUser>()
+            .Include(tpu => tpu.User).ThenInclude(user => user.Staff)
+            .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == dto.ThirdPartyIdpId && tpu.ThridPartyIdentity == dto.ThridPartyIdentity);
+        if (existingIdentityUser != null)
+        {
+            return existingIdentityUser.User.Adapt<UserModel>();
+        }
+
         var userDto = dto.User;
         _logger.LogWarning("AddThirdPartyUserAsync user {0}", JsonSerializer.Serialize(userDto));
         var user = new User(userDto.Name, userDto.DisplayName ?? "", userDto.Avatar, userDto.Account, userDto.Password, "", userDto.Email, userDto.PhoneNumber ?? "",
@@ -69,7 +86,26 @@ public class ThirdPartyUserDomainService : DomainService
 
             return existUser.Adapt<UserModel>();
         }
-        await _userDomainService.AddAsync(user);
+        try
+        {
+            await _userDomainService.AddAsync(user);
+        }
+        catch (Exception ex) when (ex is DbUpdateException || ex is UserFriendlyException)
+        {
+            //A concurrent request (possibly from another instance) created the same identity first and
+            //a filtered unique index rejected this insert - fall back to the winner instead of failing.
+            //AddAsync detaches the failed graph and translates the conflict into a UserFriendlyException
+            //(when it can identify it), so catch both shapes here.
+            var winner = await _authDbContext.Set<ThirdPartyUser>()
+                .Include(tpu => tpu.User).ThenInclude(user => user.Staff)
+                .FirstOrDefaultAsync(tpu => tpu.ThirdPartyIdpId == dto.ThirdPartyIdpId && tpu.ThridPartyIdentity == dto.ThridPartyIdentity);
+            if (winner is null)
+                throw;
+
+            _logger.LogWarning(ex, "Creation of third-party user {Identity} lost the concurrency race, fallback to the existing user {UserId}.",
+                dto.ThridPartyIdentity, winner.UserId);
+            return winner.User.Adapt<UserModel>();
+        }
         return user.Adapt<UserModel>();
     }
     public async Task<(ThirdPartyUser?, UserFriendlyException?)> VerifyRepeatAsync(Guid thirdPartyIdpId, string thridPartyIdentity)

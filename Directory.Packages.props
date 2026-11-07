@@ -1,0 +1,86 @@
+<Project>
+  <!--集中管理包版本:所有 csproj 不再写 Version。MASA 系列经 Directory.Build.props 的
+      MasaFrameworkPackageVersion / MasaStackSdksPackageVersion 两个属性(*-* 浮动)间接引用,
+      还原时解析各包最新版本(含预览);两族分设属性,便于某族需要单独固定时只改一处。
+      已知遗留:Microsoft.AspNetCore.Authentication.JwtBearer 6.0.7 与 net10 目标框架错位,
+      本地源无 10.x 版本,升级需要私有 feed 支持,单独处理。-->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+    <!--Masa 系列版本经 Directory.Build.props 的浮动版本属性(1.2.0-preview.*)间接引用,
+        CPM 默认禁止浮动版本(NU1011),此处显式放开以保持升级只改一处的既有模式。-->
+    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="AlibabaCloud.SDK.Dypnsapi20170525" Version="1.0.6" />
+    <PackageVersion Include="AspNet.Security.OAuth.Alipay" Version="6.0.15" />
+    <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="6.0.15" />
+    <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="6.0.15" />
+    <PackageVersion Include="AspNet.Security.OAuth.Weixin" Version="6.0.15" />
+    <PackageVersion Include="AspNet.Security.OAuth.WorkWeixin" Version="6.0.15" />
+    <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+    <PackageVersion Include="Fare" Version="2.2.1" />
+    <PackageVersion Include="FluentValidation" Version="11.4.0" />
+    <PackageVersion Include="FluentValidation.AspNetCore" Version="11.0.3" />
+    <PackageVersion Include="IdentityServer4.EntityFramework" Version="4.1.2" />
+    <!--2.6.4 传递引入 System.Drawing.Common 4.7.0（CVE-2021-24112 Critical RCE）；2.7.0 起移除该依赖，
+        2.9.0 为最新稳定版且依赖最干净（无 System.Drawing、无 ImageSharp），Csv 包有 net10.0 TFM-->
+    <PackageVersion Include="Magicodes.IE.Core" Version="2.9.0" />
+    <PackageVersion Include="Magicodes.IE.Csv" Version="2.9.0" />
+    <PackageVersion Include="Mapster" Version="7.3.0" />
+    <PackageVersion Include="Masa.Blazor" Version="1.9.3" />
+    <PackageVersion Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.BuildingBlocks.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.BuildingBlocks.SearchEngine.AutoComplete" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.BuildingBlocks.StackSdks.Auth.Contracts" Version="$(MasaStackSdksPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Authentication.Identity" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Authentication.OpenIdConnect.Cache" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Authentication.OpenIdConnect.Cache.Storage" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Authentication.OpenIdConnect.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Authentication.OpenIdConnect.EFCore.PostgreSql" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Caching.Distributed.StackExchangeRedis" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Data.Contracts" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Data.EFCore.PostgreSql" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Data.EFCore.SqlServer" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Data.UoW.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Ddd.Domain.Repository.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Dispatcher.IntegrationEvents.Dapr" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Dispatcher.IntegrationEvents.EventLogs.EFCore" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Exceptions" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Extensions.BackgroundJobs.Memory" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Globalization.I18n.AspNetCore" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.SearchEngine.AutoComplete.ElasticSearch" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.Service.MinimalAPIs" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.StackSdks.Auth" Version="$(MasaStackSdksPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.StackSdks.Dcc" Version="$(MasaStackSdksPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.StackSdks.Mc" Version="$(MasaStackSdksPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.StackSdks.Middleware" Version="$(MasaStackSdksPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaStackSdksPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.StackSdks.Scheduler" Version="$(MasaStackSdksPackageVersion)" />
+    <PackageVersion Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" Version="$(MasaStackSdksPackageVersion)" />
+    <PackageVersion Include="MASA.Lingua.SDK.MasaBlazor" Version="0.0.1" />
+    <PackageVersion Include="MASA.Lingua.SDK.MasaI18n" Version="0.0.1" />
+    <PackageVersion Include="Masa.Utils.Extensions.DependencyInjection" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Utils.Extensions.Validations.FluentValidation" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Masa.Utils.Ldap.Novell" Version="$(MasaFrameworkPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.9" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <!--头像生成用 SkiaSharp(MIT):原先的 SixLabors.ImageSharp 3.2.0 在 Release 编译期强制校验商业许可,
+        会给 CI/镜像构建引入密钥注入点。Linux 原生库用 NoDependencies 变体——它不依赖 fontconfig,
+        正好适配 aspnet:10.0 运行时镜像(该镜像未装 fontconfig),且字体由代码显式加载字体文件。-->
+    <PackageVersion Include="SkiaSharp" Version="3.119.4" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.4" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageVersion Include="Util.Reflection" Version="1.0.3" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+  </ItemGroup>
+</Project>

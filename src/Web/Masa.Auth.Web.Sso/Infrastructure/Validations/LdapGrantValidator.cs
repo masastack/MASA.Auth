@@ -28,6 +28,12 @@ public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
             }
 
             var password = context.Request.Raw["password"] ?? string.Empty;
+            //密码缺失直接拒绝:否则任何存在的 AD 账号都能免密换取 token
+            //(与管理端 ValidateByAccount 的 LDAP 路径保持一致,那边始终校验密码)
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_VALIDATE_FAILED, userName);
+            }
 
             var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(LdapConsts.LDAP_NAME);
             if (ldapOption is null)

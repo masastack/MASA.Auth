@@ -9,12 +9,15 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(u => u.Id);
         //mysql use ForMySQLHasCollation("utf8_bin") link https://dev.mysql.com/doc/connector-net/en/connector-net-entityframework-core-charset.html
-        //builder.Property(c => c.Account).UseCollation("SQL_Latin1_General_CP1_CS_AS");
-        builder.HasIndex(u => u.Account);
+        //Account/Email 唯一索引按大小写敏感建约束(挡住 LDAP 同步竞态产生的完全相同账号的重复用户)。
+        //大小写变体(ZhangSan/zhangsan)的唯一性由应用层承担:UserUniqueKeyQueries 的 LOWER() 预检查
+        //拦住顺序流程,仅并发窗口可能漏过(概率极低,已接受的取舍);SS 侧由 CI 列排序规则在 DB 层直接保证。
+        //PG 的 LOWER() 比较不命中本索引,登录/注册等查找为全表扫描,十万级内为毫秒级,同为已接受的代价。
+        builder.HasIndex(u => u.Account).IsUnique().HasFilter("NOT \"IsDeleted\"");
         builder.HasIndex(u => u.Name);
-        builder.HasIndex(u => u.IdCard);
-        builder.HasIndex(u => u.PhoneNumber);
-        builder.HasIndex(u => u.Email);
+        builder.HasIndex(u => u.IdCard).IsUnique().HasFilter("NOT \"IsDeleted\" and \"IdCard\"!=''");
+        builder.HasIndex(u => u.PhoneNumber).IsUnique().HasFilter("NOT \"IsDeleted\" and \"PhoneNumber\"!=''");
+        builder.HasIndex(u => u.Email).IsUnique().HasFilter("NOT \"IsDeleted\" and \"Email\"!=''");
         builder.Property(u => u.IdCard).HasMaxLength(18);
         builder.Property(u => u.PhoneNumber).HasMaxLength(11);
         builder.OwnsOne(u => u.Address);

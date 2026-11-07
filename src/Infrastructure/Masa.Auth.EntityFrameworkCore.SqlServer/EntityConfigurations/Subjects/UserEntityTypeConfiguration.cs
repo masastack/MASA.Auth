@@ -9,12 +9,15 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(u => u.Id);
         //mysql use ForMySQLHasCollation("utf8_bin") link https://dev.mysql.com/doc/connector-net/en/connector-net-entityframework-core-charset.html
-        builder.Property(c => c.Account).UseCollation("SQL_Latin1_General_CP1_CS_AS");
-        builder.HasIndex(u => u.Account);
+        //Account/Email 唯一索引按不区分大小写生效（CI），与 PostgreSQL 的 lower() 表达式索引、
+        //应用层 OrdinalIgnoreCase 保持同一口径；登录/查重等值比较无需再各自转换。
+        builder.Property(c => c.Account).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        builder.Property(c => c.Email).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        builder.HasIndex(u => u.Account).IsUnique().HasFilter("[IsDeleted] = 0");
         builder.HasIndex(u => u.Name);
-        builder.HasIndex(u => u.IdCard);
-        builder.HasIndex(u => u.PhoneNumber);
-        builder.HasIndex(u => u.Email);
+        builder.HasIndex(u => u.IdCard).IsUnique().HasFilter("[IsDeleted] = 0 and IdCard!=''");
+        builder.HasIndex(u => u.PhoneNumber).IsUnique().HasFilter("[IsDeleted] = 0 and PhoneNumber!=''");
+        builder.HasIndex(u => u.Email).IsUnique().HasFilter("[IsDeleted] = 0 and Email!=''");
         builder.Property(u => u.IdCard).HasMaxLength(18);
         builder.Property(u => u.PhoneNumber).HasMaxLength(11);
         builder.OwnsOne(u => u.Address);
