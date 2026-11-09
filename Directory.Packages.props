@@ -60,8 +60,8 @@
     <PackageVersion Include="Masa.Contrib.StackSdks.Pm" Version="$(MasaStackSdksPackageVersion)" />
     <PackageVersion Include="Masa.Contrib.StackSdks.Scheduler" Version="$(MasaStackSdksPackageVersion)" />
     <PackageVersion Include="Masa.Contrib.StackSdks.Tsc.OpenTelemetry" Version="$(MasaStackSdksPackageVersion)" />
-    <PackageVersion Include="MASA.Lingua.SDK.MasaBlazor" Version="0.0.1" />
-    <PackageVersion Include="MASA.Lingua.SDK.MasaI18n" Version="0.0.1" />
+    <PackageVersion Include="MASA.Lingua.SDK.MasaBlazor" Version="0.0.1-preview.1" />
+    <PackageVersion Include="MASA.Lingua.SDK.MasaI18n" Version="0.0.1-preview.1" />
     <PackageVersion Include="Masa.Utils.Extensions.DependencyInjection" Version="$(MasaFrameworkPackageVersion)" />
     <PackageVersion Include="Masa.Utils.Extensions.Enums" Version="$(MasaFrameworkPackageVersion)" />
     <PackageVersion Include="Masa.Utils.Extensions.Validations.FluentValidation" Version="$(MasaFrameworkPackageVersion)" />
