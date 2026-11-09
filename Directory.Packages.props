@@ -28,7 +28,7 @@
     <PackageVersion Include="Magicodes.IE.Core" Version="2.9.0" />
     <PackageVersion Include="Magicodes.IE.Csv" Version="2.9.0" />
     <PackageVersion Include="Mapster" Version="7.3.0" />
-    <PackageVersion Include="Masa.Blazor" Version="1.9.3" />
+    <PackageVersion Include="Masa.Blazor" Version="1.11.9" />
     <PackageVersion Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Domain" Version="$(MasaFrameworkPackageVersion)" />
     <PackageVersion Include="Masa.BuildingBlocks.Authentication.OpenIdConnect.Models" Version="$(MasaFrameworkPackageVersion)" />
     <PackageVersion Include="Masa.BuildingBlocks.Ddd.Domain" Version="$(MasaFrameworkPackageVersion)" />
