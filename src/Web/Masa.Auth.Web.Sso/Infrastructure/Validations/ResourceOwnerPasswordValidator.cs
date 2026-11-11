@@ -30,6 +30,9 @@ public class ResourceOwnerPasswordValidator : BaseGrantValidator, IResourceOwner
         }
         catch (Exception ex)
         {
+            _logger.LogWarning(ex,
+                "Extension grant {GrantType} rejected. userName:{UserName}, clientId:{ClientId}, error:{ErrorMessage}",
+                "password", context.UserName, context.Request.Client?.ClientId, ex.Message);
             context.Result = new GrantValidationResult(
                 TokenRequestErrors.InvalidGrant,
                 ex.Message);

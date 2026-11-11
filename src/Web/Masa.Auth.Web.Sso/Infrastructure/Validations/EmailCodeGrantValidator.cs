@@ -40,6 +40,9 @@ public class EmailCodeGrantValidator : BaseGrantValidator, IExtensionGrantValida
         }
         catch (Exception ex)
         {
+            _logger.LogWarning(ex,
+                "Extension grant {GrantType} rejected. email:{Email}, clientId:{ClientId}, error:{ErrorMessage}",
+                GrantType, context.Request.Raw["Email"], context.Request.Client?.ClientId, ex.Message);
             context.Result = new GrantValidationResult(
                 TokenRequestErrors.InvalidGrant,
                 ex.Message);
