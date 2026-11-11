@@ -53,7 +53,7 @@ public class LdapCommandHandler
                 ldapIdpDto.RootUserPassword,
                 ldapIdpDto.UserSearchBaseDn,
                 ldapIdpDto.GroupSearchBaseDn);
-        var dbItem = await _ldapIdpRepository.FindAsync(l => l.Name == ldapIdp.Name);
+        var dbItem = await _ldapIdpRepository.FindAsync(IdentityProviderQueries.NameEquals<LdapIdp>(LdapConsts.LDAP_NAME));
         if (dbItem is null)
         {
             await _ldapIdpRepository.AddAsync(ldapIdp);

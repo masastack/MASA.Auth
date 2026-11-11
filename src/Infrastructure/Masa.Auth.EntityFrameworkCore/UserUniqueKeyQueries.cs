@@ -9,6 +9,7 @@ namespace Masa.Auth.EntityFrameworkCore;
 /// 大小写敏感,仅作完全重复的兜底,见 UserEntityTypeConfiguration 注释),登录/注册等
 /// 查找为全表扫描,属已接受的代价;SS 分支裸列比较,CI 排序规则下直接走索引。
 /// 涉及这两列的等值条件统一从这里构造,不要在查询处散落 <c>Account == x</c>。
+/// LOWER 等值表达式本身的构造见 <see cref="LoweredEquals"/>。
 /// </summary>
 public static class UserUniqueKeyQueries
 {
@@ -30,8 +31,7 @@ public static class UserUniqueKeyQueries
         Expression body;
         if (dbContext.Database.ProviderName == NpgsqlProviderName)
         {
-            var left = Expression.Call(property, typeof(string).GetMethod(nameof(string.ToLower), Type.EmptyTypes)!);
-            body = Expression.Equal(left, Expression.Constant(normalized));
+            body = LoweredEquals.Build(property, normalized);
             if (withNonEmptyGuard)
             {
                 body = Expression.AndAlso(body, Expression.NotEqual(property, Expression.Constant(string.Empty)));
