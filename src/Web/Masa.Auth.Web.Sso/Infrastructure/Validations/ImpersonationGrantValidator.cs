@@ -6,11 +6,13 @@ namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 public class ImpersonationGrantValidator : IExtensionGrantValidator
 {
     IAuthClient _authClient;
+    readonly ILogger<ImpersonationGrantValidator> _logger;
     public string GrantType { get; } = BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.IMPERSONATION;
 
-    public ImpersonationGrantValidator(IAuthClient authClient)
+    public ImpersonationGrantValidator(IAuthClient authClient, ILogger<ImpersonationGrantValidator> logger)
     {
         _authClient = authClient;
+        _logger = logger;
     }
 
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
@@ -59,6 +61,9 @@ public class ImpersonationGrantValidator : IExtensionGrantValidator
         }
         catch (Exception ex)
         {
+            _logger.LogWarning(ex,
+                "Extension grant {GrantType} rejected. clientId:{ClientId}, error:{ErrorMessage}",
+                GrantType, context.Request.Client?.ClientId, ex.Message);
             context.Result = new GrantValidationResult(
                 TokenRequestErrors.InvalidGrant,
                 ex.Message);
