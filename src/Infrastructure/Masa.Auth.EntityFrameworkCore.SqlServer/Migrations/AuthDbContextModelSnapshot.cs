@@ -834,6 +834,7 @@ namespace Masa.Auth.Service.Admin.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
+                        .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("IdentityProvider", "auth");

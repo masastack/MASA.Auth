@@ -231,7 +231,7 @@ public class ThirdPartyCommandHandler
     public async Task AddThirdPartyIdpAsync(AddThirdPartyIdpCommand command)
     {
         var thirdPartyIdpDto = command.ThirdPartyIdp;
-        var exist = await _thirdPartyIdpRepository.GetCountAsync(thirdPartyIdp => thirdPartyIdp.Name == thirdPartyIdpDto.Name) > 0;
+        var exist = await _thirdPartyIdpRepository.GetCountAsync(IdentityProviderQueries.NameEquals<ThirdPartyIdp>(thirdPartyIdpDto.Name)) > 0;
         if (exist)
             throw new UserFriendlyException(UserFriendlyExceptionCodes.THIRD_PARTY_IDP_NAME_EXIST, thirdPartyIdpDto.Name);
 

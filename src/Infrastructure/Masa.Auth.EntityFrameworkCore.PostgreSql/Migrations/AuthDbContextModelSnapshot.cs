@@ -864,6 +864,7 @@ namespace Masa.Auth.EntityFrameworkCore.PostgreSql.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
+                        .IsUnique()
                         .HasFilter("NOT \"IsDeleted\"");
 
                     b.ToTable("IdentityProvider", "auth");

@@ -176,7 +176,7 @@ public class ThirdPartyQueryHandler
     {
         var identityProvider = await _authDbContext.Set<IdentityProvider>()
                                                        .AsNoTracking()
-                                                       .FirstOrDefaultAsync(ip => ip.Name == query.scheme);
+                                                       .FirstOrDefaultAsync(IdentityProviderQueries.NameEquals<IdentityProvider>(query.scheme));
 
         query.Result = identityProvider ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IDENTITY_PROVIDER_NOT_FOUND);
     }
@@ -184,7 +184,7 @@ public class ThirdPartyQueryHandler
     [EventHandler]
     public async Task GetLdapDetailDtoAsync(LdapDetailQuery query)
     {
-        var thirdPartyIdp = await _ldapIdpRepository.FindAsync(ldap => ldap.Name == query.Name);
+        var thirdPartyIdp = await _ldapIdpRepository.FindAsync(IdentityProviderQueries.NameEquals<LdapIdp>(query.Name));
         thirdPartyIdp?.Adapt(query.Result);
     }
 
@@ -218,7 +218,7 @@ public class ThirdPartyQueryHandler
     [EventHandler]
     public async Task GetLdapUsersAccountAsync(LdapUsersAccountQuery query)
     {
-        var identityProvider = await _authDbContext.Set<IdentityProvider>().FirstOrDefaultAsync(x => x.Name == "Ldap");
+        var identityProvider = await _authDbContext.Set<IdentityProvider>().FirstOrDefaultAsync(IdentityProviderQueries.NameEquals<IdentityProvider>("Ldap"));
         MasaArgumentException.ThrowIfNull(identityProvider, nameof(IdentityProvider));
 
         var tpUsers = await _thirdPartyUserRepository.GetListAsync(x => x.ThirdPartyIdpId == identityProvider.Id && query.UserIds.Contains(x.UserId));
@@ -238,7 +238,7 @@ public class ThirdPartyQueryHandler
     [EventHandler]
     public async Task GetThirdPartyUserFieldValueAsync(ThirdPartyUserFieldValueQuery query)
     {
-        var identityProvider = await _authDbContext.Set<IdentityProvider>().FirstOrDefaultAsync(x => x.Name == query.Scheme);
+        var identityProvider = await _authDbContext.Set<IdentityProvider>().FirstOrDefaultAsync(IdentityProviderQueries.NameEquals<IdentityProvider>(query.Scheme));
         MasaArgumentException.ThrowIfNull(identityProvider, nameof(IdentityProvider));
 
         var tpUsers = await _thirdPartyUserRepository.GetListAsync(x => x.ThirdPartyIdpId == identityProvider.Id && query.UserIds.Contains(x.UserId));
