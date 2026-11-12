@@ -83,5 +83,7 @@
   "EmailFormatError": "Неверный формат электронной почты",
   "IdCardFormatError": "Неверный формат номера удостоверения личности",
   "ThirdPartyUserBindExist": "Этот пользователь уже привязан",
-  "BindSuccess": "Привязка успешна"
+  "BindSuccess": "Привязка успешна",
+  "RedirectingToApplication": "Возвращаемся в приложение",
+  "RedirectingToApplicationTip": "После завершения вы можете закрыть эту вкладку"
 }

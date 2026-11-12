@@ -72,5 +72,7 @@
   "EmailFormatError": "Email format is incorrect",
   "IdCardFormatError": "Id Card format is incorrect",
   "ThirdPartyUserBindExist": "The user has been bound",
-  "BindSuccess": "Bind Successed"
+  "BindSuccess": "Bind Successed",
+  "RedirectingToApplication": "Returning to the application",
+  "RedirectingToApplicationTip": "Once complete, you may close this tab."
 }
