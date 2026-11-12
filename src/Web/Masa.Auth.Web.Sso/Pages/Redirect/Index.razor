@@ -2,15 +2,23 @@
 @page "/redirect"
 @using Microsoft.JSInterop
 
+@inherits SsoSectionComponentBase
+@layout SimpleLayout
 @inject IJSRuntime jsRuntime;
 
 <HeadContent>
     <meta http-equiv="refresh" content="0;url=@RedirectUri" data-url="@RedirectUri">
 </HeadContent>
 
-<div class="redirect-page">
-    <div class="lead">
-        <h1>You are now being returned to the application</h1>
-        <p>Once complete, you may close this tab.</p>
+<MCard MaxWidth="440" Class="full-width pa-8 text-center">
+    <MAvatar Size="72" Color="primary">
+        <MIcon Color="white" Size="36">mdi-open-in-app</MIcon>
+    </MAvatar>
+    <div class="text-h5 font-weight-medium mt-6">
+        @Text("RedirectingToApplication", "正在返回应用", "Returning to the application")
     </div>
-</div>
+    <div class="text-body-2 neutral-lighten-4--text mt-2">
+        @Text("RedirectingToApplicationTip", "完成后，您可以关闭此标签页", "Once complete, you may close this tab.")
+    </div>
+    <MProgressLinear Class="mt-6" Indeterminate Rounded Height="4" />
+</MCard>
