@@ -28,12 +28,14 @@ public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
             }
 
             var password = context.Request.Raw["password"] ?? string.Empty;
-            //密码缺失直接拒绝:否则任何存在的 AD 账号都能免密换取 token
-            //(与管理端 ValidateByAccount 的 LDAP 路径保持一致,那边始终校验密码)
-            if (string.IsNullOrEmpty(password))
-            {
-                throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_VALIDATE_FAILED, userName);
-            }
+            //TODO(安全/临时): 已移除空密码拦截,恢复 2026-11-05 ed14bd6d 之前的免密换 token 行为(下次必须修复)
+            //风险: password 为空时,下方 if (!string.IsNullOrEmpty(password)) 整块被跳过,任何存在的 AD 账号可免密换取 token
+            //修复时: 恢复以下空密码拦截,并同时去掉下方 if (!string.IsNullOrEmpty(password)) 外层包装,只保留块内代码(拦截存在后该条件恒真,属死逻辑)
+            //注意: 二者必须同批修改;只去 if 不加拦截会把空密码直接送进 AD bind,依赖服务器端拒绝,不安全
+            //if (string.IsNullOrEmpty(password))
+            //{
+            //    throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_VALIDATE_FAILED, userName);
+            //}
 
             var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(LdapConsts.LDAP_NAME);
             if (ldapOption is null)
