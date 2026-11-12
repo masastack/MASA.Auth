@@ -101,6 +101,10 @@ public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
         }
         catch (Exception ex)
         {
+            //真实失败原因此前只经 error_description 返回给调用方,服务端日志只有笼统的 invalid_grant,补记关键上下文(不含密码)
+            _logger.LogWarning(ex,
+                "Extension grant {GrantType} rejected. userName:{UserName}, clientId:{ClientId}, error:{ErrorMessage}",
+                GrantType, context.Request.Raw["userName"], context.Request.Client?.ClientId, ex.Message);
             context.Result = new GrantValidationResult(
                 TokenRequestErrors.InvalidGrant,
                 ex.Message);

@@ -63,6 +63,9 @@ public class LocalPhoneNumberGrantValidator : BaseGrantValidator, IExtensionGran
         }
         catch (Exception ex)
         {
+            _logger.LogWarning(ex,
+                "Extension grant {GrantType} rejected. phoneNumber:{PhoneNumber}, clientId:{ClientId}, error:{ErrorMessage}",
+                GrantType, context.Request.Raw["PhoneNumber"], context.Request.Client?.ClientId, ex.Message);
             context.Result = new GrantValidationResult(
                 TokenRequestErrors.InvalidGrant,
                 ex.Message);

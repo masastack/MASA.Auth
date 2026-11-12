@@ -96,6 +96,9 @@ public class ThirdPartyIdpGrantValidator : BaseGrantValidator, IExtensionGrantVa
         }
         catch (Exception ex)
         {
+            _logger.LogWarning(ex,
+                "Extension grant {GrantType} rejected. scheme:{Scheme}, clientId:{ClientId}, error:{ErrorMessage}",
+                GrantType, context.Request.Raw["scheme"], context.Request.Client?.ClientId, ex.Message);
             context.Result = new GrantValidationResult(
                 TokenRequestErrors.InvalidGrant,
                 ex.Message);
