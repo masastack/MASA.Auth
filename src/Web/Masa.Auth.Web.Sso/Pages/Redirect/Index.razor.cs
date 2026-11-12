@@ -7,6 +7,7 @@ namespace Masa.Auth.Web.Sso.Pages.Redirect;
 public partial class Index
 {
     [Parameter]
+    [SupplyParameterFromQuery]
     public string RedirectUri { get; set; } = string.Empty;
 
     [Inject]

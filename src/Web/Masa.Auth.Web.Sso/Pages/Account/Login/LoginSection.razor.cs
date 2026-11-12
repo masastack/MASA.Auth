@@ -83,6 +83,14 @@ public partial class LoginSection
                 await _localStorage.SetAsync(nameof(_inputModel.Environment), _inputModel.Environment);
                 if (SsoUrlHelper.IsLocalUrl(_inputModel.ReturnUrl))
                 {
+                    var context = SsoAuthenticationStateCache.GetAuthorizationContext(_inputModel.ReturnUrl);
+                    if (context != null && context.IsNativeClient())
+                    {
+                        // 原生客户端（自定义 scheme redirect_uri）：经 /redirect/index 中转，提升 UX
+                        Navigation.LoadingPage(_inputModel.ReturnUrl);
+                        return;
+                    }
+
                     Navigation.NavigateTo(_inputModel.ReturnUrl, true);
                 }
                 else if (string.IsNullOrEmpty(_inputModel.ReturnUrl))

@@ -29,10 +29,9 @@ public static class Extensions
     /// </summary>
     public static IActionResult LoadingPage(this PageModel page, string redirectUri)
     {
-        page.HttpContext.Response.StatusCode = 200;
-        page.HttpContext.Response.Headers["Location"] = "";
-
-        return page.RedirectToPage("/redirect/index", new { RedirectUri = redirectUri });
+        // /redirect/index 是 Blazor 组件路由（MapFallbackToPage），不是 Razor Page，
+        // RedirectToPage 无法解析，必须直接对 URL 做 302
+        return new RedirectResult(QueryHelpers.AddQueryString("/redirect/index", "RedirectUri", redirectUri));
     }
 
     public static void LoadingPage(this NavigationManager nav, string redirectUri)
@@ -42,14 +41,6 @@ public static class Extensions
             { "RedirectUri", redirectUri }
         });
         nav.NavigateTo(url);
-    }
-
-    public static IActionResult LoadingPage(this Controller controller, string redirectUri)
-    {
-        controller.HttpContext.Response.StatusCode = 200;
-        controller.HttpContext.Response.Headers["Location"] = "";
-
-        return controller.RedirectToPage("/redirect/index", new { RedirectUri = redirectUri });
     }
 
     public static void NavigateTo(this NavigationManager nav, string uri, Dictionary<string, object?> parameters, bool replace = false)

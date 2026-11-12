@@ -105,12 +105,8 @@ public class AccountController : Controller
                     : $"用户登录：使用账号{inputModel.Account}登录";
                 await RecordLoginOperationLogAsync(user, loginDescription, context?.Client.ClientId);
 
-                if (context != null && context.IsNativeClient())
-                {
-                    // The client is native, so this change in how to
-                    // return the response is for better UX for the end user.
-                    return this.LoadingPage(returnUrl);
-                }
+                // 此接口由登录页通过 XHR 调用，返回 302 会被 XHR 吞掉，浏览器不会导航；
+                // 原生客户端的 LoadingPage 中转跳转交由 Blazor 端（LoginSection.LoginHandler）处理
                 return Ok();
             }
         }
