@@ -10,8 +10,20 @@ public partial class Index
     [SupplyParameterFromQuery]
     public string RedirectUri { get; set; } = string.Empty;
 
-    [Inject]
-    public NavigationManager Navigation { get; set; } = null!;
+    /// <summary>
+    /// 取多语言词条。词条由 Lingua 平台供给，平台尚未发布新词条时 T() 会原样返回 key，
+    /// 此时回退到内置文案，避免页面直接显示 key。
+    /// </summary>
+    private string Text(string key, string zh, string en)
+    {
+        var text = T(key);
+        if (!string.IsNullOrEmpty(text) && text != key)
+        {
+            return text;
+        }
+
+        return LanguageProvider.Culture.Name.StartsWith("zh", StringComparison.OrdinalIgnoreCase) ? zh : en;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
