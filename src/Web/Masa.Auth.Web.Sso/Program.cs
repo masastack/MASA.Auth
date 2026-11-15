@@ -3,6 +3,8 @@
 
 using MASA.Lingua.SDK.AspNetCore;
 using Masa.Auth.Web.Sso.Infrastructure;
+using Masa.Auth.Web.Sso.Infrastructure.BackgroundJobs;
+using Masa.Auth.Web.Sso.Infrastructure.OnlineUser;
 using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Masa.BuildingBlocks.Globalization.I18n;
@@ -164,7 +166,10 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddExtensionGrantValidator<LocalPhoneNumberGrantValidator>()
     .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>()
     .AddExtensionGrantValidator<LdapGrantValidator>()
-    .AddExtensionGrantValidator<ImpersonationGrantValidator>();
+    .AddExtensionGrantValidator<ImpersonationGrantValidator>()
+    //踢人通知在后台服务（无 HttpContext）里发送：IS4 默认实现会因取不到 HttpContext 抛异常，
+    //这里替换为可显式指定 issuer 的实现；有 HttpContext 的请求内场景行为不变
+    .AddBackChannelLogoutService<KickBackChannelLogoutService>();
 
 if (builder.Environment.IsDevelopment())
 {
@@ -195,37 +200,17 @@ builder.Services.AddHotUpdateAuthenticationExternal<AuthenticationExternalHandle
 
 builder.Services.AddScoped<IUserSession, ClientUserSession>();
 
+//踢人通知消费：Admin 删 grant 行 + 写水位线 + XADD auth:kick-requests，SSO 消费后发 backchannel logout
+builder.Services.AddHostedService<KickRequestConsumer>();
+
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
 builder.Services.AddLadpContext();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetEntryAssembly());
 
-builder.Services.PostConfigure<CookieAuthenticationOptions>(
-    IdentityServerConstants.DefaultCookieAuthenticationScheme, options =>
-    {
-        var original = options.Events.OnValidatePrincipal;
-        options.Events.OnValidatePrincipal = async context =>
-        {
-            if (original != null)
-                await original(context);
-
-            var sub = context.Principal?.FindFirst("sub")?.Value;
-            if (sub != null)
-            {
-                var mux = context.HttpContext.RequestServices
-                    .GetRequiredService<IConnectionMultiplexer>();
-                var db = mux.GetDatabase();
-                if (await db.KeyExistsAsync($"kicked:{sub}"))
-                {
-                    context.RejectPrincipal();
-                    await context.HttpContext.SignOutAsync(
-                        IdentityServerConstants.DefaultCookieAuthenticationScheme);
-                    await db.KeyDeleteAsync($"kicked:{sub}");
-                }
-            }
-        };
-    });
+//踢人水位线：签发时刻早于 online:kicked-at:* 的 Cookie 一律拒绝（实现在 SsoKickWatermark）
+builder.Services.AddSsoKickWatermark();
 
 var app = builder.Build();
 

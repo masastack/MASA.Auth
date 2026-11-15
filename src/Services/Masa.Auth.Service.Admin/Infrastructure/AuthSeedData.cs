@@ -57,9 +57,13 @@ public class AuthSeedData
         var teamAddApi = new Permission(Guid.NewGuid(), MasaStackProject.Auth.Name, masaStackConfig.GetServiceId(MasaStackProject.Auth), "TeamAdd", ElementPermissionCodes.ApiTeamAdd, "", "", 1, PermissionTypes.Api);
         teamAddElement.BindApiPermission(teamAddApi.Id);
 
+        //在线用户"强制下线"接口：端点上的 [MasaAuthorize]（不写 Code）按请求路径推导出 {serviceId}.api.online-user.kick，
+        //与本权限的 ReplenishCode 匹配，和 teamAddApi 同一套机制（Code 必须与路径推导结果一致，由 OnlineUserAuthorizationTests 固定）
+        var onlineUserKickApi = new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetServiceId(MasaStackProject.Auth), "OnlineUserKick", ElementPermissionCodes.ApiOnlineUserKick, "", "", 1, PermissionTypes.Api);
+
         var authMenus = new List<Permission>() {
             userPermission,updateAccountPermission,
-            rolePermission,role,permission,team,teamAddElement,teamAddApi,
+            rolePermission,role,permission,team,teamAddElement,teamAddApi,onlineUserKickApi,
             new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
             new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-arrange-bring-forward",6,PermissionTypes.Menu),

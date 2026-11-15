@@ -35,6 +35,16 @@
 		<PackageReference Include="Masa.Utils.Ldap.Novell" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<!--OnlineUserConsts / KickRequestMessage：与 Admin 共享的踢人约定（纯常量与 record）-->
+		<ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!--KickRequestConsumer 的单条消息处理（租约 / ACK 语义）需要在不连真实 Redis 的情况下单测-->
+		<InternalsVisibleTo Include="Masa.Auth.EntityFrameworkCore.Tests" />
+	</ItemGroup>
+
 	<!--Lingua 离线兜底 + 同步落盘目录 = Assets/I18n（MASA I18n 原生资源目录，Lingua:LocalJsonDirectory 指向这里）：
 	    语种 JSON 随构建拷到输出目录，Lingua 同步的最新版本会原地覆盖写回同一位置
 	    （PreserveNewest：构建不反向覆盖比仓库快照更新的已同步文件）；

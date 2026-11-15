@@ -40,6 +40,8 @@
 		<PackageReference Include="Masa.Contrib.Service.MinimalAPIs" />
 		<PackageReference Include="Masa.Utils.Ldap.Novell" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+		<!--Reference 客户端 opaque AT 的 introspection 校验（踢人删行后即 401，见 plan 文档 §7/§8）-->
+		<PackageReference Include="Duende.AspNetCore.Authentication.OAuth2Introspection" />
 		<PackageReference Include="Masa.Contrib.Globalization.I18n.AspNetCore" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
 		<PackageReference Include="SkiaSharp" />
@@ -54,6 +56,11 @@
 		<ProjectReference Include="..\..\Infrastructure\Masa.Auth.EntityFrameworkCore.SqlServer\Masa.Auth.EntityFrameworkCore.SqlServer.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Masa.Auth.EntityFrameworkCore\Masa.Auth.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\Web\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!--会话分组/踢人粒度的单测需要访问 internal 成员（BuildOnlineUsersAsync / FilterForKick）-->
+		<InternalsVisibleTo Include="Masa.Auth.Service.Admin.Tests" />
 	</ItemGroup>
 
 	<!--Lingua 离线兜底 + 同步落盘目录 = Assets/I18n（MASA I18n 原生资源目录，Lingua:LocalJsonDirectory 指向这里）：

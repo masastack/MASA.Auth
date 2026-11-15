@@ -8,4 +8,6 @@ public class ElementPermissionCodes
     public static string TeamAdd { get; } = "team.add";
     public static string ApiTeamAdd { get; } = "api.team.create";
     public static string UserAccountUpdate = "user.account.update";
+
+    public static string ApiOnlineUserKick { get; } = "api.online-user.kick";
 }

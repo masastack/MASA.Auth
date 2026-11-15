@@ -12,12 +12,18 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
+    <!--grant 冒烟测试：直接用 IS4 官方 EF store（SSO 运行时唯一 grant store）验证
+        sso_session 自定义 Type 写入 / RemoveAllGrants 语义 / TokenCleanup 清理-->
+    <PackageReference Include="IdentityServer4.EntityFramework" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Infrastructure\Masa.Auth.EntityFrameworkCore\Masa.Auth.EntityFrameworkCore.csproj" />
     <!--测试需要与 PG 部署一致的实体配置,注册 PG 程序集的配置类-->
     <ProjectReference Include="..\..\src\Infrastructure\Masa.Auth.EntityFrameworkCore.PostgreSql\Masa.Auth.EntityFrameworkCore.PostgreSql.csproj" />
+    <!--SSO 的 CustomTokenRequestValidator（单活 App 会话 / 已消费 refresh_token 修剪）需要对着真实的
+        IS4 PersistedGrantDbContext 执行：谓词绑错实体类型时编译能过、运行时才抛，只有执行才能发现-->
+    <ProjectReference Include="..\..\src\Web\Masa.Auth.Web.Sso\Masa.Auth.Web.Sso.csproj" />
   </ItemGroup>
 
 </Project>

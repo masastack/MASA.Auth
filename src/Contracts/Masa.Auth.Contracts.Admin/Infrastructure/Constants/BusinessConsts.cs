@@ -10,6 +10,5 @@ public static class BusinessConsts
     public const int STAFF_JOB_NUMBER_MAX_LENGTH = 20;
     public const int POSITION_NAME_MAX_LENGTH = 20;
     public const string PASSWORD_REGULAR = @"^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Za-z])\S*$";
-    public const string SWAGGER_TOKEN = "swagger_token";
     public const string I18N_KEY = "$public.i18n.";
 }

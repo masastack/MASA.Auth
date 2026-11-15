@@ -386,12 +386,6 @@ public class UserService : ServiceBase
     }
 
     [AllowAnonymous]
-    public async Task PostLoginByAccountAsync(IEventBus eventBus, [FromBody] LoginByAccountCommand command)
-    {
-        await eventBus.PublishAsync(command);
-    }
-
-    [AllowAnonymous]
     [RoutePattern("bind_roles", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task BindRolesAsync(IEventBus eventBus, [FromBody] BindUserRolesModel model)
     {

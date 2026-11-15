@@ -18,6 +18,9 @@
     <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="6.0.15" />
     <PackageVersion Include="AspNet.Security.OAuth.Weixin" Version="6.0.15" />
     <PackageVersion Include="AspNet.Security.OAuth.WorkWeixin" Version="6.0.15" />
+    <!--introspection 认证句柄：原 IdentityModel.AspNetCore.OAuth2Introspection 已归档下架，
+        Duende（IdentityServer 团队）官方维护的继任者，同一代码谱系（RFC 7662）；供 Reference 客户端 opaque 令牌校验-->
+    <PackageVersion Include="Duende.AspNetCore.Authentication.OAuth2Introspection" Version="7.0.2" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
     <PackageVersion Include="Fare" Version="2.2.1" />
     <PackageVersion Include="FluentValidation" Version="11.4.0" />

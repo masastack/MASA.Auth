@@ -11,6 +11,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="SkiaSharp" />
+    <!--TokenSchemeSelector 的 reference 句柄形状校验要锚定到 IS4 真实的句柄生成器（DefaultHandleGenerationService）：
+        形状校验写严了，Reference 客户端会被本地 401；只有对着真实输出才测得出来-->
+    <PackageReference Include="IdentityServer4.EntityFramework" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>

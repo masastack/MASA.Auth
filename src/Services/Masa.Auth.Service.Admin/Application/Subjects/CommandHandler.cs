@@ -14,10 +14,7 @@ public class CommandHandler
     private readonly IUserSystemBusinessDataRepository _userSystemBusinessDataRepository;
     private readonly ILogger<CommandHandler> _logger;
     private readonly IEventBus _eventBus;
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly Sms _sms;
-    private readonly IMasaStackConfig _masaStackConfig;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUnitOfWork _unitOfWork;
     private readonly RoleDomainService _roleDomainService;
     private readonly IUserContext _userContext;
@@ -33,10 +30,7 @@ public class CommandHandler
         IUserSystemBusinessDataRepository userSystemBusinessDataRepository,
         ILogger<CommandHandler> logger,
         IEventBus eventBus,
-        IHttpClientFactory httpClientFactory,
         Sms sms,
-        IMasaStackConfig masaStackConfig,
-        IHttpContextAccessor httpContextAccessor,
         IUnitOfWork unitOfWork,
         RoleDomainService roleDomainService,
         IUserContext userContext,
@@ -51,10 +45,7 @@ public class CommandHandler
         _userSystemBusinessDataRepository = userSystemBusinessDataRepository;
         _logger = logger;
         _eventBus = eventBus;
-        _httpClientFactory = httpClientFactory;
         _sms = sms;
-        _masaStackConfig = masaStackConfig;
-        _httpContextAccessor = httpContextAccessor;
         _unitOfWork = unitOfWork;
         _roleDomainService = roleDomainService;
         _userContext = userContext;
@@ -484,33 +475,6 @@ public class CommandHandler
         await _distributedCacheClient.RemoveAsync<CacheLogin>(CacheKey.AccountLoginKey(user.Account));
 
         command.Result = user;
-    }
-
-    [EventHandler]
-    public async Task LoginByAccountAsync(LoginByAccountCommand command)
-    {
-        //Swagger 免登录用的 ROPC 登录;走 IHttpClientFactory,避免每次请求新建连接池
-        var httpClient = _httpClientFactory.CreateClient("SsoAddr");
-        var docUrl = _masaStackConfig.GetSsoDomain();
-#if DEBUG
-        docUrl = "http://localhost:18200";
-#endif
-        var disco = await httpClient.GetDiscoveryDocumentAsync(docUrl);
-        var loginResult = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest
-        {
-            Address = disco.TokenEndpoint,
-            ClientId = _masaStackConfig.GetWebId(MasaStackProject.Auth),
-            Scope = "openid profile offline_access",
-            UserName = command.Account,
-            Password = command.Password
-        });
-        if (loginResult.IsError)
-            throw new UserFriendlyException(loginResult.Error);
-
-        _httpContextAccessor.HttpContext!.Response.Cookies.Append(BusinessConsts.SWAGGER_TOKEN, loginResult.AccessToken, new CookieOptions
-        {
-            Expires = DateTime.Now.AddDays(7)
-        });
     }
 
     [EventHandler]

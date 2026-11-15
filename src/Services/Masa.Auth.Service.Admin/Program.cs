@@ -2,6 +2,7 @@
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 using MASA.Lingua.SDK.AspNetCore;
+using Masa.Auth.Service.Admin.Infrastructure.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,27 +69,34 @@ builder.Services
     })
     .AddAuthentication(options =>
     {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        // 默认 scheme 仍是 "Bearer"，内部改为 PolicyScheme 按令牌形状转发：
+        // JWT（三段）走本地验签（行为同前），Reference 客户端的 opaque 令牌走 SSO /connect/introspection
+        // （踢人删行后下一次请求即 401）。introspection 密钥未配置时与历史行为完全一致。
+        // 详见 Infrastructure/Auth/MixedBearerAuthentication.cs 与 plan 文档 §7/§8
+        options.DefaultAuthenticateScheme = AuthSchemes.Bearer;
+        options.DefaultChallengeScheme = AuthSchemes.Bearer;
     })
-    .AddJwtBearer("Bearer", options =>
-    {
-        options.Authority = identityServerUrl;
-        options.RequireHttpsMetadata = false;
-        //options.Audience = "";
-        options.TokenValidationParameters.ValidateAudience = false;
-        options.MapInboundClaims = false;
-
-        options.BackchannelHttpHandler = new HttpClientHandler
+    .AddMixedBearerAuthentication(
+        identityServerUrl,
+        masaConfiguration.ConfigurationApi.GetDefault(),
+        options =>
         {
-            ServerCertificateCustomValidationCallback = (
-                sender,
-                certificate,
-                chain,
-                sslPolicyErrors) =>
-            { return true; }
-        };
-    });
+            options.Authority = identityServerUrl;
+            options.RequireHttpsMetadata = false;
+            //options.Audience = "";
+            options.TokenValidationParameters.ValidateAudience = false;
+            options.MapInboundClaims = false;
+
+            options.BackchannelHttpHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (
+                    sender,
+                    certificate,
+                    chain,
+                    sslPolicyErrors) =>
+                { return true; }
+            };
+        });
 // 多语言词条改由 Lingua 平台（MASA.Lingua）统一管理与热更新：
 // MASA I18n 的调用链（静态 I18n.T / II18n<T> / UserFriendlyException 错误码 / FluentValidation / UseI18n 语言协商）不变，
 // 词条来源变为「Lingua 发布的 {culture}.json（SSE 实时通知 + 空闲对账兜底，发布后秒级~60s 生效）」，
@@ -132,12 +140,6 @@ builder.Services.AddDccClient(redisOption, connectConfig: connect => redisInstru
 var mux = await StackExchange.Redis.ConnectionMultiplexer.ConnectAsync((StackExchange.Redis.ConfigurationOptions)redisOption);
 redisInstrumentation.AddConnection(mux);
 builder.Services.AddSingleton<StackExchange.Redis.IConnectionMultiplexer>(mux);
-
-builder.Services.AddHttpClient("SsoAddr", client =>
-{
-    client.BaseAddress = new Uri(identityServerUrl);
-    client.Timeout = TimeSpan.FromSeconds(10);
-});
 
 //Webhook 推送:超时收紧,避免目标不可达时拖住保存流程
 builder.Services.AddHttpClient("Webhook", client =>
@@ -188,14 +190,14 @@ builder.Services
             Url = new Uri("https://www.masastack.com/aboutus#aboutus_contactus")
         }
     });
+    // 标准 HTTP Bearer 方案：Swagger UI 自带的 Authorize 弹窗里只需粘贴 access_token（无需手写 "Bearer " 前缀），
+    // 请求时由 Swagger UI 自动加上 Authorization: Bearer {token}
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
         BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer xxxxxxxxxxxxxxx\"",
+        Description = "粘贴由 SSO 签发的 access_token（不需要加 \"Bearer \" 前缀）。",
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -290,13 +292,7 @@ if (!app.Environment.IsProduction())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        var path = Path.Combine(app.Environment.WebRootPath, "swagger/ui/index.html");
-        if (File.Exists(path))
-        {
-            options.IndexStream = () => new MemoryStream(File.ReadAllBytes(path));
-        }
     });
-    app.UseMiddleware<SwaggerAuthentication>();
 }
 
 app.UseStaticFiles();
