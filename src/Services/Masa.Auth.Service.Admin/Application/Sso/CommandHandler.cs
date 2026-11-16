@@ -56,10 +56,9 @@ public class CommandHandler
     {
         var dto = updateClientCommand.ClientDetailDto;
         var id = dto.Id;
-        dto.ClientSecrets.ForEach(secret =>
-        {
-            HashClientSharedSecret(secret);
-        });
+        // 验签公钥会回显，须先校验再哈希落库
+        dto.ClientSecrets.ForEach(ValidateVerificationKeySecret);
+        dto.ClientSecrets.ForEach(HashClientSharedSecret);
 
         var client = await _clientRepository.GetDetailAsync(id)
             ?? throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.CLIENT_NOT_EXIST);
@@ -76,7 +75,8 @@ public class CommandHandler
             {
                 clientSecret.Id = Guid.Empty;
             }
-            else
+            // 验签公钥原样保存，仅 SharedSecret 哈希
+            else if (!ClientConsts.IsVerificationKeySecret(clientSecret.Type))
             {
                 clientSecret.Value = Sha512(clientSecret.Value);
             }
@@ -93,6 +93,16 @@ public class CommandHandler
 
                 return Convert.ToBase64String(hash);
             }
+        }
+    }
+
+    private static void ValidateVerificationKeySecret(ClientSecretDto secret)
+    {
+        var reason = ClientSecretKeyValidator.Validate(secret.Type, secret.Value);
+        if (reason is not null)
+        {
+            // 异常不含 secret.Value
+            throw new UserFriendlyException(UserFriendlyExceptionCodes.CLIENT_SECRET_KEY_INVALID, secret.Type, reason);
         }
     }
 

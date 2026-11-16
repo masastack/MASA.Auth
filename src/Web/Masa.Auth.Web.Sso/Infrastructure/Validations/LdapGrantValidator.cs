@@ -1,94 +1,91 @@
-﻿// Copyright (c) MASA Stack All rights reserved.
+// Copyright (c) MASA Stack All rights reserved.
 // Licensed under the Apache License. See LICENSE.txt in the project root for license information.
 
 namespace Masa.Auth.Web.Sso.Infrastructure.Validations;
 
+/// <summary>
+/// <c>grant_type=ldap</c>：AD 账号+密码经 bind 换 token；无密码拒绝。域身份断言走 <see cref="JwtBearerAssertionGrantValidator"/>。
+/// </summary>
 public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
 {
     readonly IThirdPartyIdpService _thirdPartyIdpService;
     readonly ILdapFactory _ldapFactory;
+    readonly LdapLoginThrottle _loginThrottle;
 
     public string GrantType { get; } = BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.LDAP;
 
-    public LdapGrantValidator(IAuthClient authClient, IThirdPartyIdpService thirdPartyIdpService, ILdapFactory ldapFactory, ILogger<LdapGrantValidator> logger)
+    public LdapGrantValidator(
+        IAuthClient authClient,
+        IThirdPartyIdpService thirdPartyIdpService,
+        ILdapFactory ldapFactory,
+        LdapLoginThrottle loginThrottle,
+        ILogger<LdapGrantValidator> logger)
         : base(authClient, logger)
     {
         _thirdPartyIdpService = thirdPartyIdpService;
         _ldapFactory = ldapFactory;
+        _loginThrottle = loginThrottle;
     }
 
     public async Task ValidateAsync(ExtensionGrantValidationContext context)
     {
+        var userName = context.Request.Raw["userName"];
+        // 仅凭据类失败计入限流，基础设施故障不计（否则 LDAP 宕机会冻结全员）
+        var credentialFailure = false;
+
         try
         {
-            var userName = context.Request.Raw["userName"];
             if (string.IsNullOrEmpty(userName))
             {
                 throw new UserFriendlyException(errorCode: SsoErrorCodes.MUST_PROVIDER_USER_NAME);
             }
 
-            var password = context.Request.Raw["password"] ?? string.Empty;
-            //TODO(安全/临时): 已移除空密码拦截,恢复 2026-11-05 ed14bd6d 之前的免密换 token 行为(下次必须修复)
-            //风险: password 为空时,下方 if (!string.IsNullOrEmpty(password)) 整块被跳过,任何存在的 AD 账号可免密换取 token
-            //修复时: 恢复以下空密码拦截,并同时去掉下方 if (!string.IsNullOrEmpty(password)) 外层包装,只保留块内代码(拦截存在后该条件恒真,属死逻辑)
-            //注意: 二者必须同批修改;只去 if 不加拦截会把空密码直接送进 AD bind,依赖服务器端拒绝,不安全
-            //if (string.IsNullOrEmpty(password))
-            //{
-            //    throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_VALIDATE_FAILED, userName);
-            //}
+            // 非法 userName 拦截 LDAP 注入；统一凭据错误文案；不计限流
+            if (!DomainAccountName.IsValid(userName))
+            {
+                throw InvalidCredentials(userName);
+            }
 
-            var ldapOption = await _thirdPartyIdpService.GetLdapOptionsAsync(LdapConsts.LDAP_NAME);
-            if (ldapOption is null)
+            // 空密码必须在此拒绝且仍执行 bind 路径不可被跳过，否则存在账号可免密换 token
+            var password = context.Request.Raw["password"];
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                credentialFailure = true;
+                throw InvalidCredentials(userName);
+            }
+
+            await _loginThrottle.EnsureNotFrozenAsync(userName);
+
+            var session = await LdapRootConnection.OpenAsync(_thirdPartyIdpService, _ldapFactory);
+            var ldapProvider = session.Provider;
+
+            var dc = GetNetBiosDomain(session.Options.BaseDn);
+            if (string.IsNullOrEmpty(dc))
             {
                 throw new UserFriendlyException(errorCode: SsoErrorCodes.NO_LDAP_CONFIG);
             }
-            var ldapOptions = ldapOption.Adapt<LdapOptions>();
-            var ldapProvider = _ldapFactory.CreateProvider(ldapOptions);
-            if (await ldapProvider.AuthenticateAsync(ldapOption.RootUserDn, ldapOption.RootUserPassword) is false)
-            {
-                throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_CONNECT_ERROR);
-            }
 
-            if (!string.IsNullOrEmpty(password))
+            if (!await ldapProvider.AuthenticateAsync($"{dc}\\{userName}", password))
             {
-                var dc = new Regex("(?<=DC=).+(?=,)").Match(ldapOptions.BaseDn).Value;
-                if (!await ldapProvider.AuthenticateAsync($"{dc}\\{userName}", password))
-                {
-                    throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_VALIDATE_FAILED, userName);
-                }
+                credentialFailure = true;
+                throw InvalidCredentials(userName);
             }
 
             var ldapUser = await ldapProvider.GetUserByUserNameAsync(userName);
-            if (ldapUser is null)
+            // 不存在/禁用与密码错同源错误，防账号枚举；细节见日志
+            if (ldapUser is null || ldapUser.IsAccountDisabled)
             {
-                throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_NOT_EXIST);
+                credentialFailure = true;
+                throw InvalidCredentials(userName);
             }
-            //A disabled AD account must never get a token (the password may be skipped above).
-            if (ldapUser.IsAccountDisabled)
+
+            var authUser = await LdapUserProvisioner.GetOrCreateUserAsync(_authClient, ldapUser);
+
+            // MASA 禁用/删除不可凭 AD 密码绕过；对外仍用统一凭据错误
+            if (!authUser.Enabled || authUser.IsDeleted)
             {
-                throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_USER_VALIDATE_FAILED, userName);
-            }
-            var authUser = await _authClient.UserService.GetThirdPartyUserAsync(new GetThirdPartyUserModel
-            {
-                ThirdPartyIdpType = ThirdPartyIdpTypes.Ldap,
-                ThridPartyIdentity = ldapUser.ObjectGuid
-            });
-            if (authUser is null)
-            {
-                authUser = await _authClient.UserService.AddThirdPartyUserAsync(new AddThirdPartyUserModel
-                {
-                    Scheme = LdapConsts.LDAP_NAME,
-                    ThridPartyIdentity = ldapUser.ObjectGuid,
-                    ExtendedData = ldapUser,
-                    User = new AddUserModel
-                    {
-                        Name = ldapUser.Name,
-                        DisplayName = ldapUser.DisplayName,
-                        Email = ldapUser.EmailAddress,
-                        PhoneNumber = ldapUser.Phone,
-                        Account = ldapUser.SamAccountName
-                    }
-                });
+                credentialFailure = true;
+                throw InvalidCredentials(userName);
             }
 
             var claims = new List<Claim>
@@ -98,18 +95,41 @@ public class LdapGrantValidator : BaseGrantValidator, IExtensionGrantValidator
 
             context.Result = new GrantValidationResult(authUser.Id.ToString(), "ldap", claims);
 
+            await _loginThrottle.ResetAsync(userName);
+
             // Record token acquisition operation log (including client information)
             await RecordTokenOperationLogAsync(authUser, $"用户Token获取：使用LDAP账号{userName}获取访问Token", context.Request.Client?.ClientId, nameof(LdapGrantValidator));
         }
         catch (Exception ex)
         {
-            //真实失败原因此前只经 error_description 返回给调用方,服务端日志只有笼统的 invalid_grant,补记关键上下文(不含密码)
-            _logger.LogWarning(ex,
+            if (credentialFailure)
+            {
+                await _loginThrottle.RecordFailureAsync(userName);
+            }
+
+            // 业务拒绝对 Warning，基础设施对 Error；对外 error_description 不泄露内部细节
+            _logger.Log(ex is UserFriendlyException ? LogLevel.Warning : LogLevel.Error, ex,
                 "Extension grant {GrantType} rejected. userName:{UserName}, clientId:{ClientId}, error:{ErrorMessage}",
-                GrantType, context.Request.Raw["userName"], context.Request.Client?.ClientId, ex.Message);
+                GrantType, userName, context.Request.Client?.ClientId, ex.Message);
             context.Result = new GrantValidationResult(
                 TokenRequestErrors.InvalidGrant,
-                ex.Message);
+                ToErrorDescription(ex));
         }
     }
+
+    /// <summary>取 BaseDn 第一个 <c>DC=</c> 分量作 NetBIOS 域名（多级域时贪婪正则会拼错 bind 名）。</summary>
+    public static string? GetNetBiosDomain(string? baseDn)
+    {
+        if (string.IsNullOrWhiteSpace(baseDn))
+        {
+            return null;
+        }
+
+        var match = Regex.Match(baseDn, @"(?:^|,)\s*DC=(?<dc>[^,]+)", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
+        return match.Success ? match.Groups["dc"].Value.Trim() : null;
+    }
+
+    /// <summary>统一凭据无效文案，防 AD 账号枚举。</summary>
+    static UserFriendlyException InvalidCredentials(string? userName)
+        => new(errorCode: SsoErrorCodes.LDAP_USER_VALIDATE_FAILED, userName ?? string.Empty);
 }

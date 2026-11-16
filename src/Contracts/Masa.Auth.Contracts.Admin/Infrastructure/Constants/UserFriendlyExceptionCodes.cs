@@ -35,6 +35,7 @@ public static class UserFriendlyExceptionCodes
     public const string CLIENT_NOT_EXIST = "ClientNotExist";
     public const string CLIENT_ID_NOT_FOUND = "ClientIdNotFound";
     public const string CLIENT_ID_ALREADY_EXIST = "ClientIdAlreadyExist";
+    public const string CLIENT_SECRET_KEY_INVALID = "ClientSecretKeyInvalid";
     public const string INVALID_CAPTCHA = "InvalidCaptcha";
     public const string LDAP_ACCOUNT_NOTEXIST = "LdapAccountNotexist";
     public const string LDAP_ACCOUNT_DISABLED = "LdapAccountDisabled";
@@ -96,5 +97,4 @@ public static class UserFriendlyExceptionCodes
     public const string IDENTITY_SOURCE_NAME_EXIST = "IdentitySourceNameExist";
     public const string THIRDPARTYUSER_BIND_EXIST = "ThirdPartyUserBindExist";
     public const string WEBHOOK_NOT_EXIST = "WebhookNotExist";
-    public const string IMPERSONATION_TOKEN_ERROR_MESSAGE = "ImpersonationTokenErrorMessage";
 }

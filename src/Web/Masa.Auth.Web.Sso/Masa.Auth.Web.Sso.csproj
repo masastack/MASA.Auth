@@ -32,6 +32,7 @@
 		<PackageReference Include="Masa.Contrib.Globalization.I18n.AspNetCore" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
 		<PackageReference Include="Masa.Utils.Ldap.Novell" />
 	</ItemGroup>
 
@@ -53,6 +54,9 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Masa.Auth.Security.OAuth.Providers\Masa.Auth.Security.OAuth.Providers.csproj" />
+		<!--SSO 与 Admin 共用权限码等约定常量（ElementPermissionCodes）。
+		    该工程只含约定与 DTO，不引入任何服务端实现，因此不会造成循环依赖（Admin 依赖 Providers，不反向依赖 SSO）。-->
+		<ProjectReference Include="..\..\Contracts\Masa.Auth.Contracts.Admin\Masa.Auth.Contracts.Admin.csproj" />
 	</ItemGroup>
 
 	<ProjectExtensions>

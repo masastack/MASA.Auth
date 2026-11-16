@@ -18,6 +18,9 @@ global using IdentityServer4.Test;
 global using IdentityServer4.Validation;
 global using Mapster;
 global using Masa.Auth.Security.OAuth.Providers;
+// 与 Admin 共用的权限码常量。只按类型别名引入，不整体导入命名空间——SSO 自己有同名的
+// LdapConsts / CacheKey，整体 using 会让这些既有文件全部产生二义性。
+global using ElementPermissionCodes = Masa.Auth.Contracts.Admin.Infrastructure.Constants.ElementPermissionCodes;
 global using Masa.Auth.Security.OAuth.Providers.Infrastructure.ThirdPartyIdpCaller;
 global using Masa.Auth.Web.Sso;
 global using Masa.Auth.Web.Sso.Global;
@@ -26,6 +29,8 @@ global using Masa.Auth.Web.Sso.Infrastructure.Aliyun;
 global using Masa.Auth.Web.Sso.Infrastructure.Attributes;
 global using Masa.Auth.Web.Sso.Infrastructure.Constants;
 global using Masa.Auth.Web.Sso.Infrastructure.Events;
+global using Masa.Auth.Web.Sso.Infrastructure.Ldap;
+global using Masa.Auth.Web.Sso.Infrastructure.Oidc;
 global using Masa.Auth.Web.Sso.Infrastructure.Options;
 global using Masa.Auth.Web.Sso.Infrastructure.Services;
 global using Masa.Auth.Web.Sso.Infrastructure.Stores;

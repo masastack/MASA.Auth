@@ -98,5 +98,6 @@
   "MachineClientDescription": "スコープOAuth 2.0アクセストークンを使用してAPIとの機械対機械の認証を行うために相互作用するマシン",
   "ThirdPartyUserBindExist": "このユーザーはすでにバインドされています",
   "PhoneValidateFailed": "有効な電話番号である必要があります",
-  "PasswordSame": "新しいパスワードと古いパスワードは同じにしてはいけません"
+  "PasswordSame": "新しいパスワードと古いパスワードは同じにしてはいけません",
+  "ClientSecretKeyInvalid": "クライアントシークレット（{0}）が無効です：{1}"
 }
