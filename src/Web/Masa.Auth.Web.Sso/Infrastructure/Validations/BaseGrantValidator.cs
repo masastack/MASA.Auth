@@ -11,11 +11,18 @@ public abstract class BaseGrantValidator
     protected readonly IAuthClient _authClient;
     protected readonly ILogger _logger;
 
+    /// <summary>基础设施失败时 <c>error_description</c> 通用文案。</summary>
+    protected const string GenericErrorDescription = "The authorization request could not be completed.";
+
     protected BaseGrantValidator(IAuthClient authClient, ILogger logger)
     {
         _authClient = authClient;
         _logger = logger;
     }
+
+    /// <summary>仅 <see cref="UserFriendlyException"/> 透出 Message；其它异常换 <see cref="GenericErrorDescription"/>，详情写日志。</summary>
+    protected static string ToErrorDescription(Exception ex)
+        => ex is UserFriendlyException ? ex.Message : GenericErrorDescription;
 
     /// <summary>
     /// Record token acquisition operation log (including client information)

@@ -98,5 +98,10 @@
   "MachineClientDescription": "使用作用域OAuth 2.0访问令牌与API交互以进行机器对机器身份验证。",
   "ThirdPartyUserBindExist": "此用户已经绑定",
   "PhoneValidateFailed": "必须是一个合法的手机号码。",
-  "PasswordSame": "新旧密码不能相同"
+  "PasswordSame": "新旧密码不能相同",
+  "ClientSecretKeyInvalid": "客户端密钥（{0}）无效：{1}",
+  "ImpersonationNotAuthorized": "无权模拟登录该用户",
+  "ImpersonationSelfNotAllowed": "不能模拟登录自己",
+  "ImpersonationClientNotConfigured": "模拟登录未配置：DCC 的 auth-service 应用下缺少 Impersonation 配置对象（ClientId/ClientSecret），请联系管理员配置",
+  "ImpersonationTokenExchangeFailed": "模拟登录令牌交换失败，请稍后重试"
 }

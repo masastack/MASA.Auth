@@ -182,6 +182,7 @@ public class UserService : ServiceBase
             Avatar = user.Avatar,
             CreationTime = user.CreationTime,
             Position = user.Position,
+            Enabled = user.Enabled,
             Address = new AddressValueModel
             {
                 Address = user.Address.Address,
@@ -426,28 +427,23 @@ public class UserService : ServiceBase
         await eventBus.PublishAsync(command);
     }
 
-    [RoutePattern("impersonate", StartWithBaseUri = true, HttpMethod = "Post")]
-    public async Task<ImpersonateOutput> ImpersonateAsync(IEventBus eventBus, [FromBody] ImpersonateInput input)
-    {
-        var command = new ImpersonateUserCommand(input.UserId, false);
-        await eventBus.PublishAsync(command);
-        return command.Result;
-    }
-
-    [AllowAnonymous]
-    [RoutePattern("impersonate", StartWithBaseUri = true, HttpMethod = "Get")]
-    public async Task<ImpersonationCacheItem> GetImpersonatedAsync([FromServices] IEventBus eventBus, [FromQuery] string impersonationToken)
-    {
-        var query = new ImpersonatedUserQuery(impersonationToken);
-        await eventBus.PublishAsync(query);
-        return query.Result;
-    }
-
     [RoutePattern("account/delete", StartWithBaseUri = true, HttpMethod = "Post")]
     public async Task DeleteAccountAsync([FromServices] IEventBus eventBus, [FromBody] DeleteAccountModel model)
     {
         var command = new DeleteAccountCommand(model.SmsCode, model.EmailCode);
         await eventBus.PublishAsync(command);
+    }
+
+    /// <summary>
+    /// 模拟登录代理（RFC 8693 token-exchange）：以调用管理员的 access_token 作为 actor_token 换取目标用户的
+    /// 短命 access_token（≤900s、无 refresh_token）。机密客户端凭据与权限校验都在服务端（见 ImpersonateTokenCommandHandler）。
+    /// </summary>
+    [RoutePattern("impersonate-token", StartWithBaseUri = true, HttpMethod = "Post")]
+    public async Task<ImpersonateTokenOutput> PostImpersonateTokenAsync([FromServices] IEventBus eventBus, [FromBody] ImpersonateInput input)
+    {
+        var command = new ImpersonateTokenCommand(input.UserId);
+        await eventBus.PublishAsync(command);
+        return command.Result;
     }
 
     [RoutePattern("generate-password", StartWithBaseUri = true, HttpMethod = "Post")]

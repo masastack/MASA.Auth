@@ -13,6 +13,21 @@
   "MustProviderCodeOrIdToken": "must provider code or idToken",
   "MustProviderPhoneNumberAndSpToken": "Must provide phone number and spToken",
   "PhoneNumberUserNotExist": "User {0} does not exist",
-  "MustProviderImpersonationToken": "Must provide impersonationToken",
-  "ImpersonatedUserNotExist": "Impersonated user does not exist"
+  "DomainAssertionClientRequired": "Domain identity assertion must be issued by an authenticated client",
+  "DomainAssertionInvalid": "Domain identity assertion is invalid or expired",
+  "DomainAssertionReplayed": "Domain identity assertion has already been used",
+  "DomainAssertionAccountRejected": "Domain account {0} does not exist or is disabled",
+  "DomainAssertionAccountNotProvisioned": "Domain account {0} has not been provisioned in this system",
+  "DomainAssertionAccountOutOfScope": "Domain account {0} is outside the scope this client may assert",
+  "DomainAssertionReplayCheckUnavailable": "Assertion replay check is unavailable, please retry later",
+  "MustProviderActorToken": "Must provide actor_token",
+  "InvalidActorToken": "actor_token is invalid or expired",
+  "ImpersonationDisabled": "Impersonation is not enabled for this client",
+  "ImpersonationNotAuthorized": "Not authorized to impersonate this user",
+  "ImpersonationChainNotAllowed": "Chained impersonation is not allowed",
+  "MustProviderSubjectToken": "Must provide subject_token (target user identifier)",
+  "ImpersonationTargetNotFound": "Impersonated user does not exist",
+  "ImpersonationOfflineAccessNotAllowed": "offline_access is not allowed for impersonation",
+  "InvalidTokenType": "Token type indicator is invalid or unsupported",
+  "LoginFreeze": "Too many failed password attempts. Login is frozen, please try again in 30 minutes."
 }

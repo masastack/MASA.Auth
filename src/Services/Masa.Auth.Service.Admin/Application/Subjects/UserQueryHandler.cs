@@ -331,18 +331,4 @@ public class UserQueryHandler
         // Sort the claim values by their keys in ascending order.
         userClaimValuesQuery.Result = userClaimValuesQuery.Result.OrderBy(c => c.Key).ToList();
     }
-
-    [EventHandler]
-    public async Task GetImpersonatedUserAsync(ImpersonatedUserQuery query)
-    {
-        var key = CacheKey.ImpersonationUserKey(query.ImpersonationToken);
-        var cacheItem = await _distributedCacheClient.GetAsync<ImpersonationCacheItem>(key);
-        if (cacheItem == null)
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.IMPERSONATION_TOKEN_ERROR_MESSAGE);
-        }
-
-        query.Result = cacheItem;
-        //await _distributedCacheClient.RemoveAsync(key);
-    }
 }

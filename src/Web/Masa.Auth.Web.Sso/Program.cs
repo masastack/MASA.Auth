@@ -5,6 +5,7 @@ using MASA.Lingua.SDK.AspNetCore;
 using Masa.Auth.Web.Sso.Infrastructure;
 using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Masa.BuildingBlocks.Globalization.I18n;
 using Microsoft.Extensions.Http;
 
@@ -164,7 +165,13 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddExtensionGrantValidator<LocalPhoneNumberGrantValidator>()
     .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>()
     .AddExtensionGrantValidator<LdapGrantValidator>()
-    .AddExtensionGrantValidator<ImpersonationGrantValidator>();
+    // RFC 7523 JWT Bearer 域身份断言
+    .AddExtensionGrantValidator<JwtBearerAssertionGrantValidator>()
+    // RFC 8693 token exchange 模拟登录
+    .AddExtensionGrantValidator<TokenExchangeGrantValidator>();
+
+// IdentityModel 8.x 会把 JSON claim（如 act）写成嵌套数组，须在 token 生成后修正
+builder.Services.Replace(ServiceDescriptor.Transient<ITokenCreationService, JsonClaimTokenCreationService>());
 
 if (builder.Environment.IsDevelopment())
 {
@@ -198,6 +205,13 @@ builder.Services.AddScoped<IUserSession, ClientUserSession>();
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
 builder.Services.AddLadpContext();
+
+// LDAP 限流 / 域解析 / 断言与模拟登录依赖（LdapLoginThrottle 无作用域状态，单例即可）
+builder.Services.AddSingleton<ILoginFailureCounter, RedisLoginFailureCounter>();
+builder.Services.AddSingleton<LdapLoginThrottle>();
+builder.Services.AddScoped<DomainAccountResolver>();
+builder.Services.AddScoped<JtiReplayCache>();
+builder.Services.AddScoped<ActorPermissionClient>();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetEntryAssembly());
 

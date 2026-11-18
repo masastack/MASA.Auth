@@ -13,6 +13,21 @@
   "MustProviderCodeOrIdToken": "Необходимо указать code или idToken",
   "MustProviderPhoneNumberAndSpToken": "Необходимо указать номер телефона и SpToken",
   "PhoneNumberUserNotExist": "Пользователь {0} не существует",
-  "MustProviderImpersonationToken": "Необходимо указать impersonationToken",
-  "ImpersonatedUserNotExist": "Имитируемый пользователь не существует"
+  "DomainAssertionClientRequired": "Утверждение доменного удостоверения должно выполняться аутентифицированным клиентом",
+  "DomainAssertionInvalid": "Утверждение доменного удостоверения недействительно или истекло",
+  "DomainAssertionReplayed": "Утверждение доменного удостоверения уже было использовано",
+  "DomainAssertionAccountRejected": "Доменная учетная запись {0} не существует или отключена",
+  "DomainAssertionAccountNotProvisioned": "Доменная учетная запись {0} еще не создана в системе",
+  "DomainAssertionAccountOutOfScope": "Доменная учетная запись {0} вне допустимой области для этого клиента",
+  "DomainAssertionReplayCheckUnavailable": "Проверка повторного использования утверждения недоступна, повторите позже",
+  "MustProviderActorToken": "Необходимо указать actor_token",
+  "InvalidActorToken": "actor_token недействителен или истек",
+  "ImpersonationDisabled": "Имитация не включена для этого клиента",
+  "ImpersonationNotAuthorized": "Нет прав на имитацию этого пользователя",
+  "ImpersonationChainNotAllowed": "Цепочная имитация не допускается",
+  "MustProviderSubjectToken": "Необходимо указать subject_token (идентификатор целевого пользователя)",
+  "ImpersonationTargetNotFound": "Имитируемый пользователь не существует",
+  "ImpersonationOfflineAccessNotAllowed": "offline_access не допускается при имитации",
+  "InvalidTokenType": "Указатель типа токена недействителен или не поддерживается",
+  "LoginFreeze": "Слишком много неудачных попыток. Вход заблокирован, повторите через 30 минут."
 }
