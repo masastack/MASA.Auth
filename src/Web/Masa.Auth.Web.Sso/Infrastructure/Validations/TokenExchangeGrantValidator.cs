@@ -24,9 +24,6 @@ public class TokenExchangeGrantValidator : BaseGrantValidator, IExtensionGrantVa
         OidcConstants.AuthenticationMethods.WindowsIntegratedAuthentication
     };
 
-    /// <summary>自定义 <c>subject_token_type</c>：目标用户 id 字符串（授权来自 <c>actor_token</c>）。</summary>
-    public const string SubjectTokenTypeUserId = "urn:masa:params:oauth:token-type:user-id";
-
     public string GrantType { get; } = BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType.TOKEN_EXCHANGE;
 
     public TokenExchangeGrantValidator(
@@ -146,7 +143,7 @@ public class TokenExchangeGrantValidator : BaseGrantValidator, IExtensionGrantVa
 
             // subject_token_type 须为自定义 user-id（授权来自 actor_token，类型错即拒）
             var subjectTokenType = context.Request.Raw[OidcConstants.TokenRequest.SubjectTokenType];
-            if (!string.Equals(subjectTokenType, SubjectTokenTypeUserId, StringComparison.Ordinal))
+            if (!string.Equals(subjectTokenType, ImpersonationConsts.SubjectTokenTypeUserId, StringComparison.Ordinal))
             {
                 throw new UserFriendlyException(errorCode: SsoErrorCodes.INVALID_TOKEN_TYPE);
             }
@@ -171,7 +168,14 @@ public class TokenExchangeGrantValidator : BaseGrantValidator, IExtensionGrantVa
 
             var claims = new List<Claim>
             {
-                new(JwtClaimTypes.Actor, act, IdentityServerConstants.ClaimValueTypes.Json)
+                new(JwtClaimTypes.Actor, act, IdentityServerConstants.ClaimValueTypes.Json),
+
+                // 与正常登录（AccountController）同口径的业务 claim：接收端（MASA.Stack.Components）据此把 UI 身份渲染成
+                // 「被模拟用户」。缺了它们，横幅会退化成显示 GUID、AuthorizeView 的角色判断也拿不到角色。
+                // roles 保持与登录一致的形态：角色 Code 的 JSON 数组序列化成字符串（接收端按此拆分）。
+                new(IdentityClaimConsts.USER_NAME, targetUser.DisplayName ?? string.Empty),
+                new(IdentityClaimConsts.ROLES, JsonSerializer.Serialize(
+                    targetUser.Roles?.Select(r => r.Code) ?? Enumerable.Empty<string>()))
             };
 
             // IS4 要求必须传 authenticationMethod（它会写成 token 里唯一一条 amr）。目标用户并未亲自认证，

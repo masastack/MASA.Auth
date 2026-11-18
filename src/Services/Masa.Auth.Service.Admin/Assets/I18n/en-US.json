@@ -99,5 +99,9 @@
   "ThirdPartyUserBindExist": "The user has been bound",
   "PhoneValidateFailed": "It must be a valid mobile phone number.",
   "PasswordSame": "The new password cannot be the same as the old one.",
-  "ClientSecretKeyInvalid": "Client secret ({0}) is invalid: {1}"
+  "ClientSecretKeyInvalid": "Client secret ({0}) is invalid: {1}",
+  "ImpersonationNotAuthorized": "You are not authorized to impersonate this user",
+  "ImpersonationSelfNotAllowed": "You cannot impersonate yourself",
+  "ImpersonationClientNotConfigured": "Impersonation is not configured: the Impersonation config object (ClientId/ClientSecret) is missing under the auth-service app in DCC. Please contact the administrator",
+  "ImpersonationTokenExchangeFailed": "Impersonation token exchange failed. Please try again later"
 }

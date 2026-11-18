@@ -86,3 +86,26 @@ curl -X POST https://sso.example.com/connect/token \
 
 - 不能模拟自己。
 - 请求里不能带 `offline_access`。省略 `scope` 而客户端开着"允许离线请求"时，也会被拒绝，所以一定要显式传 `scope`。
+
+---
+
+## 4. 管理后台的模拟登录（内置代理）
+
+管理后台 UI 是 WASM 公开客户端，自己不能持有 `client_secret`，token-exchange 由 MASA.Auth 的 Service.Admin 代理执行：
+
+`POST api/user/impersonate-token`，入参 `{ "userId": "<目标用户 Guid>" }`，需以管理员身份登录调用。
+
+| 步骤 | 谁做 | 做什么 |
+| --- | --- | --- |
+| 1 | 部署 | 在 DCC 的 `auth-service` 应用下新建 JSON 配置对象 `Impersonation`（`{"ClientId": "...", "ClientSecret": "...", "Scope": "openid profile"}`），即 2.1 建的 Machine 客户端凭据。`Scope` 可选（空格分隔），留空时用 `openid profile`；它必须是该客户端被授予的 scope 的子集、不能含 `offline_access`，**必须包含 `openid`**（接收端要用它调 SSO 的 `/connect/userinfo` 验证 token，缺了会被拒绝），并应覆盖目标应用向后端请求 token 时所需的 scope（模拟 token 无法再换取更多 scope）。注意：**appsettings.json 和环境变量都不生效**（`AddMasaStackConfigAsync` 后 appsettings 内容被迁至 `Local` 节点，服务只从 DCC 读取该配置）。不配置则接口返回"模拟登录未配置"（文案会指明缺少的 DCC 配置对象） |
+| 2 | SSO 管理员 | 给管理员授予 `UserImpersonate`（同 2.2） |
+| 3 | 管理后台 UI | 调代理端点：服务端复核调用者权限后，以其 `access_token` 作为 `actor_token` 执行第 3 节的 token-exchange，返回 `{ "accessToken": "...", "expiresIn": 900 }` |
+
+返回的 access_token 语义与 3.2 节一致（`sub`=被模拟用户、`act`=操作者、≤900s、无 refresh_token）。UI 拿到后以
+`目标应用Url#access_token=...&expires_in=...`（URL fragment，不会发给服务器）交给目标应用；目标应用需支持从
+fragment 引入该 token 建立模拟会话（接收端接入为各应用后续工作；未接入的应用会以操作者本人身份打开）。
+
+**接收端（`Masa.Stack.Components`）对收到的 token 做两层校验，任一不过就丢弃、不进入模拟态：**
+
+1. **本地预检**：`iss` 等于应用的 OIDC `Authority`（尾部 `/`、大小写忽略）；`sub`、`act.sub` 都是 Guid；带 `act`、`exp`、`openid` scope；`nbf` 不在未来；未过期。若 SSO 实际签发的 `iss` 与应用访问 SSO 的 `Authority` 不一致（例如应用走内网地址、SSO 对外域名作 `iss`），在应用的 OIDC 配置里设置 `Issuer`（`MasaOpenIdConnectOptions.Issuer`）。
+2. **SSO 验证**：浏览器带着 token 请求 `{Authority}/connect/userinfo`，必须返回 200 且 `sub` 与 token 一致。签名、有效期只有 SSO 能验。无法验证（网络/CORS 失败、超时）同样不放行，操作者重新点一次「模拟登录」即可。要求应用所在的来源被 SSO 允许跨域访问 userinfo（与应用本身的 OIDC 登录是同一个条件）。

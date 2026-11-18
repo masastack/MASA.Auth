@@ -99,5 +99,9 @@
   "ThirdPartyUserBindExist": "このユーザーはすでにバインドされています",
   "PhoneValidateFailed": "有効な電話番号である必要があります",
   "PasswordSame": "新しいパスワードと古いパスワードは同じにしてはいけません",
-  "ClientSecretKeyInvalid": "クライアントシークレット（{0}）が無効です：{1}"
+  "ClientSecretKeyInvalid": "クライアントシークレット（{0}）が無効です：{1}",
+  "ImpersonationNotAuthorized": "このユーザーになりすます権限がありません",
+  "ImpersonationSelfNotAllowed": "自分自身になりすますことはできません",
+  "ImpersonationClientNotConfigured": "なりすましログインは未設定です。DCC の auth-service アプリ配下に Impersonation 設定オブジェクト（ClientId/ClientSecret）がありません。管理者に連絡してください",
+  "ImpersonationTokenExchangeFailed": "なりすましログインのトークン交換に失敗しました。しばらくしてからもう一度お試しください"
 }

@@ -7,6 +7,7 @@ using Masa.Auth.Web.Sso.Infrastructure.Oidc;
 using Masa.Auth.Web.Sso.Infrastructure.Validations;
 using Xunit;
 using ElementPermissionCodes = Masa.Auth.Contracts.Admin.Infrastructure.Constants.ElementPermissionCodes;
+using ImpersonationConsts = Masa.Auth.Contracts.Admin.Infrastructure.Constants.ImpersonationConsts;
 using SdkGrantType = Masa.BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType;
 
 namespace Masa.Auth.Web.Sso.Tests;
@@ -45,8 +46,10 @@ public class ProtocolConstantsTests
     public void Custom_subject_token_type_is_namespaced_under_masa()
     {
         // subject_token 标识被模拟用户，不用 access_token 类型
-        Assert.StartsWith("urn:masa:params:oauth:token-type:", TokenExchangeGrantValidator.SubjectTokenTypeUserId);
-        Assert.NotEqual(OidcConstants.TokenTypeIdentifiers.AccessToken, TokenExchangeGrantValidator.SubjectTokenTypeUserId);
+        // 调用方（含文档里的 curl）按字面值传参，常量值不能变
+        Assert.Equal("urn:masa:params:oauth:token-type:user-id", ImpersonationConsts.SubjectTokenTypeUserId);
+        Assert.StartsWith("urn:masa:params:oauth:token-type:", ImpersonationConsts.SubjectTokenTypeUserId);
+        Assert.NotEqual(OidcConstants.TokenTypeIdentifiers.AccessToken, ImpersonationConsts.SubjectTokenTypeUserId);
     }
 
     [Fact]

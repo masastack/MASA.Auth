@@ -10,8 +10,10 @@ using Masa.Auth.Web.Sso.Infrastructure.Oidc;
 using Masa.Auth.Web.Sso.Infrastructure.Validations;
 using Masa.BuildingBlocks.StackSdks.Auth;
 using Masa.BuildingBlocks.StackSdks.Auth.Service;
+using Masa.BuildingBlocks.StackSdks.Config.Consts;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
+using ImpersonationConsts = Masa.Auth.Contracts.Admin.Infrastructure.Constants.ImpersonationConsts;
 using SdkGrantType = Masa.BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType;
 
 namespace Masa.Auth.Web.Sso.Tests;
@@ -246,6 +248,45 @@ public class TokenExchangeGrantValidatorTests
             context.Result.CustomResponse![OidcConstants.TokenResponse.IssuedTokenType]?.ToString());
     }
 
+    /// <summary>
+    /// 接收端（MASA.Stack.Components）靠 userName / roles 把 UI 身份渲染成「被模拟用户」，口径须与正常登录一致
+    /// （AccountController：userName=DisplayName，roles=角色 Code 数组序列化成字符串）。取的是目标而不是 actor。
+    /// </summary>
+    [Fact]
+    public async Task Success_issues_the_target_user_name_and_roles_like_a_normal_login()
+    {
+        var harness = new Harness
+        {
+            TargetDisplayName = "Target User",
+            TargetRoleCodes = new[] { "admin", "ops" }
+        };
+        var context = harness.CreateContext();
+
+        await harness.Validator.ValidateAsync(context);
+
+        Assert.False(context.Result.IsError, context.Result.ErrorDescription);
+
+        var userName = Assert.Single(context.Result.Subject!.FindAll(IdentityClaimConsts.USER_NAME));
+        Assert.Equal("Target User", userName.Value);
+        Assert.NotEqual("Actor Admin", userName.Value);
+
+        var roles = Assert.Single(context.Result.Subject.FindAll(IdentityClaimConsts.ROLES));
+        Assert.Equal(new[] { "admin", "ops" }, System.Text.Json.JsonSerializer.Deserialize<string[]>(roles.Value));
+    }
+
+    [Fact]
+    public async Task Target_without_roles_gets_an_empty_roles_array_not_a_missing_claim()
+    {
+        var harness = new Harness { TargetRoleCodes = Array.Empty<string>() };
+        var context = harness.CreateContext();
+
+        await harness.Validator.ValidateAsync(context);
+
+        Assert.False(context.Result.IsError, context.Result.ErrorDescription);
+        var roles = Assert.Single(context.Result.Subject!.FindAll(IdentityClaimConsts.ROLES));
+        Assert.Equal("[]", roles.Value);
+    }
+
     [Fact]
     public async Task Shorter_client_lifetime_is_kept_not_extended_to_the_cap()
     {
@@ -373,6 +414,8 @@ public class TokenExchangeGrantValidatorTests
         public Exception? ThrowOnGetDetail { get; set; }
         public bool ActorAuthorized { get; set; } = true;
         public bool TargetEnabled { get; set; } = true;
+        public string TargetDisplayName { get; set; } = "Target User";
+        public string[] TargetRoleCodes { get; set; } = Array.Empty<string>();
         public List<string> UserServiceCalls { get; } = new();
         public int AccessTokenLifetimeSeconds { get; set; } = 3600;
 
@@ -404,7 +447,7 @@ public class TokenExchangeGrantValidatorTests
             string? actorToken = "actor-token",
             string? actorTokenType = OidcConstants.TokenTypeIdentifiers.AccessToken,
             string? subjectToken = null,
-            string? subjectTokenType = TokenExchangeGrantValidator.SubjectTokenTypeUserId,
+            string? subjectTokenType = ImpersonationConsts.SubjectTokenTypeUserId,
             bool omitSubjectToken = false,
             string? requestedTokenType = null,
             string? scope = "openid profile")
@@ -568,8 +611,11 @@ public class TokenExchangeGrantValidatorTests
                     {
                         Id = TargetId,
                         Account = "target",
-                        DisplayName = "Target User",
-                        Enabled = Owner.TargetEnabled
+                        DisplayName = Owner.TargetDisplayName,
+                        Enabled = Owner.TargetEnabled,
+                        Roles = Owner.TargetRoleCodes
+                            .Select(code => new Masa.BuildingBlocks.StackSdks.Auth.Contracts.Model.RoleModel { Code = code })
+                            .ToList()
                     });
             }
 

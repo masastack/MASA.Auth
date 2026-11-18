@@ -51,17 +51,19 @@ public class JwtBearerAssertionGrantValidator : BaseGrantValidator, IExtensionGr
             var assertion = context.Request.Raw[OidcConstants.TokenRequest.Assertion];
             var now = DateTime.UtcNow;
             var signingKeys = DomainAssertionValidator.BuildSigningKeys(client.ClientSecrets, now);
+            var expectedAudiences = BuildExpectedAudiences(context);
             var validation = DomainAssertionValidator.Validate(
                 assertion,
                 client.ClientId,
                 signingKeys,
-                BuildExpectedAudiences(context),
+                expectedAudiences,
                 now);
             if (!validation.IsValid)
             {
+                // 期望 aud 与已登记验签公钥数量是配置项，非敏感；IDX10214 等原因默认不带这些，排查全靠它们
                 _logger.LogWarning(
-                    "Domain assertion rejected. clientId:{ClientId}, reason:{Reason}",
-                    client.ClientId, validation.Error);
+                    "Domain assertion rejected. clientId:{ClientId}, reason:{Reason}, registeredKeys:{KeyCount}, expectedAudiences:{ExpectedAudiences}",
+                    client.ClientId, validation.Error, signingKeys.Count, string.Join(", ", expectedAudiences));
                 throw new UserFriendlyException(errorCode: SsoErrorCodes.DOMAIN_ASSERTION_INVALID);
             }
 

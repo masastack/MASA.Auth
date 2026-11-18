@@ -28,6 +28,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text.Json;
 using Xunit;
+using ImpersonationConsts = Masa.Auth.Contracts.Admin.Infrastructure.Constants.ImpersonationConsts;
 using SdkGrantType = Masa.BuildingBlocks.Authentication.OpenIdConnect.Models.Constans.GrantType;
 
 namespace Masa.Auth.Web.Sso.Tests;
@@ -189,6 +190,22 @@ public class Is4PipelineTests
         Assert.Equal(new[] { "impersonation" }, Amr(payload));
 
         Assert.True(string.IsNullOrEmpty(result.RefreshToken));
+    }
+
+    [Fact]
+    public async Task Impersonation_token_carries_the_target_user_name_and_roles_in_the_final_jwt()
+    {
+        // 接收端按 JWT 渲染 UI 身份：经 IS4 + UserProfileService 之后，userName / roles 必须真的出现在 access_token 里，
+        // 且是「目标」的（桩里目标 DisplayName=target，actor=mayue），形态与正常登录一致（roles 为 JSON 数组字符串）
+        using var host = new Host();
+        var actorToken = await host.LoginAsActorAsync();
+
+        var result = await host.RequestAsync(host.ExchangeForm(actorToken, scope: "openid profile api1"));
+
+        Assert.True(result.Succeeded, result.Describe());
+        var payload = Payload(result.AccessToken!);
+        Assert.Equal("target", payload.GetProperty(IdentityClaimConsts.USER_NAME).GetString());
+        Assert.Equal("[]", payload.GetProperty(IdentityClaimConsts.ROLES).GetString());
     }
 
     [Fact]
@@ -400,7 +417,7 @@ public class Is4PipelineTests
                 ["actor_token"] = actorToken,
                 ["actor_token_type"] = IdentityModel.OidcConstants.TokenTypeIdentifiers.AccessToken,
                 ["subject_token"] = TargetId.ToString(),
-                ["subject_token_type"] = TokenExchangeGrantValidator.SubjectTokenTypeUserId
+                ["subject_token_type"] = ImpersonationConsts.SubjectTokenTypeUserId
             };
             if (scope is not null)
             {

@@ -139,6 +139,13 @@ builder.Services.AddHttpClient("SsoAddr", client =>
     client.Timeout = TimeSpan.FromSeconds(10);
 });
 
+//模拟登录代理的机密客户端凭据，只从 DCC 读取：auth-service 应用下 JSON 配置对象 "Impersonation"
+//（{"ClientId":"...","ClientSecret":"...","Scope":"openid profile"}，Scope 可选，留空即 openid profile；
+// 客户端建法见 docs/sso-impersonation.md 2.1）。
+//appsettings/环境变量不生效——AddMasaStackConfigAsync 后其值不在配置根节，须走 GetDefault()（同上 Lingua）。
+builder.Services.Configure<ImpersonationClientOptions>(
+    masaConfiguration.ConfigurationApi.GetDefault().GetSection(ImpersonationClientOptions.SectionName));
+
 //Webhook 推送:超时收紧,避免目标不可达时拖住保存流程
 builder.Services.AddHttpClient("Webhook", client =>
 {
