@@ -68,10 +68,8 @@ public class AuthSeedData
         var onlineUserKickApi = new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetServiceId(MasaStackProject.Auth), "OnlineUserKick", ElementPermissionCodes.ApiOnlineUserKick, "", "", 1, PermissionTypes.Api);
 
         var authMenus = new List<Permission>() {
-            userPermission,updateAccountPermission,
             rolePermission,role,permission,team,teamAddElement,teamAddApi,onlineUserKickApi,
             userPermission,updateAccountPermission,userImpersonateElement,impersonateApi,
-            rolePermission,role,permission,team,teamAddElement,teamAddApi,
             new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
             new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-arrange-bring-forward",6,PermissionTypes.Menu),
