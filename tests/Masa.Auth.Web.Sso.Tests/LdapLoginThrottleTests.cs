@@ -22,7 +22,7 @@ public class LdapLoginThrottleTests
             await harness.Throttle.RecordFailureAsync(Account);
         }
 
-        await harness.Throttle.EnsureNotFrozenAsync(Account);
+        Assert.Null(await Record.ExceptionAsync(() => harness.Throttle.EnsureNotFrozenAsync(Account)));
     }
 
     [Fact]
@@ -89,7 +89,8 @@ public class LdapLoginThrottleTests
 
         await harness.Throttle.ResetAsync(Account);
 
-        await harness.Throttle.EnsureNotFrozenAsync(Account);
+        Assert.Null(await Record.ExceptionAsync(() => harness.Throttle.EnsureNotFrozenAsync(Account)));
+        Assert.Equal(0, await harness.Counter.GetAsync("ldap_login_fail:mayue"));
     }
 
     [Fact]
@@ -133,9 +134,9 @@ public class LdapLoginThrottleTests
     {
         var harness = new Harness { CounterFails = true };
 
-        await harness.Throttle.EnsureNotFrozenAsync(Account);
-        await harness.Throttle.RecordFailureAsync(Account);
-        await harness.Throttle.ResetAsync(Account);
+        Assert.Null(await Record.ExceptionAsync(() => harness.Throttle.EnsureNotFrozenAsync(Account)));
+        Assert.Null(await Record.ExceptionAsync(() => harness.Throttle.RecordFailureAsync(Account)));
+        Assert.Null(await Record.ExceptionAsync(() => harness.Throttle.ResetAsync(Account)));
     }
 
     sealed class Harness

@@ -47,7 +47,7 @@ public class ImpersonateTokenCommandHandler
     public async Task ImpersonateTokenAsync(ImpersonateTokenCommand command)
     {
         var actorUserId = _userContext.GetUserId<Guid>();
-        if (actorUserId == default)
+        if (actorUserId == Guid.Empty)
         {
             throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
         }

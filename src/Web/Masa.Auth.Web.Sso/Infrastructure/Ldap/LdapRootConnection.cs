@@ -25,7 +25,7 @@ public static class LdapRootConnection
 
         var options = ldapOption.Adapt<LdapOptions>();
         var provider = ldapFactory.CreateProvider(options);
-        if (await provider.AuthenticateAsync(ldapOption.RootUserDn, ldapOption.RootUserPassword) is false)
+        if (!await provider.AuthenticateAsync(ldapOption.RootUserDn, ldapOption.RootUserPassword))
         {
             throw new UserFriendlyException(errorCode: SsoErrorCodes.LDAP_CONNECT_ERROR);
         }
