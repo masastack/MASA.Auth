@@ -17,7 +17,7 @@ var publicConfiguration = masaConfiguration.ConfigurationApi.GetPublic();
 var identityServerUrl = masaStackConfig.GetSsoDomain();
 StackExchangeRedisInstrumentation redisInstrumentation = default!;
 #if DEBUG
-//identityServerUrl = "https://localhost:18201";
+identityServerUrl = "https://localhost:18201";
 #endif
 
 builder.Services.AddAutoInject();
