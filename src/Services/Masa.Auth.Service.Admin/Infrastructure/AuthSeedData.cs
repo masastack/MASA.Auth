@@ -57,6 +57,12 @@ public class AuthSeedData
         var teamAddApi = new Permission(Guid.NewGuid(), MasaStackProject.Auth.Name, masaStackConfig.GetServiceId(MasaStackProject.Auth), "TeamAdd", ElementPermissionCodes.ApiTeamAdd, "", "", 1, PermissionTypes.Api);
         teamAddElement.BindApiPermission(teamAddApi.Id);
 
+        // 模拟登录权限：授权树只渲染 Menu/Element，所以和 teamAdd 一样用 Element 作为授予入口，再绑定 Api 权限
+        var impersonateApi = new Permission(Guid.NewGuid(), MasaStackProject.Auth.Name, masaStackConfig.GetServiceId(MasaStackProject.Auth), "UserImpersonate", ElementPermissionCodes.ApiUserImpersonate, "", "", 2, PermissionTypes.Api);
+        var userImpersonateElement = new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth), "UserImpersonate", ElementPermissionCodes.UserImpersonate, "", "", 2, PermissionTypes.Element);
+        userImpersonateElement.SetParent(userPermission.Id);
+        userImpersonateElement.BindApiPermission(impersonateApi.Id);
+
         //在线用户"强制下线"接口：端点上的 [MasaAuthorize]（不写 Code）按请求路径推导出 {serviceId}.api.online-user.kick，
         //与本权限的 ReplenishCode 匹配，和 teamAddApi 同一套机制（Code 必须与路径推导结果一致，由 OnlineUserAuthorizationTests 固定）
         var onlineUserKickApi = new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetServiceId(MasaStackProject.Auth), "OnlineUserKick", ElementPermissionCodes.ApiOnlineUserKick, "", "", 1, PermissionTypes.Api);
@@ -64,6 +70,8 @@ public class AuthSeedData
         var authMenus = new List<Permission>() {
             userPermission,updateAccountPermission,
             rolePermission,role,permission,team,teamAddElement,teamAddApi,onlineUserKickApi,
+            userPermission,updateAccountPermission,userImpersonateElement,impersonateApi,
+            rolePermission,role,permission,team,teamAddElement,teamAddApi,
             new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,
             new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"ThirdPartyIdp","thirdPartyIdp","thirdPartyIdp","mdi-arrange-bring-forward",6,PermissionTypes.Menu),

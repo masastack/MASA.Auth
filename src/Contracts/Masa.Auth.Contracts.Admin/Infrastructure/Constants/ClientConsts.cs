@@ -21,6 +21,47 @@ public class ClientConsts
         return secretTypes;
     }
 
+    /// <summary>
+    /// 按客户端类型返回管理界面 grant_type 复选项过滤集合，不影响已登记的 AllowedGrantTypes。
+    /// Web/Spa/Native：交互式 code 家族及 implicit/hybrid/password；Machine：client_credentials、密码类及 JwtBearer/TokenExchange；Device：设备流；未知类型返回空。
+    /// </summary>
+    public static IReadOnlyCollection<string> GetApplicableGrantTypes(ClientTypes clientType) => clientType switch
+    {
+        ClientTypes.Machine => new[]
+        {
+            GrantType.CLIENT_CREDENTIALS,
+            GrantType.LDAP,
+            GrantType.RESOURCE_OWNER_PASSWORD,
+            GrantType.JWT_BEARER,
+            GrantType.TOKEN_EXCHANGE
+        },
+        ClientTypes.Device => new[]
+        {
+            GrantType.DEVICE_FLOW
+        },
+        ClientTypes.Web or ClientTypes.Spa or ClientTypes.Native => new[]
+        {
+            GrantType.IMPLICIT,
+            GrantType.HYBRID,
+            GrantType.AUTHORIZATION_CODE,
+            GrantType.PHONE_CODE,
+            GrantType.EMAIL_CODE,
+            GrantType.LOCAL_PHONE,
+            GrantType.THIRD_PARTY_IDP,
+            GrantType.LDAP,
+            GrantType.RESOURCE_OWNER_PASSWORD
+        },
+        _ => Array.Empty<string>()
+    };
+
+    /// <summary>非对称验签公钥须原样保存；哈希后 IS4 无法解析为 SecurityKey，仅 SharedSecret 应哈希。</summary>
+    public static bool IsVerificationKeySecret(string? secretType)
+        => secretType is not null
+           && (string.Equals(secretType, "JWK", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(secretType, "X509CertificateBase64", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(secretType, "X509Name", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(secretType, "X509Thumbprint", StringComparison.OrdinalIgnoreCase));
+
     public static List<SelectItemDto<string>> GetStandardClaims()
     {
         //http://openid.net/specs/openid-connect-core-1_0.html#StandardClaims

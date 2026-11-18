@@ -581,34 +581,6 @@ public class CommandHandler
     }
 
     [EventHandler]
-    public async Task ImpersonateAsync(ImpersonateUserCommand command)
-    {
-        var userId = _userContext.GetUserId<Guid>();
-        if (userId == default)
-        {
-            throw new UserFriendlyException(errorCode: UserFriendlyExceptionCodes.USER_NOT_EXIST);
-        }
-        var cacheItem = new ImpersonationCacheItem(
-                command.UserId,
-                command.IsBackToImpersonator
-            );
-
-        if (!command.IsBackToImpersonator)
-        {
-            cacheItem.ImpersonatorUserId = userId;
-        }
-
-        var token = Guid.NewGuid().ToString();
-        var key = CacheKey.ImpersonationUserKey(token);
-        await _distributedCacheClient.SetAsync(key, cacheItem, TimeSpan.FromMinutes(10));
-
-        command.Result = new ImpersonateOutput
-        {
-            ImpersonationToken = token
-        };
-    }
-
-    [EventHandler]
     public async Task DeleteAccountAsync(DeleteAccountCommand command)
     {
         var userId = _userContext.GetUserId<Guid>();

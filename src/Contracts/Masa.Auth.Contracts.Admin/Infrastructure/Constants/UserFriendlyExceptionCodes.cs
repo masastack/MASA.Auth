@@ -35,6 +35,7 @@ public static class UserFriendlyExceptionCodes
     public const string CLIENT_NOT_EXIST = "ClientNotExist";
     public const string CLIENT_ID_NOT_FOUND = "ClientIdNotFound";
     public const string CLIENT_ID_ALREADY_EXIST = "ClientIdAlreadyExist";
+    public const string CLIENT_SECRET_KEY_INVALID = "ClientSecretKeyInvalid";
     public const string INVALID_CAPTCHA = "InvalidCaptcha";
     public const string LDAP_ACCOUNT_NOTEXIST = "LdapAccountNotexist";
     public const string LDAP_ACCOUNT_DISABLED = "LdapAccountDisabled";
@@ -96,5 +97,16 @@ public static class UserFriendlyExceptionCodes
     public const string IDENTITY_SOURCE_NAME_EXIST = "IdentitySourceNameExist";
     public const string THIRDPARTYUSER_BIND_EXIST = "ThirdPartyUserBindExist";
     public const string WEBHOOK_NOT_EXIST = "WebhookNotExist";
-    public const string IMPERSONATION_TOKEN_ERROR_MESSAGE = "ImpersonationTokenErrorMessage";
+
+    /// <summary>模拟登录代理端点：调用者未持有 api.user.impersonate 权限（fail-closed）。</summary>
+    public const string IMPERSONATION_NOT_AUTHORIZED = "ImpersonationNotAuthorized";
+
+    /// <summary>模拟登录代理端点：不允许模拟登录自己。</summary>
+    public const string IMPERSONATION_SELF_NOT_ALLOWED = "ImpersonationSelfNotAllowed";
+
+    /// <summary>模拟登录代理端点：未配置机密客户端凭据（Impersonation:ClientId/ClientSecret），功能未启用。</summary>
+    public const string IMPERSONATION_CLIENT_NOT_CONFIGURED = "ImpersonationClientNotConfigured";
+
+    /// <summary>模拟登录代理端点：SSO token-exchange 被拒或调用失败，附加信息为 SSO 的 error/error_description。</summary>
+    public const string IMPERSONATION_TOKEN_EXCHANGE_FAILED = "ImpersonationTokenExchangeFailed";
 }

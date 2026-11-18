@@ -13,6 +13,21 @@
   "MustProviderCodeOrIdToken": "必须提供code或idToken",
   "MustProviderPhoneNumberAndSpToken": "必须提供手机号和SpToken",
   "PhoneNumberUserNotExist": "用户{0}不存在",
-  "MustProviderImpersonationToken": "必须提供impersonationToken",
-  "ImpersonatedUserNotExist": "被模拟登录的用户不存在"
+  "DomainAssertionClientRequired": "域身份断言必须由已认证的客户端发起",
+  "DomainAssertionInvalid": "域身份断言无效或已过期",
+  "DomainAssertionReplayed": "域身份断言已被使用",
+  "DomainAssertionAccountRejected": "域账号{0}不存在或已被禁用",
+  "DomainAssertionAccountNotProvisioned": "域账号{0}尚未在系统中建立账号",
+  "DomainAssertionAccountOutOfScope": "域账号{0}不在该客户端允许断言的范围内",
+  "DomainAssertionReplayCheckUnavailable": "域身份断言重放校验不可用，请稍后重试",
+  "MustProviderActorToken": "必须提供actor_token",
+  "InvalidActorToken": "actor_token无效或已过期",
+  "ImpersonationDisabled": "该客户端未启用模拟登录",
+  "ImpersonationNotAuthorized": "无权模拟该用户",
+  "ImpersonationChainNotAllowed": "不允许链式模拟登录",
+  "MustProviderSubjectToken": "必须提供subject_token（目标用户标识）",
+  "ImpersonationTargetNotFound": "被模拟的用户不存在",
+  "ImpersonationOfflineAccessNotAllowed": "模拟登录不允许申请offline_access",
+  "InvalidTokenType": "令牌类型标识无效或不支持",
+  "LoginFreeze": "您连续输错密码5次,登录已冻结，请三十分钟后再次尝试"
 }

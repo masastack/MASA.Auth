@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--域身份断言（RFC 7523）与 token exchange（RFC 8693）的判定逻辑在 SSO 项目内，
+        这里直接引用该 Web 项目以覆盖其中的纯逻辑类型（断言校验、账号匹配、常量约定）。
+        不启动宿主，也不需要数据库/Redis。-->
+    <ProjectReference Include="..\..\src\Web\Masa.Auth.Web.Sso\Masa.Auth.Web.Sso.csproj" />
+  </ItemGroup>
+
+</Project>

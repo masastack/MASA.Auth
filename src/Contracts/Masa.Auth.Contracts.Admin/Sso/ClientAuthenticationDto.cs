@@ -69,6 +69,7 @@ public class ClientAuthenticationDto
             {
                 var descriptionAttribute = (DescriptionAttribute?)Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute));
                 var value = $"{fieldInfo.GetValue(default)}";
+
                 _grantTypes.Add(new CheckItemDto<string>()
                 {
                     Id = value,

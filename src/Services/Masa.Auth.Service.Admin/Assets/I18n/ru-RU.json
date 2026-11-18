@@ -97,5 +97,10 @@
   "DeviceClientDescription": "Устройства с ограниченным вводом, такие как смарт-телевизоры, IoT-устройства или принтеры",
   "MachineClientDescription": "Приложения, использующие OAuth 2.0 токены для взаимодействия с API для аутентификации между машинами.",
   "PhoneValidateFailed": "Это должен быть законный номер мобильного телефона.",
-  "PasswordSame": "Пароль одинаковый."
+  "PasswordSame": "Пароль одинаковый.",
+  "ClientSecretKeyInvalid": "Секрет клиента ({0}) недействителен: {1}",
+  "ImpersonationNotAuthorized": "У вас нет прав входить от имени этого пользователя",
+  "ImpersonationSelfNotAllowed": "Нельзя войти от имени самого себя",
+  "ImpersonationClientNotConfigured": "Вход от имени пользователя не настроен: в приложении auth-service в DCC отсутствует объект конфигурации Impersonation (ClientId/ClientSecret). Обратитесь к администратору",
+  "ImpersonationTokenExchangeFailed": "Не удалось обменять токен входа от имени пользователя. Повторите попытку позже"
 }

@@ -7,6 +7,7 @@ using Masa.Auth.Web.Sso.Infrastructure.BackgroundJobs;
 using Masa.Auth.Web.Sso.Infrastructure.OnlineUser;
 using Masa.Contrib.Configuration.ConfigurationApi.Dcc;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Masa.BuildingBlocks.Globalization.I18n;
 using Microsoft.Extensions.Http;
 
@@ -166,10 +167,16 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     .AddExtensionGrantValidator<LocalPhoneNumberGrantValidator>()
     .AddExtensionGrantValidator<ThirdPartyIdpGrantValidator>()
     .AddExtensionGrantValidator<LdapGrantValidator>()
-    .AddExtensionGrantValidator<ImpersonationGrantValidator>()
+    // RFC 7523 JWT Bearer 域身份断言
+    .AddExtensionGrantValidator<JwtBearerAssertionGrantValidator>()
+    // RFC 8693 token exchange 模拟登录
+    .AddExtensionGrantValidator<TokenExchangeGrantValidator>();
     //踢人通知在后台服务（无 HttpContext）里发送：IS4 默认实现会因取不到 HttpContext 抛异常，
     //这里替换为可显式指定 issuer 的实现；有 HttpContext 的请求内场景行为不变
     .AddBackChannelLogoutService<KickBackChannelLogoutService>();
+
+// IdentityModel 8.x 会把 JSON claim（如 act）写成嵌套数组，须在 token 生成后修正
+builder.Services.Replace(ServiceDescriptor.Transient<ITokenCreationService, JsonClaimTokenCreationService>());
 
 if (builder.Environment.IsDevelopment())
 {
@@ -206,6 +213,13 @@ builder.Services.AddHostedService<KickRequestConsumer>();
 builder.Services.AddSingleton<SsoAuthenticationStateCache>();
 builder.Services.AddScoped<AuthenticationStateProvider, SsoAuthenticationStateProvider>();
 builder.Services.AddLadpContext();
+
+// LDAP 限流 / 域解析 / 断言与模拟登录依赖（LdapLoginThrottle 无作用域状态，单例即可）
+builder.Services.AddSingleton<ILoginFailureCounter, RedisLoginFailureCounter>();
+builder.Services.AddSingleton<LdapLoginThrottle>();
+builder.Services.AddScoped<DomainAccountResolver>();
+builder.Services.AddScoped<JtiReplayCache>();
+builder.Services.AddScoped<ActorPermissionClient>();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetEntryAssembly());
 

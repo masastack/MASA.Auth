@@ -13,6 +13,21 @@
   "MustProviderCodeOrIdToken": "codeまたはidTokenを入力してください",
   "MustProviderPhoneNumberAndSpToken": "電話番号とSpTokenを入力してください",
   "PhoneNumberUserNotExist": "ユーザー {0} は存在しません",
-  "MustProviderImpersonationToken": "impersonationTokenを入力してください",
-  "ImpersonatedUserNotExist": "なりすまし対象ユーザーが存在しません"
+  "DomainAssertionClientRequired": "ドメイン ID アサーションは認証済みクライアントからのみ発行できます",
+  "DomainAssertionInvalid": "ドメイン ID アサーションが無効または期限切れです",
+  "DomainAssertionReplayed": "ドメイン ID アサーションは既に使用されています",
+  "DomainAssertionAccountRejected": "ドメインアカウント {0} は存在しないか無効です",
+  "DomainAssertionAccountNotProvisioned": "ドメインアカウント {0} はまだシステムに登録されていません",
+  "DomainAssertionAccountOutOfScope": "ドメインアカウント {0} はこのクライアントがアサート可能な範囲外です",
+  "DomainAssertionReplayCheckUnavailable": "アサーションの再利用チェックを利用できません。後で再試行してください",
+  "MustProviderActorToken": "actor_tokenを入力してください",
+  "InvalidActorToken": "actor_tokenが無効または期限切れです",
+  "ImpersonationDisabled": "このクライアントではなりすましが有効になっていません",
+  "ImpersonationNotAuthorized": "このユーザーをなりすます権限がありません",
+  "ImpersonationChainNotAllowed": "連鎖的ななりすましは許可されていません",
+  "MustProviderSubjectToken": "subject_token（対象ユーザー識別子）を入力してください",
+  "ImpersonationTargetNotFound": "なりすまし対象ユーザーが存在しません",
+  "ImpersonationOfflineAccessNotAllowed": "なりすましではoffline_accessを要求できません",
+  "InvalidTokenType": "トークンタイプ識別子が無効または未対応です",
+  "LoginFreeze": "パスワードの誤入力が続いたためログインが凍結されました。30分後に再試行してください"
 }
