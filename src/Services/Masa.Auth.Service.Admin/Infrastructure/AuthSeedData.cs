@@ -67,8 +67,16 @@ public class AuthSeedData
         //与本权限的 ReplenishCode 匹配，和 teamAddApi 同一套机制（Code 必须与路径推导结果一致，由 OnlineUserAuthorizationTests 固定）
         var onlineUserKickApi = new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetServiceId(MasaStackProject.Auth), "OnlineUserKick", ElementPermissionCodes.ApiOnlineUserKick, "", "", 1, PermissionTypes.Api);
 
+        //在线用户管理页面：菜单 + "踢下线"按钮 Element，Element 绑定上面的 Api（teamAddElement/teamAddApi 同构），
+        //普通角色经授权树拿到 Element（连带绑定的 Api），内置 admin 走全部权限缓存
+        var onlineUser = new Permission(Guid.NewGuid(), MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth), "OnlineUser", "onlineUser", "onlineUser", "mdi-account-clock-outline", 10, PermissionTypes.Menu);
+        var onlineUserKickElement = new Permission(Guid.NewGuid(), MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth), "OnlineUserKick", ElementPermissionCodes.OnlineUserKick, "", "", 1, PermissionTypes.Element);
+        onlineUserKickElement.SetParent(onlineUser.Id);
+        onlineUserKickElement.BindApiPermission(onlineUserKickApi.Id);
+
         var authMenus = new List<Permission>() {
-            rolePermission,role,permission,team,teamAddElement,teamAddApi,onlineUserKickApi,
+            rolePermission,role,permission,team,teamAddElement,teamAddApi,
+            onlineUser,onlineUserKickElement,onlineUserKickApi,
             userPermission,updateAccountPermission,userImpersonateElement,impersonateApi,
             new Permission(MasaStackProject.Auth.Name, masaStackConfig.GetWebId(MasaStackProject.Auth),"Organization","org","organization/index","mdi-file-tree-outline",4,PermissionTypes.Menu),
             sso,userClaim,identityResource,apiScope,apiResource,client,customLogin,

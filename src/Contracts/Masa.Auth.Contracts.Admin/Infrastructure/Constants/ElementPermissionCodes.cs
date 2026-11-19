@@ -16,4 +16,7 @@ public class ElementPermissionCodes
     public static string ApiUserImpersonate { get; } = "api.user.impersonate";
 
     public static string ApiOnlineUserKick { get; } = "api.online-user.kick";
+
+    /// <summary>在线用户页面"踢下线"按钮 Element 权限，经 BindApiPermission 关联 <see cref="ApiOnlineUserKick"/>（同 <see cref="TeamAdd"/> / <see cref="ApiTeamAdd"/> 模式）。</summary>
+    public static string OnlineUserKick { get; } = "onlineUser.kick";
 }

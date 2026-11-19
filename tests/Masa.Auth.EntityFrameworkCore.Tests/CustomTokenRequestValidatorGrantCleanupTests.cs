@@ -261,7 +261,7 @@ public class CustomTokenRequestValidatorGrantCleanupTests : IDisposable
     }
 
     [Theory]
-    [InlineData("impersonation", null, true, true)]         // 管理员模拟：不能杀被模拟者的真实会话
+    [InlineData("urn:ietf:params:oauth:grant-type:token-exchange", null, true, true)] // 管理员模拟（RFC 8693 token-exchange，旧的 impersonation 扩展授权已在 #1499 删除）：不能杀被模拟者的真实会话
     [InlineData("password", null, false, true)]             // 客户端允许 offline_access，但本次没申请：不会签发新 refresh_token，不能清旧会话
     [InlineData("password", null, null, true)]              // scope 校验结果缺失：按"未申请"处理
     [InlineData("password", null, false, false)]            // 客户端不允许 offline_access：同样不会产生会话行

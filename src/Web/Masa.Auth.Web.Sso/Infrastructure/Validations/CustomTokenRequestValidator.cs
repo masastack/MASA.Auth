@@ -122,7 +122,9 @@ public class CustomTokenRequestValidator : ICustomTokenRequestValidator
     /// Token/RefreshToken.SessionId → PersistedGrant.SessionId）。在此读它即是对未来那行的精确预测，
     /// 新增扩展授权验证器无需维护任何名单，天然纳入单活语义。
     /// 两个显式排除：refresh_token（轮换续期而非新登录，该请求的 SessionId 同样为空，不排除会
-    /// 杀死正在续期的会话）、impersonation（管理员模拟用户，不能杀被模拟者的真实会话）。
+    /// 杀死正在续期的会话）、token-exchange（管理员模拟登录，不能杀被模拟者的真实会话；
+    /// 旧的 impersonation 扩展授权已在 #1499 改造为 RFC 8693 token-exchange。TokenExchangeGrantValidator
+    /// 另有 offline_access 禁令挡住 refresh_token 签发，此处排除与之互为冗余保险）。
     ///
     /// 另一个必要条件：**本次请求确实会签发 refresh_token**，即请求的 scope 里带了 offline_access
     /// （<see cref="RequestedOfflineAccess"/>）。不能看 <c>Client.AllowOfflineAccess</c>：那只是客户端"被允许"
@@ -136,7 +138,7 @@ public class CustomTokenRequestValidator : ICustomTokenRequestValidator
         var subjectId = request.Subject?.FindFirst(JwtClaimTypes.Subject)?.Value;
 
         if (request.GrantType == OidcConstants.GrantTypes.RefreshToken
-            || request.GrantType == MasaGrantType.IMPERSONATION
+            || request.GrantType == MasaGrantType.TOKEN_EXCHANGE
             || !string.IsNullOrEmpty(request.SessionId)
             || !RequestedOfflineAccess(request)
             || string.IsNullOrEmpty(subjectId))

@@ -170,7 +170,7 @@ var identityServerBuilder = builder.Services.AddOidcCacheStorage(redisOption)
     // RFC 7523 JWT Bearer 域身份断言
     .AddExtensionGrantValidator<JwtBearerAssertionGrantValidator>()
     // RFC 8693 token exchange 模拟登录
-    .AddExtensionGrantValidator<TokenExchangeGrantValidator>();
+    .AddExtensionGrantValidator<TokenExchangeGrantValidator>()
     //踢人通知在后台服务（无 HttpContext）里发送：IS4 默认实现会因取不到 HttpContext 抛异常，
     //这里替换为可显式指定 issuer 的实现；有 HttpContext 的请求内场景行为不变
     .AddBackChannelLogoutService<KickBackChannelLogoutService>();
